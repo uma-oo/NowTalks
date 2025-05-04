@@ -1,19 +1,32 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"fmt"
+
+	database "real-time-forum/backend/database"
+	"real-time-forum/backend/handler"
+	"real-time-forum/backend/repositories"
+	"real-time-forum/backend/service"
 )
 
 func main() {
-
-	// repo  := ""
-	// service := ""
-	// handler := ""
-
-	log.Println("Server starting on :3500")
-	if err := http.ListenAndServe(":3500", nil); err != nil {
-		log.Fatal("Server failed to start:", err)
+	db, err := database.InitDB("./database/forum.db")
+	if err != nil {
+		fmt.Println("err", err)
+	}
+	
+	err = db.ReadSQL("./database/db.sql")
+	if err != nil {
+		fmt.Println("err", err)
 	}
 
+	// setup layers
+	repo := repositories.NewAppRepository(db.Database)
+	service := service.NewPostService(repo)
+	handler := handler.NewPostService(service)
+
+	defer db.Database.Close()
+
+	_, err = db.Database.Exec(`INSERT INTO categories (category) values ("IT");`)
+	fmt.Println("res", err)
 }
