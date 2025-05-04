@@ -9,6 +9,5 @@ type AppService struct {
 
 // NewPostService creates a new service
 func NewPostService(repo *rep.AppRepository) *AppService {
-	
 	return &AppService{repo: repo}
 }

@@ -10,3 +10,7 @@ type AppRepository struct{
 func NewAppRepository(db *sql.DB) *AppRepository {
 	return &AppRepository{db: db}
 }
+
+
+
+

@@ -66,5 +66,6 @@ INSERT INTO categories (category) VALUES
   ('Issues');
 
 
+/* triggers section  we'll have only for the total comments */
 
 

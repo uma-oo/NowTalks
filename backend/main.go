@@ -4,9 +4,6 @@ import (
 	"fmt"
 
 	database "real-time-forum/backend/database"
-	"real-time-forum/backend/handler"
-	"real-time-forum/backend/repositories"
-	"real-time-forum/backend/service"
 )
 
 func main() {
@@ -14,16 +11,16 @@ func main() {
 	if err != nil {
 		fmt.Println("err", err)
 	}
-	
+
 	err = db.ReadSQL("./database/db.sql")
 	if err != nil {
 		fmt.Println("err", err)
 	}
 
 	// setup layers
-	repo := repositories.NewAppRepository(db.Database)
-	service := service.NewPostService(repo)
-	handler := handler.NewPostService(service)
+	// repo := repositories.NewAppRepository(db.Database)
+	// service := service.NewPostService(repo)
+	// handler := handler.NewPostService(service)
 
 	defer db.Database.Close()
 
