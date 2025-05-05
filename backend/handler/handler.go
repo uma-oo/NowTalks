@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+
 	"real-time-forum/backend/models"
 	"real-time-forum/backend/service"
 )
@@ -10,28 +11,21 @@ import (
 type PostHandler struct {
 	service *service.AppService
 }
- type CommentHandler struct {
-	service 
- }
-
-
-
-
-
-// NewPostService creates a new service
-func NewPostService(service *service.AppService) *AppHandler {
-	return &AppHandler{service: service}
+type CommentHandler struct {
+	service *service.AppService
 }
 
-func (ah *AppHandler) AddPost (){}
-func (ah *AppHandler) GetPost (){}
-func (ah *AppHandler) AddComment (){}
-func (ah *AppHandler) GetComment(){}
+func NewCommentHandler(service *service.AppService) *CommentHandler {
+	return &CommentHandler{service: service}
+}
 
+func NewPostHandler(service *service.AppService) *PostHandler {
+	return &PostHandler{service: service}
+}
 
+// NewPostService
 
-
-func WriteJsonErrors(w http.ResponseWriter, errJson models.ErrorJson){
+func WriteJsonErrors(w http.ResponseWriter, errJson models.ErrorJson) {
 	w.WriteHeader(errJson.Status)
 	json.NewEncoder(w).Encode(errJson)
 }

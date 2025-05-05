@@ -1,4 +1,5 @@
-import { getPosts } from "./api/posts";
+import {getPosts} from "./api/posts.js"
+
 
 // const registerForm = document.getElementById("registerForm")
 
@@ -12,10 +13,13 @@ import { getPosts } from "./api/posts";
 
 
 
+// let posts = await getPosts()
+// console.log(posts)
 
 
-
-console.log(getPosts())
+    fetch('https://fakestoreapi.com/products')
+  .then(response => response.json())
+  .then(data => console.log(data))
 
 
 

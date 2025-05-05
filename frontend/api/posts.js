@@ -9,6 +9,13 @@ export async function addPost(postData) {
 }
 
 export async function getPosts() {
-    const response = await fetch('/api/posts')
-    return response.json()
+    try {
+        const response = await fetch('/api/posts', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        })
+        return  response.json()
+    } catch (error) {
+        throw new Error (error)
+    }
 }

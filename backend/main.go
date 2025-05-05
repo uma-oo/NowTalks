@@ -25,11 +25,11 @@ func main() {
 	// setup layers
 	repo := repositories.NewAppRepository(db.Database)
 	service := service.NewPostService(repo)
-	handler := handler.NewPostService(service)
-	routes.SetRoutes(handler)
+	postHanlder := handler.NewPostHandler(service)
+	commentHandler := handler.NewCommentHandler(service)
+	routes.SetRoutes(*postHanlder, commentHandler)
 	defer db.Database.Close()
 
 	fmt.Println("Listening on: http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
-
 }

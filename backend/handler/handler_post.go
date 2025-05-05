@@ -8,7 +8,7 @@ import (
 	"real-time-forum/backend/models"
 )
 
-func (handler *AppHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
+func (Phandler *PostHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodPost:
@@ -20,31 +20,30 @@ func (handler *AppHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(errJSon)
 			return
 		}
-		err := handler.service.AddPost(post)
+		err := Phandler.service.AddPost(post)
 		if err != nil {
 			w.WriteHeader(err.Status)
 			json.NewEncoder(w).Encode(err)
-			return 
+			return
 		}
 	case http.MethodGet:
-		posts, err := handler.service.GetPosts()
+		posts, err := Phandler.service.GetPosts()
 		if err != nil {
 			w.WriteHeader(err.Status)
 			json.NewEncoder(w).Encode(err)
 			return
 		}
 		err_ := json.NewEncoder(w).Encode(posts)
-		if err_!= nil {
+		if err_ != nil {
 			errJSon := models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 			w.WriteHeader(errJSon.Status)
 			json.NewEncoder(w).Encode(errJSon)
-			return 
+			return
 		}
 
 	default:
 		errJSon := models.ErrorJson{Status: 405, Message: "Method not Allowed!!"}
-		w.WriteHeader(errJSon.Status)
-		json.NewEncoder(w).Encode(errJSon)
-		return 
+		WriteJsonErrors(w, errJSon)
+		return
 	}
 }
