@@ -8,33 +8,32 @@ import (
 
 // OMG
 
-func (appRep *AppRepository) CreatePost(post *models.Post) error {
+func (appRep *AppRepository) CreatePost(post *models.Post) *models.ErrorJson {
 	fmt.Println("inside repo")
 	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?)`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return err
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	res, err := stmt.Exec(post.UserId, post.Title, post.Content)
-	fmt.Printf("res: %v\n", res)
+	_, err = stmt.Exec(post.UserId, post.Title, post.Content)
 	if err != nil {
-		return err
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	return nil
 }
 
 // all the posts
-func (appRep *AppRepository) GetPosts() ([]models.Post, error) {
+func (appRep *AppRepository) GetPosts() ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT postID , userID, createdAt, title, content FROM posts`
 	rows, err := appRep.db.Query(query)
 	if err != nil {
-		return nil, err
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	for rows.Next() {
 		var post models.Post
 		if err := rows.Scan(&post.Id, &post.UserId, &post.CreatedAt, &post.Title, &post.Content); err != nil {
-			return posts, err
+			return posts,  &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		posts = append(posts, post)
 

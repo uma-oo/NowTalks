@@ -25,9 +25,14 @@ type Post struct {
 }
 
 type Comment struct {
-	Id        int
-	PostId    int
-	UserId    int
-	CreatedAt string
-	Content   string
+	Id        int    `json:"id,omitempty"`
+	PostId    int    `json:"post_id"`
+	UserId    int    `json:"user_id"`
+	CreatedAt string `json:"created_at,omitempty"`
+	Content   string `json:"content"`
+}
+
+type ErrorJson struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }

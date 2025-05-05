@@ -7,5 +7,8 @@ import (
 )
 
 func SetRoutes(handler *handler.AppHandler) {
-	http.HandleFunc("/posts", handler.GetPostsHandler)
+	http.HandleFunc("/api/post", handler.PostHandler)
+	http.Handle("/api/comment", handler)
+
+
 }
