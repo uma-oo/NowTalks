@@ -2,8 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	database "real-time-forum/backend/database"
+	"real-time-forum/backend/handler"
+	"real-time-forum/backend/repositories"
+	"real-time-forum/backend/routes"
+	"real-time-forum/backend/service"
 )
 
 func main() {
@@ -18,12 +23,12 @@ func main() {
 	}
 
 	// setup layers
-	// repo := repositories.NewAppRepository(db.Database)
-	// service := service.NewPostService(repo)
-	// handler := handler.NewPostService(service)
-
+	repo := repositories.NewAppRepository(db.Database)
+	service := service.NewPostService(repo)
+	handler := handler.NewPostService(service)
+	routes.SetRoutes(handler)
 	defer db.Database.Close()
 
-	_, err = db.Database.Exec(`INSERT INTO categories (category) values ("IT");`)
-	fmt.Println("res", err)
+	fmt.Println("Listening on: http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
 }

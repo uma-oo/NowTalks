@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type User struct {
 	Id        int
 	Nickname  string
@@ -19,18 +17,17 @@ type Session struct {
 }
 
 type Post struct {
-	Id        int `json:"id"`
-	UserId    int
-	CreatedAt time.Time `json:"created_at"`
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-
+	Id        int    `json:"id,omitempty"`
+	UserId    int    `json:"user_id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at,omitempty"`
 }
 
 type Comment struct {
-	Id      int
-	PostId int
-	UserId int
-	CreatedAt time.Time
-	Content string
+	Id        int
+	PostId    int
+	UserId    int
+	CreatedAt string
+	Content   string
 }

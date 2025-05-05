@@ -1,27 +1,29 @@
 package repositories
 
-import "real-time-forum/backend/models"
+import (
+	"fmt"
 
-
+	"real-time-forum/backend/models"
+)
 
 // OMG
 
 func (appRep *AppRepository) CreatePost(post *models.Post) error {
-	query := `INSERT INTO posts VALUES (?, ?, ?, ?)`
+	fmt.Println("inside repo")
+	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?)`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(post.UserId, post.CreatedAt, post.Title, post.Content)
+	res, err := stmt.Exec(post.UserId, post.Title, post.Content)
+	fmt.Printf("res: %v\n", res)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-
-
-// all the posts 
+// all the posts
 func (appRep *AppRepository) GetPosts() ([]models.Post, error) {
 	var posts []models.Post
 	query := `SELECT postID , userID, createdAt, title, content FROM posts`
@@ -40,6 +42,5 @@ func (appRep *AppRepository) GetPosts() ([]models.Post, error) {
 	return posts, nil
 }
 
-// Filter by MyPosts // by userId 
-// Filter based on categories 
-
+// Filter by MyPosts // by userId
+// Filter based on categories
