@@ -18,9 +18,22 @@ func (s *AppService) GetPosts() ([]models.Post, *models.ErrorJson) {
 	return posts, nil
 }
 
+
+
 func (s *AppService) AddPost(post models.Post) *models.ErrorJson {
-	if post.Content == "" || post.Title == "" {
-		return &models.ErrorJson{Status: 400, Message: "Bad Request!! Empty title or Message"}
+	fmt.Println("HEREEEE")
+	var ErrorJson *models.ErrorJson
+	var message *models.Post
+	if post.Content == ""  {
+		ErrorJson.Status = 400
+		message.Content = "ERROR: Empty Body Post!!"
+	} else if post.Title ==""{
+	  message.Title = "ERROR: Empty Body Title"
+	}
+	
+	if message!= nil {
+		ErrorJson.Message = message
+		return ErrorJson
 	}
 	err := s.repo.CreatePost(&post)
 	if err != nil {

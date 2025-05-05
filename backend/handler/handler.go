@@ -11,22 +11,27 @@ type PostHandler struct {
 	service *service.AppService
 }
  type CommentHandler struct {
-	service 
+	service *service.AppService
+ }
+
+ func  NewCommentHandler(service *service.AppService) *CommentHandler {
+	return &CommentHandler{service: service}
+ }
+
+ func NewPostHandler(service *service.AppService) *PostHandler {
+	return &PostHandler{service: service}
  }
 
 
 
 
 
-// NewPostService creates a new service
-func NewPostService(service *service.AppService) *AppHandler {
-	return &AppHandler{service: service}
-}
 
-func (ah *AppHandler) AddPost (){}
-func (ah *AppHandler) GetPost (){}
-func (ah *AppHandler) AddComment (){}
-func (ah *AppHandler) GetComment(){}
+// NewPostService 
+
+
+
+
 
 
 

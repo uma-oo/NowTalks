@@ -1,5 +1,7 @@
 package models
 
+
+
 type User struct {
 	Id        int
 	Nickname  string
@@ -32,7 +34,23 @@ type Comment struct {
 	Content   string `json:"content"`
 }
 
+// we can make the message interface and then accpet all of them but for now let's work so
+
 type ErrorJson struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
+	Status  int `json:"status"`
+	Message any `json:"errors"`
 }
+
+//
+
+func NewPost() *Post {
+	return &Post{
+		Id:        0,
+		UserId:    0,
+		Title:     "",
+		Content:   "",
+		CreatedAt: "",
+	}
+}
+
+

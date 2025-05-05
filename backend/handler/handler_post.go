@@ -8,7 +8,7 @@ import (
 	"real-time-forum/backend/models"
 )
 
-func (handler *AppHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
+func (Phandler *PostHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodPost:
@@ -20,14 +20,14 @@ func (handler *AppHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(errJSon)
 			return
 		}
-		err := handler.service.AddPost(post)
+		err := Phandler.service.AddPost(post)
 		if err != nil {
 			w.WriteHeader(err.Status)
 			json.NewEncoder(w).Encode(err)
 			return 
 		}
 	case http.MethodGet:
-		posts, err := handler.service.GetPosts()
+		posts, err := Phandler.service.GetPosts()
 		if err != nil {
 			w.WriteHeader(err.Status)
 			json.NewEncoder(w).Encode(err)
@@ -43,8 +43,7 @@ func (handler *AppHandler) PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	default:
 		errJSon := models.ErrorJson{Status: 405, Message: "Method not Allowed!!"}
-		w.WriteHeader(errJSon.Status)
-		json.NewEncoder(w).Encode(errJSon)
+		WriteJsonErrors(w, errJSon)
 		return 
 	}
 }

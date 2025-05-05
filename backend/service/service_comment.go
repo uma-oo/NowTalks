@@ -23,7 +23,7 @@ func (s *AppService) GetComments(postId int) ([]models.Comment, *models.ErrorJso
 // check if the content is null 
 func (s *AppService) AddComment( comment *models.Comment) *models.ErrorJson {
 	if comment.Content=="" {
-		return &models.ErrorJson{Status: 500, Message: "Bad request! Comment content is empty!!"}
+		return &models.ErrorJson{Status: 400, Message: models.Comment{ Content: "ERROR: Empty Body Comment!"}}
 	}
 	if err := s.repo.CreateComment(comment); err!= nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
