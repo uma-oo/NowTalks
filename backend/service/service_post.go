@@ -8,7 +8,7 @@ import (
 
 // ayoub u afkaru lghariba
 // bash ghan3mr hadshi :)
-// add offsets and limits 
+// add offsets and limits
 
 func (s *AppService) GetPosts() ([]models.Post, *models.ErrorJson) {
 	posts, err := s.repo.GetPosts()
@@ -18,20 +18,17 @@ func (s *AppService) GetPosts() ([]models.Post, *models.ErrorJson) {
 	return posts, nil
 }
 
-
-
 func (s *AppService) AddPost(post models.Post) *models.ErrorJson {
-	fmt.Println("HEREEEE")
-	var ErrorJson *models.ErrorJson
-	var message *models.Post
-	if post.Content == ""  {
-		ErrorJson.Status = 400
-		message.Content = "ERROR: Empty Body Post!!"
-	} else if post.Title ==""{
-	  message.Title = "ERROR: Empty Body Title"
+	ErrorJson := models.NewErrorJson()
+	message := models.NewPostErr()
+	if post.Content == "" {
+		message.Content = "ERROR: Empty Post Content!!"
 	}
-	
-	if message!= nil {
+	if post.Title == "" {
+		message.Title = "ERROR: Empty Title Content!!"
+	}
+	if message.Content != "" || message.Title != "" {
+		ErrorJson.Status = 400
 		ErrorJson.Message = message
 		return ErrorJson
 	}

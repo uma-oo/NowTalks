@@ -1,7 +1,5 @@
 package models
 
-
-
 type User struct {
 	Id        int
 	Nickname  string
@@ -17,6 +15,8 @@ type Session struct {
 	Id    int
 	Token string
 }
+
+
 
 type Post struct {
 	Id        int    `json:"id,omitempty"`
@@ -34,6 +34,18 @@ type Comment struct {
 	Content   string `json:"content"`
 }
 
+
+
+type PostError struct {
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+
+type CommentError struct {
+	Content string `json:"content"`
+}
+
 // we can make the message interface and then accpet all of them but for now let's work so
 
 type ErrorJson struct {
@@ -43,14 +55,26 @@ type ErrorJson struct {
 
 //
 
-func NewPost() *Post {
-	return &Post{
-		Id:        0,
-		UserId:    0,
-		Title:     "",
-		Content:   "",
-		CreatedAt: "",
-	}
+func NewErrorJson() *ErrorJson {
+	return &ErrorJson{}
 }
 
+func NewPost() *Post {
+	return &Post{}
+}
 
+func NewPostErr() *PostError {
+	return &PostError{}
+}
+
+func NewComment() *Comment {
+	return &Comment{}
+}
+
+func NewCommentErr() *CommentError {
+	return &CommentError{}
+}
+
+func NewUser() *User {
+	return &User{}
+}
