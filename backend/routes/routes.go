@@ -7,5 +7,7 @@ import (
 )
 
 func SetRoutes(handler *handler.AppHandler) {
+	fileserver := http.FileServer(http.Dir("../frontend"))
+	http.Handle("/", fileserver)
 	http.HandleFunc("/posts", handler.GetPostsHandler)
 }
