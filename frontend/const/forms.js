@@ -80,6 +80,7 @@ export const registerFom = {
                 type: 'email',
                 id: 'email',
                 name: 'email',
+                pattern: "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$",
                 placeholder: "Enter Your Email...",
             },
             style: {
@@ -94,6 +95,7 @@ export const registerFom = {
                 type: 'password',
                 id: 'userPassword',
                 name: 'userPassword',
+                pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
                 placeholder: "Enter Your Password...",
             },
             style: {

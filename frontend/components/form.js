@@ -37,7 +37,6 @@ export function renderForm(target, formRepresentaion, id) {
         const formData = Object.fromEntries(form.entries())
         console.log(formData)
     })
-
 }
 
 function setAttributes(elem, attributes) {
@@ -53,5 +52,4 @@ function setOpions(selectElement, options) {
         optionElement.textContent = option
         selectElement.append(optionElement)
     })
-
 }

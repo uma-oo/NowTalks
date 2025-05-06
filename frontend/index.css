@@ -30,7 +30,9 @@ form {
     padding: 1rem;
 }
 
-input,select,textarea {
+input,
+select,
+textarea {
     width: 100%;
 }
 
@@ -44,4 +46,16 @@ textarea {
 .input-filled:invalid {
     border: 2px solid red;
     background-color: beige;
-  }
+}
+
+
+/* post styling */
+.postContainer {
+    border: solid;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
