@@ -6,7 +6,8 @@ import (
 	"real-time-forum/backend/handler"
 )
 
-func SetRoutes(Phandler *handler.PostHandler, Chandler *handler.CommentHandler) {
+func SetRoutes(Phandler *handler.PostHandler, Chandler *handler.CommentHandler, Uhandler *handler.UserHanlder) {
 	http.Handle("/api/comment", Chandler)
 	http.Handle("/api/post", Phandler)
+	http.HandleFunc("/api/register", Uhandler.Register)
 }

@@ -1,15 +1,15 @@
 package models
 
 type User struct {
-	Id            int
-	Nickname      string
-	Age           int
-	Gender        string
-	FirstName     string
-	LastName      string
-	Email         string
-	Password      string
-	VerifPassword string
+	Id            int    `json:"id,omitempty"`
+	Nickname      string `json:"nickname"`
+	Age           int    `json:"age"`
+	Gender        string `json:"gender"`
+	FirstName     string `json:"firstname"`
+	LastName      string `json:"lastname"`
+	Email         string `json:"email"`
+	Password      string `json:"password"`
+	VerifPassword string `json:"password2"`
 }
 
 type Session struct {
@@ -19,7 +19,8 @@ type Session struct {
 
 type Post struct {
 	Id        int    `json:"id,omitempty"`
-	UserId    int    `json:"user_id"`
+	UserId    int `json:"user_id,omitempty"`
+	Username    string    `json:"user_name"`
 	Title     string `json:"title"`
 	Content   string `json:"content"`
 	CreatedAt string `json:"created_at,omitempty"`
@@ -44,7 +45,7 @@ type CommentError struct {
 
 type RegisterError struct {
 	Nickname      string `json:"Nickname"`
-	Age           int    `json:"age"`
+	Age           string `json:"age"`
 	Gender        string `json:"gender"`
 	FirstName     string `json:"firstname"`
 	LastName      string `json:"lastname"`
@@ -62,9 +63,9 @@ type ErrorJson struct {
 
 //
 
-func NewErrorJson(status int , message string) *ErrorJson {
+func NewErrorJson(status int, message string) *ErrorJson {
 	return &ErrorJson{
-		Status: status,
+		Status:  status,
 		Message: message,
 	}
 }
