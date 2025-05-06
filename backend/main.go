@@ -27,7 +27,9 @@ func main() {
 	service := service.NewPostService(repo)
 	postHanlder := handler.NewPostHandler(service)
 	commentHandler := handler.NewCommentHandler(service)
-	routes.SetRoutes(*postHanlder, commentHandler)
+	routes.SetRoutes(postHanlder, commentHandler)
+	data, res, err_ := repo.GetItem("users", "nickname", "oumaaa")
+	fmt.Println("res", res, data, err_)
 	defer db.Database.Close()
 
 	fmt.Println("Listening on: http://localhost:8080")

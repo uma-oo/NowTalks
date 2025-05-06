@@ -1,22 +1,21 @@
 package models
 
 type User struct {
-	Id        int
-	Nickname  string
-	Age       int
-	Gender    string
-	FirstName string
-	LastName  string
-	Email     string
-	Password  string
+	Id            int
+	Nickname      string
+	Age           int
+	Gender        string
+	FirstName     string
+	LastName      string
+	Email         string
+	Password      string
+	VerifPassword string
 }
 
 type Session struct {
 	Id    int
 	Token string
 }
-
-
 
 type Post struct {
 	Id        int    `json:"id,omitempty"`
@@ -34,16 +33,24 @@ type Comment struct {
 	Content   string `json:"content"`
 }
 
-
-
 type PostError struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
 
-
 type CommentError struct {
 	Content string `json:"content"`
+}
+
+type RegisterError struct {
+	Nickname      string `json:"Nickname"`
+	Age           int    `json:"age"`
+	Gender        string `json:"gender"`
+	FirstName     string `json:"firstname"`
+	LastName      string `json:"lastname"`
+	Email         string `json:"email"`
+	Password      string `json:"password"`
+	VerifPassword string `json:"verifpassword"`
 }
 
 // we can make the message interface and then accpet all of them but for now let's work so
@@ -55,8 +62,11 @@ type ErrorJson struct {
 
 //
 
-func NewErrorJson() *ErrorJson {
-	return &ErrorJson{}
+func NewErrorJson(status int , message string) *ErrorJson {
+	return &ErrorJson{
+		Status: status,
+		Message: message,
+	}
 }
 
 func NewPost() *Post {

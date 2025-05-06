@@ -18,8 +18,8 @@ func (s *AppService) GetPosts() ([]models.Post, *models.ErrorJson) {
 	return posts, nil
 }
 
-func (s *AppService) AddPost(post models.Post) *models.ErrorJson {
-	ErrorJson := models.NewErrorJson()
+func (s *AppService) AddPost(post *models.Post) *models.ErrorJson {
+	ErrorJson := models.NewErrorJson(0, "")
 	message := models.NewPostErr()
 	if post.Content == "" {
 		message.Content = "ERROR: Empty Post Content!!"
@@ -32,7 +32,7 @@ func (s *AppService) AddPost(post models.Post) *models.ErrorJson {
 		ErrorJson.Message = message
 		return ErrorJson
 	}
-	err := s.repo.CreatePost(&post)
+	err := s.repo.CreatePost(post)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
