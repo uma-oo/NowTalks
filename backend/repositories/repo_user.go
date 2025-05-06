@@ -47,7 +47,7 @@ func (appRep *AppRepository) GetUsers() ([]models.User, error) {
 // we need to specify  the type aftewards ;)
 // it will be used for the nickname , session and also the email checking
 func (appRep *AppRepository) GetItem(typ string, field string, value string) ([]any, bool, *models.ErrorJson) {
-	data := make([]interface{}, 0)
+	data := make([]any, 0)
 	query := fmt.Sprintf(`SELECT %v FROM %v WHERE %v=?`, field, typ, field)
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {

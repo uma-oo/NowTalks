@@ -19,8 +19,8 @@ type Session struct {
 
 type Post struct {
 	Id        int    `json:"id,omitempty"`
-	UserId    int `json:"user_id,omitempty"`
-	Username    string    `json:"user_name"`
+	UserId    int    `json:"user_id,omitempty"`
+	Username  string `json:"user_name"`
 	Title     string `json:"title"`
 	Content   string `json:"content"`
 	CreatedAt string `json:"created_at,omitempty"`
@@ -44,7 +44,7 @@ type CommentError struct {
 }
 
 type RegisterError struct {
-	Nickname      string `json:"Nickname"`
+	Nickname      string `json:"user_name"`
 	Age           string `json:"age"`
 	Gender        string `json:"gender"`
 	FirstName     string `json:"firstname"`
@@ -52,6 +52,12 @@ type RegisterError struct {
 	Email         string `json:"email"`
 	Password      string `json:"password"`
 	VerifPassword string `json:"verifpassword"`
+}
+
+type LoginError struct {
+	Nickname string `json:"user_name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 // we can make the message interface and then accpet all of them but for now let's work so
