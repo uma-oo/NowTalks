@@ -10,7 +10,7 @@ import (
 func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	var errJson models.ErrorJson
 	var registerErr models.RegisterError
-	// check for the nickname and email 
+	// check for the nickname and email
 	_, has_nickname, _ := s.repo.GetItem("users", "nickname", user.Nickname)
 	_, has_email, _ := s.repo.GetItem("users", "email", user.Email)
 	if has_nickname {
@@ -48,7 +48,15 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 		return &errJson
 	}
 
-	err := s.repo.CreateUser(user)
+	// hash the password here !! before the database insertion
+	hash, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+	} else {
+		user.Password = hash
+	}
+    
+	err = s.repo.CreateUser(user)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -56,14 +64,4 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	return nil
 }
 
-// Section of the helper functions used to check the user input
 
-// check if the NICKNAME is duplicated
-
-
-
-
-func (s *AppService) Login(user *models.User)   *models.ErrorJson{ 
-	
- return nil
-}

@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type User struct {
 	Id            int    `json:"id,omitempty"`
 	Nickname      string `json:"nickname"`
@@ -13,9 +15,13 @@ type User struct {
 }
 
 type Session struct {
-	Id    int
-	Token string
+	Id      int       `json:"id,omitempty"`
+	Token   string    `json:"token"`
+	UserId  int       `json:"user_id"`
+	ExpDate time.Time `json:"expiration_date,omitempty"`
 }
+
+
 
 type Post struct {
 	Id        int    `json:"id,omitempty"`
@@ -54,11 +60,12 @@ type RegisterError struct {
 	VerifPassword string `json:"verifpassword"`
 }
 
-type LoginError struct {
-	Nickname string `json:"user_name"`
-	Email    string `json:"email"`
+type Login struct {
+	LoginField    string `json:"login"`
 	Password string `json:"password"`
 }
+
+
 
 // we can make the message interface and then accpet all of them but for now let's work so
 
@@ -69,7 +76,7 @@ type ErrorJson struct {
 
 //
 
-func NewErrorJson(status int, message string) *ErrorJson {
+func NewErrorJson(status int, message any) *ErrorJson {
 	return &ErrorJson{
 		Status:  status,
 		Message: message,
