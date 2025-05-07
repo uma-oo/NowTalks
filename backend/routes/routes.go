@@ -6,9 +6,10 @@ import (
 	"real-time-forum/backend/handler"
 )
 
-func SetRoutes(Phandler handler.PostHandler, Chandler *handler.CommentHandler) {
+func SetRoutes(Phandler *handler.PostHandler, Chandler *handler.CommentHandler, Uhandler *handler.UserHanlder) {
 	http.Handle("/api/comment", Chandler)
-	http.HandleFunc("/api/posts", Phandler.PostHandler)
+	http.Handle("/api/post", Phandler)
+	http.HandleFunc("/api/register", Uhandler.Register)
 	fileserver := http.FileServer(http.Dir("../frontend"))
 	http.Handle("/", fileserver)
 }

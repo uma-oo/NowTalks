@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS posts (
     total_comments INTEGER DEFAULT 0 CHECK (total_comments >= 0),  
     FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE 
 );
-DROP TABLE IF EXISTS comments;
+
 CREATE TABLE IF NOT EXISTS comments (
     commentID INTEGER PRIMARY KEY,
     postID INTEGER NOT NULL,

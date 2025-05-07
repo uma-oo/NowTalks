@@ -1,4 +1,5 @@
 import { formatCreationDate } from "../utils.js"
+import { createButton } from "./button.js"
 
 export function createPostCard(postData) {
     let postContainer = document.createElement('div')
@@ -11,14 +12,12 @@ export function createPostCard(postData) {
     postTitle.className = 'post-title'
     postTitle.textContent = postData.title
 
-
     let postBody = document.createElement('div')
     let postContent = document.createElement('p')
     postBody.append(postContent)
     postBody.className = 'post-body'
     postContent.className = 'post-content'
     postContent.textContent = postData.content
-
 
     let postFooter = document.createElement('div')
     let postWriter = document.createElement('p')
@@ -29,9 +28,18 @@ export function createPostCard(postData) {
     postWriter.textContent = postData.user
     postTimePosted.textContent = formatCreationDate(postData.created_at)
 
+    let viewPostBtn = createButton("viewPost >>",'button','linkBtn')
+    viewPostBtn.addEventListener('click', ()=>expandPost(postContainer))
 
-    postContainer.append(postHeader)
-    postContainer.append(postBody)
-    postContainer.append(postFooter)
+    postContainer.append(postHeader,postBody,postFooter,viewPostBtn)
     return postContainer
+}
+
+
+
+
+
+function expandPost(postContainer) {
+    postContainer.classList.add('expand-post')
+    
 }

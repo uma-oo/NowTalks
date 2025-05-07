@@ -14,5 +14,5 @@ export const app = document.getElementById('app')
 
 
 
-posts.forEach(post => app.append(createPostCard(post)))
+posts.forEach(post => app.append(createPostCard(post))) 
 

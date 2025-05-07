@@ -5,8 +5,6 @@
 //     let aside = document.createElement('aside')
 //     let main = document.createElement('main')
 
-
-
 //     document.body.append(header)
 //     document.body.append(aside)
 //     document.body.append(header)

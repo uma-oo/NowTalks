@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"fmt"
-
 	"real-time-forum/backend/models"
 )
 
@@ -21,16 +19,14 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) error {
 // But hna comments dyal wa7d l post specific
 func (appRep *AppRepository) GetComments(postId int) ([]models.Comment, error) {
 	var comments []models.Comment
-	query := `SELECT commentID, userID, createdAt , content FROM comments WHERE postID = ?`
+	query := `SELECT commentID, userID, postID, createdAt , content FROM comments WHERE postID = ?`
 	rows, err := appRep.db.Query(query, postId)
 	if err != nil {
-		fmt.Println("err1", err)
 		return nil, err
 	}
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Id, &comment.UserId, &comment.CreatedAt, &comment.Content); err != nil {
-			fmt.Println("err2", err)
+		if err = rows.Scan(&comment.Id, &comment.UserId, &comment.PostId, &comment.CreatedAt, &comment.Content); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)

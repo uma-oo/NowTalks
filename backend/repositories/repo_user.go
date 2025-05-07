@@ -9,7 +9,7 @@ import (
 // y9dr ay wa7d ydiiruuu
 
 func (appRep *AppRepository) CreateUser(user *models.User) error {
-	query := `INSERT INTO users VALUES (?,?,?,?,?,?,?)`
+	query := `INSERT INTO users (nickname, age, gender, firstName, lastName, email, password) VALUES (?,?,?,?,?,?,?)`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
 		return err
@@ -37,4 +37,22 @@ func (appRep *AppRepository) GetUsers() ([]models.User, error) {
 	}
 
 	return users, nil
+}
+
+// chosen_field ( it may be the nickname or the email )
+func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, error) {
+	var user = models.NewUser()
+	query := `SELECT userID, nickname, firstName, lastName, email, password 
+	FROM users where (nickname=? OR email =? ) and password = ?`
+	stmt, err := appRep.db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	row := stmt.QueryRow(login.LoginField, login.LoginField, login.Password)
+	err = row.Scan(&user.Id, &user.Nickname, &user.FirstName, &user.LastName, &user.Email, &user.Password)
+	if err != nil {
+		return nil , err
+	}
+   
+	return user, nil
 }

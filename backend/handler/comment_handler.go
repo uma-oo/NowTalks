@@ -11,21 +11,23 @@ import (
 
 // GET THE request body
 func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Request) {
-	var comment models.Comment
+	var comment *models.Comment
 	if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {
 		errJson := models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)}
 		WriteJsonErrors(w, errJson)
 		return
 	}
-	err := CHanlder.service.AddComment(&comment)
+	err := CHanlder.service.AddComment(comment)
 	if err != nil {
 		WriteJsonErrors(w, *err)
 		return
 	}
+	WriteDataBack(w, comment)
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("url_query", r.URL)
+    // get the posts of a specific ID
+	// FOR NOW let's just get them from the query 
 	postId, err := strconv.ParseInt(r.URL.Query().Get("postId"), 10, 64)
 	if err != nil {
 		errJson := models.ErrorJson{Status: 400, Message: "Bad Request! Post Not Found"}
