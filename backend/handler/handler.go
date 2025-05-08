@@ -23,15 +23,6 @@ type UserHanlder struct {
 
 
 
-
-
-
-
-
-
-
-
-
 func NewCommentHandler(service *service.AppService) *CommentHandler {
 	return &CommentHandler{service: service}
 }

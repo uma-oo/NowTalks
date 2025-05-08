@@ -1,0 +1,21 @@
+{
+  
+ "nickname": "najiya", 
+ "age" :25,
+ "gender": "Female",
+ "firstname" : "oumayma",
+ "lastname" : "ELFAHSI",
+ "email": "najiya@gmail.com",
+ "password": "Abcd@2024",
+ "password2": "Abcd@2024"
+
+}
+
+
+{
+  
+"login": "najiya", 
+"password": "Abcd@2024"
+}
+
+

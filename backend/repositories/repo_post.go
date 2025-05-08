@@ -41,6 +41,8 @@ func (appRep *AppRepository) GetPosts() ([]models.Post, *models.ErrorJson) {
 		posts = append(posts, post)
 
 	}
+
+	defer rows.Close()
 	return posts, nil
 }
 
