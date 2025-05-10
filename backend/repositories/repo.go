@@ -24,6 +24,7 @@ func (appRep *AppRepository) GetItem(typ string, field string, value string) ([]
 	data := make([]any, 0)
 	query := fmt.Sprintf(`SELECT %v FROM %v WHERE %v=?`, field, typ, field)
 	stmt, err := appRep.db.Prepare(query)
+	defer stmt.Close()
 	if err != nil {
 		return nil, false, models.NewErrorJson(500, "ERROR: Internal Server Error!!")
 	}

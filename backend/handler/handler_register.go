@@ -47,12 +47,9 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 	// var login = models.Login{LoginField: user.Nickname}
 	session, err_ := Uhandler.service.SetUserSession(userData)
 	if err_ != nil {
-		fmt.Println("errror", session)
 		WriteJsonErrors(w, *err_)
 		return
 	}
-
-
 	// Path knt nassyaha dakshi 3lash makantsh tl3
 	
 	http.SetCookie(w, &http.Cookie{

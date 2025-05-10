@@ -19,7 +19,7 @@ func SetRoutes(Phandler *handler.PostHandler, Chandler *handler.CommentHandler, 
 	http.Handle("/api/comment", m.NewMiddleWare(Chandler, service))
 	http.Handle("/api/post", m.NewMiddleWare(Phandler, service))
 	http.HandleFunc("/api/user/register", Uhandler.Register)
-	http.HandleFunc("/api/user/login", Uhandler.Login)
+	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
 }
 
 

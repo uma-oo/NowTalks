@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"real-time-forum/backend/models"
@@ -15,6 +16,7 @@ func (s *AppService) SetUserSession(user *models.User) (*models.Session, *models
 	session.ExpDate = time.Now().Add(24 * time.Hour)
 	errJson := s.repo.CreateUserSession(session, user)
 	if errJson != nil {
+		fmt.Println("EROOOOOOOOOR", errJson)
 		return nil, errJson
 	}
 	return session, nil
@@ -34,5 +36,11 @@ func (s *AppService) CheckUserSession(user *models.User) {
 func (s *AppService) UpdateUserSession(user *models.User) {
 }
 
-func (s *AppService) GetUserSession(user *models.User) {
+func (s *AppService) GetSessionByUserId(user_id int) (*models.Session, *models.ErrorJson) {
+	session, err := s.repo.GetUserSession(user_id)
+	fmt.Printf("%T", session.ExpDate)
+	if err != nil {
+		return nil, err
+	}
+	return session, nil
 }

@@ -20,8 +20,8 @@ type Middleware struct {
 }
 // Hna i wrapped the Middleware type here 7itash 7tajit wa7d l method!!
 type LoginRegisterMiddleWare struct {
-	MiddlewareHanlder Middleware
-    handler http.Handler
+	MiddlewareHanlder http.Handler
+    service           *service.AppService
 }
 
 func NewMiddleWare(handler http.Handler, service *service.AppService) *Middleware {
@@ -29,6 +29,6 @@ func NewMiddleWare(handler http.Handler, service *service.AppService) *Middlewar
 }
 
 
-func NewLoginMiddleware(m Middleware, handler http.Handler) *LoginRegisterMiddleWare {
-	return &LoginRegisterMiddleWare{m, handler}
+func NewLoginMiddleware( handler http.Handler, service *service.AppService) *LoginRegisterMiddleWare {
+	return &LoginRegisterMiddleWare{handler, service}
 }

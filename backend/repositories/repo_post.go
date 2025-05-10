@@ -12,6 +12,7 @@ func (appRep *AppRepository) CreatePost(post *models.Post) *models.ErrorJson {
 	fmt.Println("inside repo")
 	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?)`
 	stmt, err := appRep.db.Prepare(query)
+	defer stmt.Close()
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}

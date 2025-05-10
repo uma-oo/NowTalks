@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	handler "real-time-forum/backend/handler"
 	"real-time-forum/backend/models"
@@ -12,7 +13,7 @@ import (
 
 
 func (LogRegM *LoginRegisterMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.Request){
-	session , _ := LogRegM.MiddlewareHanlder.GetAuthUser(r)
+	session , err := LogRegM.GetAuthUser(r)
 	if session != nil {
 		handler.WriteJsonErrors(w, models.ErrorJson{
 			Status: 403,
@@ -20,6 +21,13 @@ func (LogRegM *LoginRegisterMiddleWare) ServeHTTP(w http.ResponseWriter, r *http
 		})
 		return
           
+	}
+	if err != nil {
+		handler.WriteJsonErrors(w, models.ErrorJson{
+			Status: 400,
+			Message: fmt.Sprintf("%v", err),
+		})
+		return
 	}
 	LogRegM.MiddlewareHanlder.ServeHTTP(w,r)
 	

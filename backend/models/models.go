@@ -104,5 +104,5 @@ func NewUser() *User {
 }
 
 func (session *Session) IsExpired() bool {
-	return session.ExpDate.After(time.Now())
+	return session.ExpDate.Before(time.Now())
 }
