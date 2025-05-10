@@ -12,6 +12,7 @@ type User struct {
 	Email         string `json:"email"`
 	Password      string `json:"password"`
 	VerifPassword string `json:"password2"`
+	CreatedAt     string `json:"created_at,omitempty"`
 }
 
 type Session struct {
@@ -20,8 +21,6 @@ type Session struct {
 	UserId  int       `json:"user_id"`
 	ExpDate time.Time `json:"expiration_date,omitempty"`
 }
-
-
 
 type Post struct {
 	Id        int    `json:"id,omitempty"`
@@ -61,11 +60,9 @@ type RegisterError struct {
 }
 
 type Login struct {
-	LoginField    string `json:"login"`
-	Password string `json:"password"`
+	LoginField string `json:"login"`
+	Password   string `json:"password"`
 }
-
-
 
 // we can make the message interface and then accpet all of them but for now let's work so
 
@@ -101,4 +98,8 @@ func NewCommentErr() *CommentError {
 
 func NewUser() *User {
 	return &User{}
+}
+
+func (session *Session) IsExpired() bool {
+	return session.ExpDate.After(time.Now())
 }

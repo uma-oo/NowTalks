@@ -4,16 +4,60 @@
     box-sizing: border-box;
 }
 
+
+a {
+    text-decoration: unset;
+    color: unset;
+    font-size: larger;
+}
+
+
 body {
     width: 100%;
     height: 100vh;
+   
 }
+
+#app
+
+
+
+header {
+    border-bottom: solid purple;
+    margin: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+
+main {
+    flex-grow: 1;
+    border: solid blue;
+}
+
+footer{
+    border: solid green;
+}
+
 
 #app {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column ;
+    border: solid red ;
+    gap: 1rem;
     overflow-y: auto;
 }
+
+
+
+
+.logo{
+
+}
+
 
 
 

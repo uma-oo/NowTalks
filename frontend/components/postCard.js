@@ -1,4 +1,4 @@
-import { formatCreationDate } from "../utils.js"
+import { timeAgo } from "../utils.js"
 import { createButton } from "./button.js"
 
 export function createPostCard(postData) {
@@ -26,7 +26,7 @@ export function createPostCard(postData) {
     postFooter.append(postTimePosted)
     postFooter.className = 'post-Footer'
     postWriter.textContent = postData.user
-    postTimePosted.textContent = formatCreationDate(postData.created_at)
+    postTimePosted.textContent = timeAgo(postData.created_at)
 
     let viewPostBtn = createButton("viewPost >>",'button','linkBtn')
     viewPostBtn.addEventListener('click', ()=>expandPost(postContainer))

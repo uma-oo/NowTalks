@@ -27,8 +27,9 @@ func main() {
 	service := service.NewPostService(repo)
 	postHanlder := handler.NewPostHandler(service)
 	commentHandler := handler.NewCommentHandler(service)
-	userHANDLER := handler.NewUserHandler(service)
-	routes.SetRoutes(postHanlder, commentHandler, userHANDLER)
+	userHandler := handler.NewUserHandler(service)
+	// middleware := middleware.NewMiddleWare(postHanlder)
+	routes.SetRoutes(postHanlder, commentHandler, userHandler, service)
 	defer db.Database.Close()
 
 	fmt.Println("Listening on: http://localhost:8080")

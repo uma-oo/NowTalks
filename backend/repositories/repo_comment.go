@@ -31,5 +31,6 @@ func (appRep *AppRepository) GetComments(postId int) ([]models.Comment, error) {
 		}
 		comments = append(comments, comment)
 	}
+	defer rows.Close()
 	return comments, nil
 }

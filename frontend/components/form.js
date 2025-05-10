@@ -1,4 +1,6 @@
 import { createButton } from "./button.js";
+import { setAttributes, setOpions } from "../utils.js";
+
 
 export function renderForm(target, formRepresentaion, id) {
     let formElement = document.createElement('form')
@@ -39,17 +41,3 @@ export function renderForm(target, formRepresentaion, id) {
     })
 }
 
-function setAttributes(elem, attributes) {
-    for ( let [key,val] of Object.entries(attributes)) {
-        elem.setAttribute(key,val)
-    }
-}
-
-function setOpions(selectElement, options) {
-    options.forEach(option=> {
-        let optionElement = document.createElement('option')
-        optionElement.setAttribute('value', option)
-        optionElement.textContent = option
-        selectElement.append(optionElement)
-    })
-}

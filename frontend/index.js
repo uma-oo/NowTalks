@@ -1,10 +1,27 @@
-// import {getPosts} from "./api/posts.js"
-import { renderForm } from "./components/form.js"
-import { createPostCard } from "./components/postCard.js"
-import { posts } from "./const/data.js"
-import { CommentForm, LoginForm, PostForm, registerFom } from "./const/forms.js"
 
-export const app = document.getElementById('app')
+import { renderHomePage } from "./pages/home.js"
+
+export const appContainer = document.getElementById('app')
+
+// window.addEventListener('popstate', function (event) {
+//     event.preventDefault()
+// 	let page = this.window.location.href
+//     console.log(page)
+// });
+
+// async function startApp() {
+//     let posts = await getPosts()
+//     console.log(posts)
+
+//     if (posts.status === 401){
+//         history.pushState({},"","/login")
+//     }
+// }
+
+
+// startApp();
+
+
 
 
 // renderForm(app, registerFom, 'registerForm')
@@ -14,5 +31,10 @@ export const app = document.getElementById('app')
 
 
 
-posts.forEach(post => app.append(createPostCard(post))) 
+
+
+renderHomePage()
+
+
+// posts.forEach(post => app.append(createPostCard(post))) 
 

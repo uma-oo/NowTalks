@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"database/sql"
+	"fmt"
+
 	models "real-time-forum/backend/models"
 )
 
@@ -35,24 +38,31 @@ func (appRep *AppRepository) GetUsers() ([]models.User, error) {
 		}
 		users = append(users, user)
 	}
+	defer rows.Close()
 
 	return users, nil
 }
 
 // chosen_field ( it may be the nickname or the email )
-func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, error) {
-	var user = models.NewUser()
-	query := `SELECT userID, nickname, firstName, lastName, email, password 
-	FROM users where (nickname=? OR email =? ) and password = ?`
+// the query must not include the password entered by the user
+func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models.ErrorJson) {
+	user := models.NewUser()
+	query := `SELECT userID, nickname, password 
+	FROM users where nickname=? OR email =? `
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, err
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	row := stmt.QueryRow(login.LoginField, login.LoginField, login.Password)
-	err = row.Scan(&user.Id, &user.Nickname, &user.FirstName, &user.LastName, &user.Email, &user.Password)
-	if err != nil {
-		return nil , err
+	row := stmt.QueryRow(login.LoginField, login.LoginField)
+	err = row.Scan(&user.Id, &user.Nickname, &user.Password)
+	if err == sql.ErrNoRows {
+		return nil, &models.ErrorJson{
+			Status: 401,
+			Message: models.Login{
+				LoginField: "ERROR!! Username or Email does not exist! Or Password Incorrect!",
+				Password:   "ERROR!! Username or Email does not exist! Or Password Incorrect!",
+			},
+		}
 	}
-   
 	return user, nil
 }

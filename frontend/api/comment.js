@@ -7,8 +7,6 @@ export async function getComments(id) {
     return response.json();
 }
 
-
-
 // the same applies for the creation !!! khass id f l api 
 export async function createComment(commentData) {
     const response = await fetch('/api/comment', {
