@@ -16,10 +16,12 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 	err := json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
 		if err == io.EOF {
-			errJson := models.ErrorJson{Status: 400, Message: models.CommentError{
-				Content: "ERROR!! Empty Content Field!",
-			}}
-			WriteJsonErrors(w, errJson)
+			WriteJsonErrors(w, models.ErrorJson{
+				Status: 400,
+				Message: models.CommentError{
+					Content: "ERROR!! Empty Content Field!",
+				},
+			})
 			return
 		}
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})

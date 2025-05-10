@@ -21,6 +21,12 @@ func (m *Middleware) GetAuthUser(r *http.Request) (*models.Session, *models.Erro
 	return session, nil
 }
 
+
+
+
+
+
+
 func (m *Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_, err := m.GetAuthUser(r)
 	if err != nil {

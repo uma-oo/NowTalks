@@ -13,16 +13,17 @@ import (
 // Write the added post f response again (good practice)
 func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 	var post *models.Post
-	err := json.NewDecoder(r.Body).Decode(&post); 
+	err := json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
-		if err ==io.EOF {
-			WriteJsonErrors(w, models.ErrorJson{Status: 400 , Message: &models.PostError {
-        
+		if err == io.EOF {
+			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.PostError{
+				Title:   "ERROR!! Empty Title field!",
+				Content: "ERROR!! Empty Content fiedl!",
 			}})
+			return
 		}
 		// which status code to return
-		errJSon := models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)}
-		WriteJsonErrors(w, errJSon)
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
 	err_ := Phandler.service.AddPost(post)

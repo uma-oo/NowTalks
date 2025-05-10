@@ -39,5 +39,7 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
+	// in the login we don't need to rewrite the data ??? 
+	// allahu a3lam
 	WriteDataBack(w, login)
 }
