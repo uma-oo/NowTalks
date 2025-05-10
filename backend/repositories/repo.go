@@ -46,12 +46,3 @@ func (appRep *AppRepository) GetItem(typ string, field string, value string) ([]
 	return nil, false, nil
 }
 
-func (appRepo *AppRepository) GetUserbyToken(token string) (*models.Session, *models.ErrorJson) {
-	session := models.Session{}
-	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
-	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, session.Token, session.ExpDate)
-	if row == sql.ErrNoRows {
-		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorizes Access"}
-	}
-	return &session, nil
-}

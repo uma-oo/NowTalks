@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"database/sql"
 	"fmt"
 
 	"real-time-forum/backend/models"
@@ -24,13 +25,23 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 
 // get the session by the user id or the user nickname !!
 
+func (appRepo *AppRepository) GetUserbyToken(token string) (*models.Session, *models.ErrorJson) {
+	session := models.Session{}
+	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
+	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, session.Token, session.ExpDate)
+	if row == sql.ErrNoRows {
+		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorizes Access"}
+	}
+	return &session, nil
+}
+
 func (appRep *AppRepository) GetUserSession(field any) (*models.Session, *models.ErrorJson) {
 	session := models.Session{}
 	query := `SELECT * FROM sessions WHERE userID = ?`
 	row := appRep.db.QueryRow(query, field)
 	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpDate)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: "error u safi"}
+		return nil, &models.ErrorJson{Status: 400, Message: "ERROR!! No session is set for this User"}
 	}
 	return &session, nil
 }
@@ -52,3 +63,4 @@ func (appRep *AppRepository) DeleteSession(session models.Session) *models.Error
 	}
 	return nil
 }
+

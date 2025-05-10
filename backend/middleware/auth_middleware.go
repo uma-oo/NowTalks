@@ -21,20 +21,6 @@ func (m *Middleware) GetAuthUser(r *http.Request) (*models.Session, *models.Erro
 	return session, nil
 }
 
-func (LogRegM *LoginRegisterMiddleWare) GetAuthUser(r *http.Request) (*models.Session, *models.ErrorJson) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			return nil, nil
-		}
-		return nil, models.NewErrorJson(400, "ERROR!! There was an error in the Request!!")
-	}
-	session, _ := LogRegM.service.GetUserSessionByToken(cookie.Value)
-	if session.IsExpired() {
-		return nil, nil
-	}
-	return session, nil
-}
 
 func (m *Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_, err := m.GetAuthUser(r)

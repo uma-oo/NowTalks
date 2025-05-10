@@ -6,19 +6,13 @@ import (
 	"real-time-forum/backend/service"
 )
 
-// dunno if this method will work or not !!!!
-
-// bacause we are having http.Hanlder interface types
-
-
-
-
 
 type Middleware struct {
 	MiddlewareHanlder http.Handler
 	service           *service.AppService
 }
-// Hna i wrapped the Middleware type here 7itash 7tajit wa7d l method!!
+
+
 type LoginRegisterMiddleWare struct {
 	MiddlewareHanlder http.Handler
     service           *service.AppService

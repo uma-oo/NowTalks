@@ -59,7 +59,6 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Path knt nassyaha dakshi 3lash makantsh tl3
-	fmt.Println(session.IsExpired())
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session",
 		Value:   session.Token,
