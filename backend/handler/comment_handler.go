@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -12,22 +13,30 @@ import (
 // GET THE request body
 func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Request) {
 	var comment *models.Comment
-	if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {
-		errJson := models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)}
-		WriteJsonErrors(w, errJson)
-		return
-	}
-	err := CHanlder.service.AddComment(comment)
+	err := json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
-		WriteJsonErrors(w, *err)
+		if err == io.EOF {
+			errJson := models.ErrorJson{Status: 400, Message: models.CommentError{
+				Content: "ERROR!! Empty Content Field!",
+			}}
+			WriteJsonErrors(w, errJson)
+			return
+		}
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
+		return
+
+	}
+	err_ := CHanlder.service.AddComment(comment)
+	if err_ != nil {
+		WriteJsonErrors(w, *err_)
 		return
 	}
 	WriteDataBack(w, comment)
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {
-    // get the posts of a specific ID
-	// FOR NOW let's just get them from the query 
+	// get the posts of a specific ID
+	// FOR NOW let's just get them from the query
 	postId, err := strconv.ParseInt(r.URL.Query().Get("postId"), 10, 64)
 	if err != nil {
 		errJson := models.ErrorJson{Status: 400, Message: "Bad Request! Post Not Found"}
