@@ -27,7 +27,7 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err_ := Phandler.service.AddPost(post)
-	if err != nil {
+	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 		return
 	}

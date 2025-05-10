@@ -14,6 +14,9 @@ func (Uhandler *UserHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodPost && r.URL.Path[1:] == "api/user/login":
 		Uhandler.Login(w, r)
 		return
+	case r.Method == http.MethodPost && r.URL.Path[1:] == "api/user/register":
+		Uhandler.Register(w, r)
+		return
 	case r.Method != http.MethodPost:
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not allowed!!"})
 		return

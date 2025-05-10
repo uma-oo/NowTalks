@@ -33,7 +33,12 @@ func (s *AppService) GetUserSessionByToken(token string) (*models.Session, *mode
 func (s *AppService) CheckUserSession(user *models.User) {
 }
 
-func (s *AppService) UpdateUserSession(user *models.User) {
+
+
+func (s *AppService) UpdateUserSession(session *models.Session) {
+	
+
+
 }
 
 func (s *AppService) GetSessionByUserId(user_id int) (*models.Session, *models.ErrorJson) {

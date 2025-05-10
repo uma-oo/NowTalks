@@ -12,7 +12,7 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	
+
 	defer stmt.Close()
 	fmt.Println("session", session.Token, session.ExpDate, user.Id)
 	_, err = stmt.Exec(user.Id, session.Token, session.ExpDate)
@@ -33,4 +33,22 @@ func (appRep *AppRepository) GetUserSession(field any) (*models.Session, *models
 		return nil, &models.ErrorJson{Status: 500, Message: "error u safi"}
 	}
 	return &session, nil
+}
+
+func (appRep *AppRepository) UpdateSession(session models.Session, new_token string) *models.ErrorJson {
+	query := `UPDATE sessions SET token = ? where sessionToken= ?`
+	_, err := appRep.db.Exec(query, new_token, session.Token)
+	if err != nil {
+		return models.NewErrorJson(500, fmt.Sprintf("%v", err))
+	}
+	return nil
+}
+
+func (appRep *AppRepository) DeleteSession(session models.Session) *models.ErrorJson {
+	query := `DELETE FROM sessions WHERE sessionToken = ?`
+	_, err := appRep.db.Exec(query, session.Token)
+	if err != nil {
+		return models.NewErrorJson(500, fmt.Sprintf("%v", err))
+	}
+	return nil
 }
