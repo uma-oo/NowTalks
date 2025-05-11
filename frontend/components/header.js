@@ -6,8 +6,8 @@ export function createHeader() {
     logo.href = '/'
     logo.textContent = 'Talkaa'
     logo.className = 'logo'
-    let logOut = createButton("Log-Out",'button','logout-btn')
-    
+    let logOut = createButton("Log-Out",'button',['logout-btn'])
+
     header.append(logo, logOut)
     return header
 }

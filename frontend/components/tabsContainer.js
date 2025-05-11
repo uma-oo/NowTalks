@@ -1,33 +1,37 @@
-import { createButton } from "./button"
+import { createButton } from "./button.js"
 
 const tabs = [
     {
-        content: "posts",
-        show: true,
+        content: "Posts",
+        classes :['active-tab-btn', 'tab-btn'],
         section: 'posts_section'
     },
     {
         content: "Chat",
-        hidden: false,
+        classes : ['tab-btn'],
         section: 'chat_section'
     }
 ]
 
 export function createTabsContainer() {
     let tabsContainer = document.createElement('div')
-
-
+    tabsContainer.classList.add('tabs-container')
     tabs.forEach(tab => {
-        let tabBtn = createButton(tab.content,'button','tab-btn')
-        tabsContainer.append()
-
-        tabBtn.addEventListener("click",()=>{
-            let section = document.querySelector("visible_tab_section")
-            section.classList.remove("visible_tab_section")
-            
+        let tabBtn = createButton(tab.content,'button',tab.classes)
+        tabBtn.dataset.section = tab.section
+        tabsContainer.append(tabBtn)
+        
+        tabBtn.addEventListener("click",(e)=>{
+            let btn = e.target
+            let sectionTriggered = document.querySelector(`.${btn.dataset.section}`) 
+            if (!sectionTriggered.classList.contains("visible_tab_section")) {
+                let tab_btns = document.querySelectorAll('.tab-btn')
+                tab_btns.forEach(btn => btn.classList.toggle('active-tab-btn'))
+                let sections = document.querySelectorAll(".tab_section")
+                sections.forEach(section=>section.classList.toggle('visible_tab_section'))
+            }
         })
-
     })
 
-
+    return tabsContainer
 }

@@ -1,8 +1,6 @@
 export function createChatSections(){
-    let postsSection = document.createElement('section')
-    postsSection.classList.add("chat_section",) 
-
-
-
-
+    let chatSection = document.createElement('section')
+    chatSection.classList.add("chat_section","tab_section")
+    chatSection.append("Chat Section")
+    return chatSection;
 }

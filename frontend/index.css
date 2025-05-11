@@ -1,3 +1,5 @@
+
+/** global styling */
 * {
     padding: 0;
     margin: 0;
@@ -11,51 +13,152 @@ a {
     font-size: larger;
 }
 
-
 body {
     width: 100%;
     height: 100vh;
-   
 }
-
-#app
-
-
 
 header {
-    border-bottom: solid purple;
-    margin: 1rem 2rem;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 1rem 0rem;
 }
-
 
 main {
     flex-grow: 1;
-    border: solid blue;
 }
 
-footer{
-    border: solid green;
+
+
+/** buttons styles  */
+
+
+.logo{
+    /* display: none; */
+    font-size: 30px;
+    font-weight: bold;
+    color: #4B164C;
 }
 
+.logout-btn {
+    border: unset;
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: rgb(196, 14, 14);
+    color: white;
+    font-weight: 700;
+    border-radius: 5px ;
+}
 
 #app {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column ;
-    border: solid red ;
-    gap: 1rem;
     overflow-y: auto;
+    padding:0rem 1rem;
+    background-color: #D9D9D9;
+}
+
+.home-main {
+    /* display: none; */
+    /* background-color: #4B164C; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    margin-inline: 2rem ;
+}
+
+.tabs-container{
+    display: flex;
+    gap: 5px;
+    /* justify-content: end; */
+    /* margin-left: auto; */
+    background-color: #D9D9D9;
+}
+
+.tab-btn {
+    all: unset;
+    cursor: pointer;
+    color: #4B164C;
+    font-size: 18px;
+    padding: 6px 20px ;
+    border-radius: 8px 8px 0px 0px ;
+    font-weight: 700;
+}
+
+.active-tab-btn {
+    color: white;
+    background-color: #4B164C;
 }
 
 
+.main-sectionsContainer{
+    position: relative;
+    /* display: none; */
+    height:  100%;
+    /* padding: 0 2rem; */
+    margin-bottom:1rem;
+    /* border: solid red; */
+}
+
+.hide {
+    display: none;
+}
 
 
-.logo{
+.tab_section {
+    /* padding: 2rem 1rem; */
+    visibility: hidden ;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0  8px 8px  8px;
+    background-color: #4B164C;
+    padding: 2rem;
+}
 
+.visible_tab_section {
+    visibility: visible;
+}
+
+.expand-post {
+    animation: expand 0.3s ease-in forwards;
+    background-color: #4B164C;
+    width: 100%;
+}
+
+@keyframes expand {
+    to {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200% !important;
+        height:  100%;
+    }
+}
+
+.posts_section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    overflow: auto;
+    border: solid red ;
+}
+
+/* post styling */
+.postContainer {
+    padding: 1rem;
+    border: solid;
+    width: 50%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 
@@ -83,8 +186,6 @@ textarea {
 textarea {
     resize: vertical;
     height: 400px;
-
-
 }
 
 .input-filled:invalid {
@@ -93,13 +194,25 @@ textarea {
 }
 
 
-/* post styling */
-.postContainer {
-    border: solid;
-    width: 90%;
-    max-width: 500px;
-    margin: auto;
+ul,li {
+    list-style: none;
+}
+
+footer {
+}
+
+footer ul{
+    font-weight: bold;
+    width: max-content;
+    margin: auto    ;
+    /* border: solid red ; */
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+
+}
+footer ul li {
+    font-weight: 400;
+    font-size: 14px;
 }

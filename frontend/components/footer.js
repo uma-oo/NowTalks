@@ -3,7 +3,7 @@ import { creatLink } from "./links.js"
 export function createFooter() {
     let footer = document.createElement('footer')
     let ul = document.createElement('ul')
-    ul.textContent =  "created by :"  
+    ul.textContent =  "Created By :"  
     let links  = [
         {
             content : "ayoub",

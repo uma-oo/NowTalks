@@ -25,11 +25,11 @@ export function createPostCard(postData) {
     postFooter.append(postWriter)
     postFooter.append(postTimePosted)
     postFooter.className = 'post-Footer'
-    postWriter.textContent = postData.user
+    postWriter.textContent = postData.user_name
     postTimePosted.textContent = timeAgo(postData.created_at)
 
     let viewPostBtn = createButton("viewPost >>",'button','linkBtn')
-    viewPostBtn.addEventListener('click', ()=>expandPost(postContainer))
+    viewPostBtn.addEventListener('click', ()=>expandPost(viewPostBtn,postContainer))
 
     postContainer.append(postHeader,postBody,postFooter,viewPostBtn)
     return postContainer
@@ -39,7 +39,7 @@ export function createPostCard(postData) {
 
 
 
-function expandPost(postContainer) {
+function expandPost(viewPostBtn,postContainer) {
+    viewPostBtn.classList.toggle('hide')
     postContainer.classList.add('expand-post')
-    
 }

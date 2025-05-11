@@ -29,7 +29,7 @@ export function renderForm(target, formRepresentaion, id) {
     });
 
     formRepresentaion.buttons.forEach(button => {
-        formElement.append(createButton(button.content,button.type,button.style))    
+        formElement.append(createButton(button.content,button.type,[button.style]))    
     })
     target.append(formElement)
     
