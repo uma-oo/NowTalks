@@ -1,4 +1,5 @@
-import { getPosts } from "../api/posts.js"
+// import { getPosts } from "../api/posts.js"
+import { Posts } from "../const/data.js"
 import { createButton } from "./button.js"
 import { createPostCard } from "./postCard.js"
 
@@ -12,13 +13,12 @@ export async function createPostsSections(){
         
     })
 
-    let posts = await getPosts()
+    // let posts = await getPosts()
 
-    posts.forEach(post => {
+    Posts.forEach(post => {
         postsSection.append(createPostCard(post))
     });
 
-    console.log(posts)
     return postsSection
 
 }

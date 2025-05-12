@@ -28,8 +28,8 @@ export function createPostCard(postData) {
     postWriter.textContent = postData.user_name
     postTimePosted.textContent = timeAgo(postData.created_at)
 
-    let viewPostBtn = createButton("viewPost >>",'button','linkBtn')
-    viewPostBtn.addEventListener('click', ()=>expandPost(viewPostBtn,postContainer))
+    let viewPostBtn = createButton("viewPost >>",'button',["linkBtn","show", "viewPost"])
+    viewPostBtn.addEventListener('click', ()=>expandPost(viewPostBtn, postContainer))
 
     postContainer.append(postHeader,postBody,postFooter,viewPostBtn)
     return postContainer
@@ -39,7 +39,41 @@ export function createPostCard(postData) {
 
 
 
-function expandPost(viewPostBtn,postContainer) {
-    viewPostBtn.classList.toggle('hide')
-    postContainer.classList.add('expand-post')
+function expandPost(viewPostBtn, postContainer) {
+    postContainer.classList.add("expand-post")
+    let elementsToHide = postContainer.querySelectorAll(".hide")
+    elementsToHide.forEach(elem => {
+        elem.classList.replace("hide","show")
+    });
+    let closeBtn = createButton("<- Go Back.","button",["close-btn","show"])
+    if (!postContainer.querySelector('.close-btn')) {
+        postContainer.append(closeBtn)
+        viewPostBtn.classList.replace("show","hide")
+        closeBtn.addEventListener("click", ()=>shrinkPost(viewPostBtn,postContainer) )
+    }
 }
+
+
+
+function shrinkPost(viewPostBtn, postContainer){
+    postContainer.classList.remove("expand-post")
+    let elementsToHide = postContainer.querySelectorAll(".show")
+    elementsToHide.forEach(elem => {
+        elem.classList.replace("show","hide")
+    });
+    viewPostBtn.classList.replace("hide","show")
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
