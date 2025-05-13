@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+
 	"real-time-forum/backend/models"
 	"real-time-forum/backend/service"
 )
@@ -18,10 +19,11 @@ type UserHanlder struct {
 	service *service.AppService
 }
 
+type Logout UserHanlder
 
-
-
-
+func NewLogoutHandler(service *service.AppService) *Logout {
+	return &Logout{service: service}
+}
 
 func NewCommentHandler(service *service.AppService) *CommentHandler {
 	return &CommentHandler{service: service}
@@ -31,7 +33,7 @@ func NewPostHandler(service *service.AppService) *PostHandler {
 	return &PostHandler{service: service}
 }
 
-func NewUserHandler(service *service.AppService) *UserHanlder{
+func NewUserHandler(service *service.AppService) *UserHanlder {
 	return &UserHanlder{service: service}
 }
 

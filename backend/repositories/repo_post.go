@@ -9,13 +9,12 @@ import (
 // OMG
 
 func (appRep *AppRepository) CreatePost(post *models.Post) *models.ErrorJson {
-	fmt.Println("inside repo")
 	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?)`
 	stmt, err := appRep.db.Prepare(query)
-	defer stmt.Close()
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
+	defer stmt.Close()
 	_, err = stmt.Exec(post.UserId, post.Title, post.Content)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
@@ -37,7 +36,7 @@ func (appRep *AppRepository) GetPosts() ([]models.Post, *models.ErrorJson) {
 	for rows.Next() {
 		var post models.Post
 		if err := rows.Scan(&post.Id, &post.Username, &post.CreatedAt, &post.Title, &post.Content); err != nil {
-			return posts,  &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		posts = append(posts, post)
 

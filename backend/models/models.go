@@ -65,6 +65,12 @@ type Login struct {
 	Password   string `json:"password"`
 }
 
+
+
+
+
+
+
 // we can make the message interface and then accpet all of them but for now let's work so
 
 type ErrorJson struct {

@@ -50,9 +50,6 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 
 	// we don't need to handle the error here (7itash deja login katkhdm nfss l function u error hadnling is there)
 	userData, _ := Uhandler.service.GetUser(login)
-
-	// var login = models.Login{LoginField: user.Nickname}
-	fmt.Println("USER DATA", userData)
 	// if there is a session update it
 	session, errJson := Uhandler.service.GetSessionByUserId(userData.Id)
 	if errJson != nil {

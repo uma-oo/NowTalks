@@ -5,10 +5,7 @@ import (
 	"net/http"
 
 	database "real-time-forum/backend/database"
-	"real-time-forum/backend/handler"
-	"real-time-forum/backend/repositories"
-	"real-time-forum/backend/routes"
-	"real-time-forum/backend/service"
+	Init "real-time-forum/backend/init"
 )
 
 func main() {
@@ -21,15 +18,8 @@ func main() {
 	if err != nil {
 		fmt.Println("err DB", err)
 	}
+	Init.InitSetup(db.Database)
 
-	// setup layers
-	repo := repositories.NewAppRepository(db.Database)
-	service := service.NewPostService(repo)
-	postHanlder := handler.NewPostHandler(service)
-	commentHandler := handler.NewCommentHandler(service)
-	userHandler := handler.NewUserHandler(service)
-	// middleware := middleware.NewMiddleWare(postHanlder)
-	routes.SetRoutes(postHanlder, commentHandler, userHandler, service)
 	defer db.Database.Close()
 
 	fmt.Println("Listening on: http://localhost:8080")

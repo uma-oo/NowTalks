@@ -53,3 +53,10 @@ func (s *AppService) GetSessionByUserId(user_id int) (*models.Session, *models.E
 	}
 	return session, nil
 }
+
+func (s *AppService) DeleteSession(session *models.Session) *models.ErrorJson {
+	if err := s.repo.DeleteSession(*session); err != nil {
+		return err
+	}
+	return nil
+}
