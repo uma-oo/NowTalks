@@ -9,11 +9,14 @@ import (
 func (Uhandler *UserHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json")
 	switch {
-	case r.Method == http.MethodPost && r.URL.Path[1:] == "api/user/login":
+	case r.Method == http.MethodPost && r.URL.Path == "/api/user/login":
 		Uhandler.Login(w, r)
 		return
-	case r.Method == http.MethodPost && r.URL.Path[1:] == "api/user/register":
+	case r.Method == http.MethodPost && r.URL.Path == "/api/user/register":
 		Uhandler.Register(w, r)
+		return
+	case r.Method == http.MethodPost && r.URL.Path == "/api/user/logout":
+		Uhandler.Logout(w, r)
 		return
 	case r.Method != http.MethodPost:
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not allowed!!"})

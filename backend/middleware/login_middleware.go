@@ -25,7 +25,7 @@ func (LogRegM *LoginRegisterMiddleWare) ServeHTTP(w http.ResponseWriter, r *http
 	LogRegM.MiddlewareHanlder.ServeHTTP(w, r)
 }
 
-// the logic of this function is not correct so neeed a quick fix
+// 
 
 func (LogRegM *LoginRegisterMiddleWare) GetAuthUser(r *http.Request) *models.ErrorJson {
 	cookie, err := r.Cookie("session")
@@ -36,7 +36,6 @@ func (LogRegM *LoginRegisterMiddleWare) GetAuthUser(r *http.Request) *models.Err
 		return models.NewErrorJson(400, "ERROR!! There was an error in the Request!!")
 	}
 	has_session, session := LogRegM.service.CheckUserSession(cookie.Value)
-	fmt.Println("has_session", has_session,"seesion", session)
 	if has_session {
 		if !session.IsExpired() {
 			return models.NewErrorJson(403, "ERROR!! The User has a session!! Access Forbiden")
