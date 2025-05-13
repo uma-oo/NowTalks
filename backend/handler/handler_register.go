@@ -51,12 +51,12 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Path knt nassyaha dakshi 3lash makantsh tl3
-	
+
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session",
 		Value:   session.Token,
 		Expires: session.ExpDate,
-		Path: "/",
+		Path:    "/",
 	})
 	// we don't need to write back the data for the repsonse ( sentitive data ;)
 	// WriteDataBack(w, user)

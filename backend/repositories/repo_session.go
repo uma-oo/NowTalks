@@ -15,7 +15,6 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 	}
 
 	defer stmt.Close()
-	fmt.Println("session", session.Token, session.ExpDate, user.Id)
 	_, err = stmt.Exec(user.Id, session.Token, session.ExpDate)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
@@ -25,7 +24,7 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 
 // get the session by the user id or the user nickname !!
 
-func (appRepo *AppRepository) GetUserbyToken(token string) (*models.Session, *models.ErrorJson) {
+func (appRepo *AppRepository) GetUserbyTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
 	session := models.Session{}
 	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
 	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, session.Token, session.ExpDate)
@@ -33,6 +32,21 @@ func (appRepo *AppRepository) GetUserbyToken(token string) (*models.Session, *mo
 		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorizes Access"}
 	}
 	return &session, nil
+}
+
+func (appRepo *AppRepository) HasValidToken(token string) (bool, *models.Session) {
+	session := models.NewSession()
+	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
+	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, &session.Token, &session.ExpDate)
+
+	if row == sql.ErrNoRows {
+		return false, nil
+	}
+
+	if (session != &models.Session{}) {
+		return true, session
+	}
+	return false, nil
 }
 
 func (appRep *AppRepository) GetUserSession(field any) (*models.Session, *models.ErrorJson) {
@@ -46,9 +60,9 @@ func (appRep *AppRepository) GetUserSession(field any) (*models.Session, *models
 	return &session, nil
 }
 
-func (appRep *AppRepository) UpdateSession(session models.Session, new_token string) *models.ErrorJson {
-	query := `UPDATE sessions SET token = ? where sessionToken= ?`
-	_, err := appRep.db.Exec(query, new_token, session.Token)
+func (appRep *AppRepository) UpdateSession(session *models.Session, new_session *models.Session) *models.ErrorJson {
+	query := `UPDATE sessions SET sessionToken = ? , expiresAt = ? where sessionToken= ?`
+	_, err := appRep.db.Exec(query, new_session.Token, new_session.ExpDate, session.Token)
 	if err != nil {
 		return models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
@@ -63,4 +77,3 @@ func (appRep *AppRepository) DeleteSession(session models.Session) *models.Error
 	}
 	return nil
 }
-

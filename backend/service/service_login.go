@@ -47,6 +47,5 @@ func (s *AppService) Login(login *models.Login) *models.ErrorJson {
 			},
 		}
 	}
-	// a finir tomorrow
 	return nil
 }

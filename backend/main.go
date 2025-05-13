@@ -14,12 +14,12 @@ import (
 func main() {
 	db, err := database.InitDB("./database/forum.db")
 	if err != nil {
-		fmt.Println("err", err)
+		fmt.Println("err DB", err)
 	}
 
 	err = db.ReadSQL("./database/db.sql")
 	if err != nil {
-		fmt.Println("err", err)
+		fmt.Println("err DB", err)
 	}
 
 	// setup layers

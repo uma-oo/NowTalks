@@ -16,20 +16,20 @@ import (
 // reset the sesssion
 
 func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
-	var login = &models.Login{}
+	login := &models.Login{}
 	if r.Method != http.MethodPost {
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "Method not Allowed!"})
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&login)
 	if err != nil {
-		if err==io.EOF {
+		if err == io.EOF {
 			// case if the body sent if empty
 			WriteJsonErrors(w, models.ErrorJson{
 				Status: 400,
-				Message: models.Login {
+				Message: models.Login{
 					LoginField: "ERROR!! Empty Login field!!",
-					Password: "ERROR!! Emty Password field!!",
+					Password:   "ERROR!! Emty Password field!!",
 				},
 			})
 			return
@@ -43,18 +43,39 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// We are kinda sure that if the user has a token he cannot be here
+	// we need now
+
 	// before setting the session we need the actual id of the user
-	userData, errJson := Uhandler.service.GetUser(login)
+
+	// we don't need to handle the error here (7itash deja login katkhdm nfss l function u error hadnling is there)
+	userData, _ := Uhandler.service.GetUser(login)
+
+	// var login = models.Login{LoginField: user.Nickname}
+	fmt.Println("USER DATA", userData)
+	// if there is a session update it
+	session, errJson := Uhandler.service.GetSessionByUserId(userData.Id)
 	if errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
-	// var login = models.Login{LoginField: user.Nickname}
-	ss , e := Uhandler.service.GetSessionByUserId(userData.Id)
-	fmt.Println("ss", ss.ExpDate,ss.IsExpired(), e)
+	if session != (&models.Session{}) {
+		new_session, errUpdate := Uhandler.service.UpdateUserSession(session)
+		if errUpdate != nil {
+			WriteJsonErrors(w, *errUpdate)
+			return
+		}
+		http.SetCookie(w, &http.Cookie{
+			Name:    "session",
+			Value:   new_session.Token,
+			Expires: new_session.ExpDate,
+			Path:    "/",
+		})
+		return
+	}
+
 	session, err_ := Uhandler.service.SetUserSession(userData)
 	if err_ != nil {
-		fmt.Println("errror", err_)
 		WriteJsonErrors(w, *err_)
 		return
 	}
@@ -63,10 +84,10 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		Name:    "session",
 		Value:   session.Token,
 		Expires: session.ExpDate,
-		Path: "/",
+		Path:    "/",
 	})
-    
-	// in the login we don't need to rewrite the data ??? 
+
+	// in the login we don't need to rewrite the data ???
 	// allahu a3lam
 	WriteDataBack(w, login)
 }

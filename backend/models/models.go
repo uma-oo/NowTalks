@@ -60,8 +60,6 @@ type RegisterError struct {
 	VerifPassword string `json:"verifpassword"`
 }
 
-
-
 type Login struct {
 	LoginField string `json:"login"`
 	Password   string `json:"password"`
@@ -101,6 +99,10 @@ func NewCommentErr() *CommentError {
 
 func NewUser() *User {
 	return &User{}
+}
+
+func NewSession() *Session {
+	return &Session{}
 }
 
 func (session *Session) IsExpired() bool {

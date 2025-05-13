@@ -1,14 +1,12 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"real-time-forum/backend/models"
 )
 
 func (Uhandler *UserHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("path url", r.URL.Path)
 	r.Header.Set("Content-Type", "application/json")
 	switch {
 	case r.Method == http.MethodPost && r.URL.Path[1:] == "api/user/login":
