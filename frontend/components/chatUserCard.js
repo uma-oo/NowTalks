@@ -1,13 +1,9 @@
 export function createChatUserCard(user) {
-
-    console.log(user)
-
     let chatUserCard = document.createElement('div');
     chatUserCard.classList.add("chat-user-card")
 
     let userName = document.createElement('p')
     userName.append(user.name)
-    console.log(userName)
     let onlineIndicator = document.createElement('div')
     onlineIndicator.classList.add('online-indicator')
     user.online ? onlineIndicator.classList.add('online') : onlineIndicator.classList.add('offline')

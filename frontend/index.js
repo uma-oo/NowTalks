@@ -1,40 +1,32 @@
+import { renderErrorPage } from "./pages/errorPage.js";
+import { renderHomePage } from "./pages/homePage.js"
+import { renderLoginPage } from "./pages/loginPage.js";
+import { renderRegisterPage } from "./pages/registerPage.js";
 
-import { renderHomePage } from "./pages/home.js"
+let app  = document.querySelector('#app')
 
-export const appContainer = document.getElementById('app')
+export function renderApp() {
+    console.log(window.location.pathname)
+    switch (window.location.pathname) {
+        case "/register":
+            renderRegisterPage(app)
+            break;
+        case "/login":
+            renderLoginPage(app)
+            break;
+        case "/":
+            renderHomePage(app)
+            break;
+        default:
+            renderErrorPage(app)
+            break;
+    }
+}
 
-// window.addEventListener('popstate', function (event) {
-//     event.preventDefault()
-// 	let page = this.window.location.href
-//     console.log(page)
-// });
+window.addEventListener('popstate', () => {
+    console.log("url has been changed ")
+    renderApp();
+});
 
-// async function startApp() {
-//     let posts = await getPosts()
-//     console.log(posts)
-
-//     if (posts.status === 401){
-//         history.pushState({},"","/login")
-//     }
-// }
-
-
-// startApp();
-
-
-
-
-// renderForm(app, registerFom, 'registerForm')
-// renderForm(app, LoginForm, 'loginForm')
-// renderForm(app, PostForm, 'postForm')
-// renderForm(app, CommentForm, 'commentForm')
-
-
-
-
-
-renderHomePage()
-
-
-// posts.forEach(post => app.append(createPostCard(post))) 
+renderApp()
 

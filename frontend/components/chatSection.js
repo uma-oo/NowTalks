@@ -19,7 +19,6 @@ export function createChatSections(){
         chatUsersCardsContainer.append(createChatUserCard(user))
     });
 
-    console.log( chatUsersCardsContainer)
     chatSection.append(chatUsersCardsContainer)
     return chatSection;
 }

@@ -6,13 +6,13 @@ import { createTabsContainer } from "../components/tabsContainer.js";
 
 
 
-export async function renderHomePage() {
+export function renderHomePage(app) {
     let header = createHeader()
 
     let main =  document.createElement('main')
     main.classList.add("home-main")
     
-    main.append(await createPostsSections(), createChatSections())
+    main.append(createPostsSections(), createChatSections())
     app.append(header,main)
 }
 
