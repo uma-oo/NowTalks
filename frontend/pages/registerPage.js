@@ -1,5 +1,5 @@
 export function renderRegisterPage(app) {
-    // app.innerHTML = ""
-    console.log(app)
+    
+    app.innerHTML = ""
     app.append("register page")
 }

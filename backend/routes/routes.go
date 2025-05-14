@@ -17,5 +17,7 @@ func SetRoutes(Phandler *handler.PostHandler,
 	http.Handle("/api/comment", m.NewMiddleWare(Chandler, service))
 	http.Handle("/api/post", m.NewMiddleWare(Phandler, service))
 	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
-	http.Handle("/api/user/logout", m.NewMiddleWare(logout , service))
+	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
+	fileserver := http.FileServer(http.Dir("../frontend"))
+	http.Handle("/", fileserver)
 }
