@@ -37,7 +37,7 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {
-	// get the posts of a specific ID
+	// get the comments of a specific ID
 	// FOR NOW let's just get them from the query
 	postId, err := strconv.ParseInt(r.URL.Query().Get("postId"), 10, 64)
 	if err != nil {

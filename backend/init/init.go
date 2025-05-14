@@ -9,10 +9,7 @@ import (
 	"real-time-forum/backend/service"
 )
 
-
-
-
-// SETUP THE LAYERS 
+// SETUP THE LAYERS
 func InitSetup(database *sql.DB) {
 	repo := repositories.NewAppRepository(database)
 	service := service.NewPostService(repo)
@@ -20,6 +17,5 @@ func InitSetup(database *sql.DB) {
 	commentHandler := handler.NewCommentHandler(service)
 	userHandler := handler.NewUserHandler(service)
 	logout := handler.NewLogoutHandler(service)
-	// middleware := middleware.NewMiddleWare(postHanlder)
-	routes.SetRoutes(postHanlder, commentHandler, userHandler, service, logout)
+	routes.SetRoutes(postHanlder, commentHandler, userHandler, logout, service)
 }

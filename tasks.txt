@@ -1,0 +1,9 @@
+
+1. Write the response body with created at for the comment and the post
+2. Add the likes and dislikes in a scalable way
+3. Cleaning the code and unnecessary code 
+4. The Websocket part 
+5. The front end part tooo 
+6. REgister and login (username and userid and uuid )
+7. LIMIT AND offset
+8.  categories 

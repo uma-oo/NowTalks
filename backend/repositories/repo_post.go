@@ -48,3 +48,12 @@ func (appRep *AppRepository) GetPosts() ([]models.Post, *models.ErrorJson) {
 
 // Filter by MyPosts // by userId
 // Filter based on categories
+
+
+// func (appRep  *AppRepository) GetPostsByCategory(category... string) ([]models.Post , *models.ErrorJson){
+// 	var posts = []models.Post{}
+// 	query := Query{}
+// 	query.Query("SELECT * FROM postCategories ")
+
+
+// }
