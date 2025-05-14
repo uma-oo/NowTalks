@@ -2,7 +2,9 @@ import { createButton } from "./button.js";
 import { setAttributes, setOpions } from "../utils.js";
 
 
-export function renderForm(target, formRepresentaion, id) {
+export function renderForm(formRepresentaion, id) {
+    console.log('asdafsdfasfasdf')
+    console.log(formRepresentaion)
     let formElement = document.createElement('form')
     formElement.id = id
     
@@ -31,13 +33,13 @@ export function renderForm(target, formRepresentaion, id) {
     formRepresentaion.buttons.forEach(button => {
         formElement.append(createButton(button.content,button.type,[button.style]))    
     })
-    target.append(formElement)
     
     formElement.addEventListener('submit',(event)=>{
         event.preventDefault()
         let form = new FormData(formElement)
         const formData = Object.fromEntries(form.entries())
-        console.log(formData)
+        
     })
+    return formElement
 }
 

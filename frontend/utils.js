@@ -1,3 +1,16 @@
+import { renderApp } from "./index.js";
+
+export function currentRoute() {
+    let sep  = new RegExp("/")
+    let currentRoute = window.location.href.split('/')
+}
+
+export async function navigateTo(pathname) {
+    history.replaceState({},"",pathname)
+    renderApp();
+}
+
+
 export function timeAgo(timestamp, locale = 'en') {
     let value;
     const diff = (new Date().getTime() - new Date(timestamp).getTime()) / 1000;
@@ -23,6 +36,10 @@ export function timeAgo(timestamp, locale = 'en') {
     }
     return value;
 }
+
+
+
+
 
 
 export function setAttributes(elem, attributes) {

@@ -119,7 +119,7 @@ export const registerFom = {
 
 
 
-export const LoginForm = {
+export const loginForm = {
     elements: [
         {
             tag: 'input',

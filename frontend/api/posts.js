@@ -16,7 +16,12 @@ export async function getPosts() {
         })
         return  response.json()
     } catch (error) {
-        throw new Error (error)
+        console.log(error)
+        // throw new Error (error)
     }
 }
+
+
+
+
 
