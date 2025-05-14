@@ -20,19 +20,43 @@ func (s *AppService) SetUserSession(user *models.User) (*models.Session, *models
 	return session, nil
 }
 
-func (s *AppService) GetUserSessionByToken(token string) (*models.Session, *models.ErrorJson) {
-	session, err := s.repo.GetUserbyToken(token)
+func (s *AppService) GetUserSessionByTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
+	session, err := s.repo.GetUserbyTokenEnsureAuth(token)
 	if err != nil {
 		return nil, err
 	}
 	return session, nil
 }
 
-func (s *AppService) CheckUserSession(user *models.User) {
+func (s *AppService) CheckUserSession(token string) (bool, *models.Session) {
+	has_session, session := s.repo.HasValidToken(token)
+	if has_session {
+		return true, session
+	}
+	return false, nil
 }
 
-func (s *AppService) UpdateUserSession(user *models.User) {
+func (s *AppService) UpdateUserSession(session *models.Session) (*models.Session, *models.ErrorJson) {
+	new_session := models.NewSession()
+	new_session.Token = uuid.NewString()
+	new_session.ExpDate = time.Now().Add(24 * time.Hour)
+	if err := s.repo.UpdateSession(session, new_session); err != nil {
+		return nil, err
+	}
+	return new_session, nil
 }
 
-func (s *AppService) GetUserSession(user *models.User) {
+func (s *AppService) GetSessionByUserId(user_id int) (*models.Session, *models.ErrorJson) {
+	session, err := s.repo.GetUserSession(user_id)
+	if err != nil {
+		return nil, err
+	}
+	return session, nil
+}
+
+func (s *AppService) DeleteSession(session *models.Session) *models.ErrorJson {
+	if err := s.repo.DeleteSession(*session); err != nil {
+		return err
+	}
+	return nil
 }

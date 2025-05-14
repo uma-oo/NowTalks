@@ -7,6 +7,7 @@ import (
 func (appRep *AppRepository) CreateComment(comment *models.Comment) error {
 	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?)`
 	stmt, err := appRep.db.Prepare(query)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}

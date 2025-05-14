@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
-    sesSEsionID INTEGER PRIMARY KEY,
+    sessionID INTEGER PRIMARY KEY,
     userID  INTEGER NOT NULL UNIQUE,
     sessionToken VARCHAR(200) NOT NULL UNIQUE,
     expiresAt DATETIME,
@@ -67,6 +67,6 @@ INSERT INTO categories (category) VALUES
   ('Issues');
 
 
-/* triggers section  we'll have only for the total comments */
+/* */
 
 

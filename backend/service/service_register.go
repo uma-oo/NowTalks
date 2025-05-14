@@ -14,7 +14,6 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	_, has_nickname, _ := s.repo.GetItem("users", "nickname", user.Nickname)
 	_, has_email, _ := s.repo.GetItem("users", "email", user.Email)
 	if has_nickname {
-		// fmt.Println("hnaaa")
 		registerErr.Nickname = "ERROR! Username already exists"
 	}
 	if has_email {

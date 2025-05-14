@@ -47,19 +47,16 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 	// var login = models.Login{LoginField: user.Nickname}
 	session, err_ := Uhandler.service.SetUserSession(userData)
 	if err_ != nil {
-		fmt.Println("errror", session)
 		WriteJsonErrors(w, *err_)
 		return
 	}
-
-
 	// Path knt nassyaha dakshi 3lash makantsh tl3
-	
+
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session",
 		Value:   session.Token,
 		Expires: session.ExpDate,
-		Path: "/",
+		Path:    "/",
 	})
 	// we don't need to write back the data for the repsonse ( sentitive data ;)
 	// WriteDataBack(w, user)

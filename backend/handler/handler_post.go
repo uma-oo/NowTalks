@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"real-time-forum/backend/models"
@@ -12,15 +13,22 @@ import (
 // Write the added post f response again (good practice)
 func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 	var post *models.Post
-	if err := json.NewDecoder(r.Body).Decode(&post); err != nil {
+	err := json.NewDecoder(r.Body).Decode(&post)
+	if err != nil {
+		if err == io.EOF {
+			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.PostError{
+				Title:   "ERROR!! Empty Title field!",
+				Content: "ERROR!! Empty Content fiedl!",
+			}})
+			return
+		}
 		// which status code to return
-		errJSon := models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)}
-		WriteJsonErrors(w, errJSon)
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
-	err := Phandler.service.AddPost(post)
-	if err != nil {
-		WriteJsonErrors(w, *err)
+	err_ := Phandler.service.AddPost(post)
+	if err_ != nil {
+		WriteJsonErrors(w, *err_)
 		return
 	}
 	WriteDataBack(w, post)

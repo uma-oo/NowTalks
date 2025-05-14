@@ -25,7 +25,7 @@ type Session struct {
 type Post struct {
 	Id        int    `json:"id,omitempty"`
 	UserId    int    `json:"user_id,omitempty"`
-	Username  string `json:"user_name"`
+	Username  string `json:"user_name,omitempty"`
 	Title     string `json:"title"`
 	Content   string `json:"content"`
 	CreatedAt string `json:"created_at,omitempty"`
@@ -33,8 +33,9 @@ type Post struct {
 
 type Comment struct {
 	Id        int    `json:"id,omitempty"`
-	PostId    int    `json:"post_id"`
-	UserId    int    `json:"user_id"`
+	PostId    int    `json:"post_id,omitempty"`
+	UserId    int    `json:"user_id,omitempty"`
+	Username  string `json:"user_name,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
 	Content   string `json:"content"`
 }
@@ -63,6 +64,12 @@ type Login struct {
 	LoginField string `json:"login"`
 	Password   string `json:"password"`
 }
+
+
+
+
+
+
 
 // we can make the message interface and then accpet all of them but for now let's work so
 
@@ -100,6 +107,10 @@ func NewUser() *User {
 	return &User{}
 }
 
+func NewSession() *Session {
+	return &Session{}
+}
+
 func (session *Session) IsExpired() bool {
-	return session.ExpDate.After(time.Now())
+	return session.ExpDate.Before(time.Now())
 }

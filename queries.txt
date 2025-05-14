@@ -13,7 +13,6 @@
 
 
 {
-  
 "login": "najiya", 
 "password": "Abcd@2024"
 }

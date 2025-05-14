@@ -14,6 +14,7 @@ import (
 func (appRep *AppRepository) CreateUser(user *models.User) error {
 	query := `INSERT INTO users (nickname, age, gender, firstName, lastName, email, password) VALUES (?,?,?,?,?,?,?)`
 	stmt, err := appRep.db.Prepare(query)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}
@@ -50,6 +51,7 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 	query := `SELECT userID, nickname, password 
 	FROM users where nickname=? OR email =? `
 	stmt, err := appRep.db.Prepare(query)
+	defer stmt.Close()
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
