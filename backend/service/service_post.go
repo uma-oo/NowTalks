@@ -12,6 +12,7 @@ import (
 
 func (s *AppService) GetPosts() ([]models.Post, *models.ErrorJson) {
 	posts, err := s.repo.GetPosts()
+    fmt.Println("posts inside the service", posts)
 	if err != nil {
 		return nil, err
 	}

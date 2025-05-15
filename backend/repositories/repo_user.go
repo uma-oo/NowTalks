@@ -51,10 +51,10 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 	query := `SELECT userID, nickname, password 
 	FROM users where nickname=? OR email =? `
 	stmt, err := appRep.db.Prepare(query)
-	defer stmt.Close()
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
+	defer stmt.Close()
 	row := stmt.QueryRow(login.LoginField, login.LoginField)
 	err = row.Scan(&user.Id, &user.Nickname, &user.Password)
 	if err == sql.ErrNoRows {

@@ -24,7 +24,7 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 
 // get the session by the user id or the user nickname !!
 
-func (appRepo *AppRepository) GetUserbyTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
+func (appRepo *AppRepository) GetSessionbyTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
 	session := models.Session{}
 	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
 	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, session.Token, session.ExpDate)

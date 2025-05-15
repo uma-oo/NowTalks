@@ -14,7 +14,7 @@ func (m *Middleware) GetAuthUserEnsureAuth(r *http.Request) (*models.Session, *m
 		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorized Access"}
 	}
 	// check if the value of the cookie is correct and if not expired!!!
-	session, errJson := m.service.GetUserSessionByTokenEnsureAuth(cookie.Value)
+	session, errJson := m.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	if errJson != nil || session.IsExpired() {
 		return nil, errJson
 	}

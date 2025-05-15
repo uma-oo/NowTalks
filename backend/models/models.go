@@ -65,11 +65,11 @@ type Login struct {
 	Password   string `json:"password"`
 }
 
-
-
-
-
-
+type UserData struct {
+	IsLoggedIn bool   `json:"is_logged_in"`
+	Id         int    `json:"id,omitempty"`
+	Nickname   string `json:"nickname,omitempty"`
+}
 
 // we can make the message interface and then accpet all of them but for now let's work so
 

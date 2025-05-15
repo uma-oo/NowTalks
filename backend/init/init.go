@@ -17,5 +17,6 @@ func InitSetup(database *sql.DB) {
 	commentHandler := handler.NewCommentHandler(service)
 	userHandler := handler.NewUserHandler(service)
 	logout := handler.NewLogoutHandler(service)
-	routes.SetRoutes(postHanlder, commentHandler, userHandler, logout, service)
+	loggedin := handler.NewUserDataHanlder(service)
+	routes.SetRoutes(postHanlder, commentHandler, userHandler, logout, loggedin, service)
 }

@@ -123,7 +123,7 @@ export const loginForm = {
     elements: [
         {
             tag: 'input',
-            label: 'NickName/Email',
+            label: 'NickName Or Email:',
             attributes: {
                 required: 'true',
                 type: 'text',
@@ -141,8 +141,8 @@ export const loginForm = {
             attributes: {
                 required: 'true',
                 type: 'password',
-                id: 'userPassword',
-                name: 'userPassword',
+                id: 'password',
+                name: 'password',
                 placeholder: "Enter Your Password...",
             },
             style: {

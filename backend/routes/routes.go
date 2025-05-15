@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	"real-time-forum/backend/handler"
@@ -12,15 +13,19 @@ func SetRoutes(Phandler *handler.PostHandler,
 	Chandler *handler.CommentHandler,
 	Uhandler *handler.UserHanlder,
 	logout *handler.Logout,
+	loggedin *handler.UserData,
 	service *s.AppService,
 ) {
 	http.Handle("/api/comment", m.NewMiddleWare(Chandler, service))
 	http.Handle("/api/post", m.NewMiddleWare(Phandler, service))
 	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
 	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
-	// create a function that handles the route /
+	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
+	http.HandleFunc("/", handleSPA)
+}
 
-	http.HandleFunc("/", handler.HandleAssets)
-	// fileserver := http.FileServer(http.Dir("../frontend"))
-	// http.Handle("/", fileserver)
+func handleSPA(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path)
+
+	http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
 }

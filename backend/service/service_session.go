@@ -20,8 +20,8 @@ func (s *AppService) SetUserSession(user *models.User) (*models.Session, *models
 	return session, nil
 }
 
-func (s *AppService) GetUserSessionByTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
-	session, err := s.repo.GetUserbyTokenEnsureAuth(token)
+func (s *AppService) GetSessionByTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
+	session, err := s.repo.GetSessionbyTokenEnsureAuth(token)
 	if err != nil {
 		return nil, err
 	}

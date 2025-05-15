@@ -88,3 +88,32 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 	// allahu a3lam
 	WriteDataBack(w, login)
 }
+
+func (Uhandler *UserHanlder) getLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "Method not Allowed!"})
+		return
+	}
+
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		data := struct {
+			IsLoggedIn bool `json:"logged_in"`
+		}{IsLoggedIn: false}
+		WriteDataBack(w, data)
+		return
+	}
+	// check if the value of the cookie is correct and if not expired!!!
+	session, errJson := Uhandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
+	if errJson != nil || session.IsExpired() {
+		data := struct {
+			IsLoggedIn bool `json:"logged_in"`
+		}{IsLoggedIn: false}
+		WriteDataBack(w, data)
+		return
+	}
+	data := struct {
+		IsLoggedIn bool `json:"logged_in"`
+	}{IsLoggedIn: true}
+	WriteDataBack(w, data)
+}
