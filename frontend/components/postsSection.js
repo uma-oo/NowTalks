@@ -1,7 +1,7 @@
-import { getPosts } from "../api/posts.js"
+import { getPostsApi } from "../api/posts.js"
 // import { Posts } from "../const/data.js"
 import { renderApp } from "../index.js"
-import { navigateTo } from "../utils.js"
+import { navigateTo } from "../../utils.js"
 import { createButton } from "./button.js"
 import { createPostCard } from "./postCard.js"
 
@@ -15,7 +15,7 @@ export function createPostsSections() {
 
     })
 
-    getPosts().then(posts => {
+    getPostsApi().then(posts => {
         if (posts.status == 401) navigateTo('/login')
     }).catch(error => {
         console.log('error catched')

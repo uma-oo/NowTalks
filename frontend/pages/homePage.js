@@ -1,8 +1,6 @@
 import { createChatSections } from "../components/chatSection.js";
-import { createFooter } from "../components/footer.js";
 import { createHeader } from "../components/header.js";
 import { createPostsSections } from "../components/postsSection.js";
-import { createTabsContainer } from "../components/tabsContainer.js";
 
 
 

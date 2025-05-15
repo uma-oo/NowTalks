@@ -1,4 +1,4 @@
-import { timeAgo } from "../utils.js"
+import { timeAgo } from "../../utils.js"
 import { createButton } from "./button.js"
 
 export function createPostCard(postData) {

@@ -1,5 +1,5 @@
 
-export async function addPost(postData) {
+export async function addPostApi(postData) {
     const response = await fetch('/api/post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -8,7 +8,7 @@ export async function addPost(postData) {
     return response.json()
 }
 
-export async function getPosts() {
+export async function getPostsApi() {
     try {
         const response = await fetch('/api/post', {
             method: 'GET',

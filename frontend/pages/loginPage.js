@@ -1,7 +1,7 @@
 import { renderForm } from "../components/form.js"
 import { creatLink } from "../components/links.js"
 import { loginForm } from "../const/forms.js"
-import { navigateTo } from "../utils.js"
+import { navigateTo } from "../../utils.js"
 
 export function renderLoginPage(app) {
     app.innerHTML = ""
@@ -9,7 +9,7 @@ export function renderLoginPage(app) {
     let formError = document.createElement('div')
     formError.className = "form-Error"
     header.textContent = "Log In"
-    let logingForm = renderForm(loginForm,"login-form")
+    let loginFormElement = renderForm(loginForm,"login-form")
     let goToRegister = document.createElement('p')
     goToRegister.textContent = "Don't have an account? "
     let registerLink = creatLink("Register","","")
@@ -19,5 +19,5 @@ export function renderLoginPage(app) {
         e.preventDefault()
         navigateTo('./register')
     })
-    app.append(header,formError,logingForm,goToRegister)
+    app.append(header,formError,loginFormElement,goToRegister)
 }

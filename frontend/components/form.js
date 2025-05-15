@@ -1,7 +1,6 @@
 import { createButton } from "./button.js";
-import { setAttributes, setOpions } from "../utils.js";
-import { loginUser } from "../api/user.js";
-
+import { navigateTo, setAttributes, setOpions } from "../../utils.js";
+import { createUser, loginUser } from "../api/user.js";
 
 export function renderForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
@@ -32,29 +31,45 @@ export function renderForm(formRepresentaion, id) {
         formElement.append(createButton(button.content,button.type,[button.style]))    
     })
 
-    formElement.addEventListener('submit',(event)=>{
-        event.preventDefault()
-        let form = new FormData(formElement)
+    formElement.addEventListener('submit',(e)=>{handleForm(e)})
+    return formElement
+}
+
+
+export function handleForm(event) {
+     event.preventDefault()
+        let form = new FormData(event.target)
         const formData = Object.fromEntries(form.entries())
-        console.log(formData)
-        switch (event.target.id) {
+
+        switch(event.target.id) {
             case "login-form":
                 login(event.target, formData)
                 break;
+            case "register-form":
+                register(event.target, formData)
             default:
                 break;
         }
-    })
-    return formElement
 }
 
 
 export function login(form, data) {
     console.log(form)
-    loginUser(data).then(data => {
-        if (data.status == 200) console.log("user Loged in successfully")
-        else if (data.status == 401) console.log("wrong creadentials", data)
-    }).catch(error=> console.log("ERROR !! ", error))
-
-
+    loginUser(data).then(response => {
+        if (response.status == 200) navigateTo("/")
+        else if (response.status == 401) console.log("wrong creadentials", response)
+    }).catch(error => console.log("Error submitting login form", error))
 } 
+
+export function register(form,data){
+    createUser(data)
+    .then(response => {
+        if (response.status === 200) navigateTo("/")
+        else if (response.status === 400) console.log("bad request", response)
+    })
+    .catch(error => console.error("error submitting register form: ",error))
+}
+
+
+// export function createPost
+

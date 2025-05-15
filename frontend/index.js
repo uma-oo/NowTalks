@@ -9,7 +9,6 @@ export function renderApp() {
     console.log(window.location.pathname)
     switch (window.location.pathname) {
         case "/register":
-            console.log('going to register');
             renderRegisterPage(app)
             break;
         case "/login":
