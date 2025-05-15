@@ -22,7 +22,6 @@ func SetRoutes(Phandler *handler.PostHandler,
 	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
 	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
 	http.HandleFunc("/", handleSPA)
-
 }
 
 func handleSPA(w http.ResponseWriter, r *http.Request) {
@@ -32,5 +31,7 @@ func handleSPA(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "../frontend/index.html")
 		return
 	}
+
 	http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
+
 }

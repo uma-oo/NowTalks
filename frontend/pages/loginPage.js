@@ -14,7 +14,6 @@ export function renderLoginPage(app) {
     goToRegister.textContent = "Don't have an account? "
     let registerLink = creatLink("Register","","")
     goToRegister.append(registerLink)
-
     registerLink.addEventListener("click", (e) => {
         e.preventDefault()
         navigateTo('./register')

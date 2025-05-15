@@ -5,8 +5,10 @@ import { renderRegisterPage } from "./pages/registerPage.js";
 
 let app  = document.querySelector('#app')
 
+console.log(document.cookie)
+
 export function renderApp() {
-    console.log(window.location.pathname)
+    app.innerHTML = ""
     switch (window.location.pathname) {
         case "/register":
             renderRegisterPage(app)
@@ -22,11 +24,6 @@ export function renderApp() {
             break;
     }
 }
-
-window.addEventListener('popstate', () => {
-    console.log("url has been changed ")
-    renderApp();
-});
 
 renderApp()
 

@@ -26,6 +26,7 @@ export function renderForm(formRepresentaion, id) {
             formInput.classList.add('input-filled');
         });
     });
+    
 
     formRepresentaion.buttons.forEach(button => {
         formElement.append(createButton(button.content,button.type,[button.style]))    
@@ -40,7 +41,6 @@ export function handleForm(event) {
      event.preventDefault()
         let form = new FormData(event.target)
         const formData = Object.fromEntries(form.entries())
-
         switch(event.target.id) {
             case "login-form":
                 login(event.target, formData)
@@ -54,7 +54,6 @@ export function handleForm(event) {
 
 
 export function login(form, data) {
-    console.log(form)
     loginUser(data).then(response => {
         if (response.status == 200) navigateTo("/")
         else if (response.status == 401) console.log("wrong creadentials", response)
@@ -62,14 +61,16 @@ export function login(form, data) {
 } 
 
 export function register(form,data){
+    data.age = parseInt(data.age)
     createUser(data)
     .then(response => {
-        if (response.status === 200) navigateTo("/")
-        else if (response.status === 400) console.log("bad request", response)
+        if (response.ok || response.status === 403){
+            navigateTo("/")
+        }
+        else if (response.status === 400) {
+            console.log("bad request", response)
+        }
     })
-    .catch(error => console.error("error submitting register form: ",error))
+    .catch(error => console.log("error submitting register form: ",error))
 }
-
-
-// export function createPost
 

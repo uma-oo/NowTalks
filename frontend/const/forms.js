@@ -93,10 +93,25 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'password',
-                id: 'userPassword',
-                name: 'userPassword',
-                pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
+                id: 'password',
+                name: 'password',
+                pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$",
                 placeholder: "Enter Your Password...",
+            },
+            style: {
+                width: '100%'
+            }
+        },
+        {
+            tag: 'input',
+            label: 'Verify Password:',
+            attributes: {
+                required: 'true',
+                type: 'password',
+                id: 'password2',
+                name: 'password2',
+                pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$",
+                placeholder: "Repeat Your Password...",
             },
             style: {
                 width: '100%'

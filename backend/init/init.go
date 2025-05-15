@@ -9,10 +9,7 @@ import (
 	"real-time-forum/backend/service"
 )
 
-
-
-
-// SETUP THE LAYERS 
+// SETUP THE LAYERS
 func InitSetup(database *sql.DB) {
 	repo := repositories.NewAppRepository(database)
 	service := service.NewPostService(repo)

@@ -1,7 +1,7 @@
 
 export async function addPostApi(postData) {
     const response = await fetch('/api/post', {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData)
     })
@@ -14,10 +14,9 @@ export async function getPostsApi() {
             method: 'GET',
             headers: { 'Content-Type': 'application/json'},
         })
-        return  response.json()
+        return await response.json()
     } catch (error) {
-        console.log(error)
-        // throw new Error (error)
+        console.error(error);
     }
 }
 

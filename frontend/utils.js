@@ -1,19 +1,14 @@
 import { renderApp } from "./index.js";
 
-export function currentRoute() {
-    let sep  = new RegExp("/")
-    let currentRoute = window.location.href.split('/')
-}
-
 export async function navigateTo(pathname) {
     history.replaceState({},"",pathname)
-    renderApp();
+    renderApp()
 }
 
 
 export function timeAgo(timestamp, locale = 'en') {
     let value;
-    const diff = (new Date().getTime() - new Date(timestamp).getTime()) / 1000;
+    const diff = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
     const minutes = Math.floor(diff / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
@@ -22,17 +17,17 @@ export function timeAgo(timestamp, locale = 'en') {
     const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
 
     if (years > 0) {
-        value = rtf.format(0 - years, "year");
+        value = rtf.format(-  years, "year");
     } else if (months > 0) {
-        value = rtf.format(0 - months, "month");
+        value = rtf.format(-  months, "month");
     } else if (days > 0) {
-        value = rtf.format(0 - days, "day");
+        value = rtf.format(-  days, "day");
     } else if (hours > 0) {
-        value = rtf.format(0 - hours, "hour");
+        value = rtf.format(-  hours, "hour");
     } else if (minutes > 0) {
-        value = rtf.format(0 - minutes, "minute");
+        value = rtf.format(-  minutes, "minute");
     } else {
-        value = rtf.format(0 - diff, "second");
+        value = rtf.format(-  diff, "second");
     }
     return value;
 }
