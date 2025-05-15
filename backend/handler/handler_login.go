@@ -68,6 +68,7 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 			Expires: new_session.ExpDate,
 			Path:    "/",
 		})
+		
 		return
 	}
 
@@ -77,6 +78,25 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Path knt nassyaha dakshi 3lash makantsh tl3
+
+    fmt.Println("session", session)
+
+
+	user_data, errJ := Uhandler.service.IsLoggedInUser(session.Token)
+	if errJ != nil {
+		user_data.IsLoggedIn = false
+		WriteDataBack(w, user_data)
+		return
+
+	}
+
+	fmt.Println("user_data", user_data)
+
+	// in the login we don't need to rewrite the data ???
+	// allahu a3lam
+	user_data.IsLoggedIn = true
+	WriteDataBack(w, user_data)
+
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session",
 		Value:   session.Token,
@@ -84,36 +104,8 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		Path:    "/",
 	})
 
-	// in the login we don't need to rewrite the data ???
-	// allahu a3lam
-	WriteDataBack(w, login)
-}
 
-func (Uhandler *UserHanlder) getLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "Method not Allowed!"})
-		return
-	}
 
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		data := struct {
-			IsLoggedIn bool `json:"logged_in"`
-		}{IsLoggedIn: false}
-		WriteDataBack(w, data)
-		return
-	}
-	// check if the value of the cookie is correct and if not expired!!!
-	session, errJson := Uhandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
-	if errJson != nil || session.IsExpired() {
-		data := struct {
-			IsLoggedIn bool `json:"logged_in"`
-		}{IsLoggedIn: false}
-		WriteDataBack(w, data)
-		return
-	}
-	data := struct {
-		IsLoggedIn bool `json:"logged_in"`
-	}{IsLoggedIn: true}
-	WriteDataBack(w, data)
+
+	
 }
