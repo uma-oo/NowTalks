@@ -23,12 +23,13 @@ type Session struct {
 }
 
 type Post struct {
-	Id        int    `json:"id,omitempty"`
-	UserId    int    `json:"user_id,omitempty"`
-	Username  string `json:"user_name,omitempty"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	CreatedAt string `json:"created_at,omitempty"`
+	Id            int    `json:"id,omitempty"`
+	UserId        int    `json:"user_id,omitempty"`
+	Username      string `json:"user_name,omitempty"`
+	Title         string `json:"title"`
+	Content       string `json:"content"`
+	CreatedAt     string `json:"created_at,omitempty"`
+	TotalComments int    `json:"total_comments"`
 }
 
 type Comment struct {
@@ -64,6 +65,10 @@ type Login struct {
 	LoginField string `json:"login"`
 	Password   string `json:"password"`
 }
+
+
+
+
 
 type UserData struct {
 	IsLoggedIn bool   `json:"is_logged_in"`

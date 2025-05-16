@@ -1,5 +1,5 @@
 
-1. Write the response body with created at for the comment and the post
+1. Write the response body with created at for the comment and the post done
 2. Add the likes and dislikes in a scalable way
 3. Cleaning the code and unnecessary code 
 4. The Websocket part 

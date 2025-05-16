@@ -59,5 +59,9 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 		Path:    "/",
 	})
 	// we don't need to write back the data for the repsonse ( sentitive data ;)
-	// WriteDataBack(w, user)
+	WriteDataBack(w, models.UserData{
+		IsLoggedIn: true,
+		Id:         userData.Id,
+		Nickname:   userData.Nickname,
+	})
 }

@@ -26,12 +26,12 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
-	err_ := Phandler.service.AddPost(post)
+	postCreated, err_ := Phandler.service.AddPost(post)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 		return
 	}
-	WriteDataBack(w, post)
+	WriteDataBack(w, postCreated)
 }
 
 func (Phandler *PostHandler) getPosts(w http.ResponseWriter) {

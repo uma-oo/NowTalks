@@ -28,12 +28,12 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 		return
 
 	}
-	err_ := CHanlder.service.AddComment(comment)
+	comment_created, err_ := CHanlder.service.AddComment(comment)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 		return
 	}
-	WriteDataBack(w, comment)
+	WriteDataBack(w, comment_created)
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {

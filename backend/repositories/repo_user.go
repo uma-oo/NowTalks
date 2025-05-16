@@ -14,10 +14,10 @@ import (
 func (appRep *AppRepository) CreateUser(user *models.User) error {
 	query := `INSERT INTO users (nickname, age, gender, firstName, lastName, email, password) VALUES (?,?,?,?,?,?,?)`
 	stmt, err := appRep.db.Prepare(query)
-	defer stmt.Close()
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
 	if _, err = stmt.Exec(user.Nickname, user.Age, user.Gender, user.FirstName, user.LastName, user.Email, user.Password); err != nil {
 		return nil
 	}
@@ -67,4 +67,15 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 		}
 	}
 	return user, nil
+}
+
+func (appRep *AppRepository) getUserNameById(user_id int) (string, *models.ErrorJson) {
+	var username string
+	fmt.Println("user_id", user_id)
+	query := `SELECT nickname FROM users WHERE userID = ?`
+	err := appRep.db.QueryRow(query, user_id).Scan(&username)
+	if err != nil {
+		return "", models.NewErrorJson(500, fmt.Sprintf("%v 3", err))
+	}
+	return username, nil
 }

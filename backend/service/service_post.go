@@ -12,15 +12,15 @@ import (
 
 func (s *AppService) GetPosts() ([]models.Post, *models.ErrorJson) {
 	posts, err := s.repo.GetPosts()
-    fmt.Println("posts inside the service", posts)
+	fmt.Println("posts inside the service", posts)
 	if err != nil {
 		return nil, err
 	}
 	return posts, nil
 }
 
-func (s *AppService) AddPost(post *models.Post) *models.ErrorJson {
-	ErrorJson := models.NewErrorJson(0, "")
+func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson) {
+	errorJson := models.NewErrorJson(0, "")
 	message := models.NewPostErr()
 	if post.Content == "" {
 		message.Content = "ERROR: Empty Post Content!!"
@@ -29,13 +29,15 @@ func (s *AppService) AddPost(post *models.Post) *models.ErrorJson {
 		message.Title = "ERROR: Empty Title Content!!"
 	}
 	if message.Content != "" || message.Title != "" {
-		ErrorJson.Status = 400
-		ErrorJson.Message = message
-		return ErrorJson
+		errorJson.Status = 400
+		errorJson.Message = message
+		return nil, errorJson
 	}
-	err := s.repo.CreatePost(post)
+	post_created, err := s.repo.CreatePost(post)
 	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	return nil
+	return post_created, nil
 }
+
+

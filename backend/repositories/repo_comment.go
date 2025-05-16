@@ -1,20 +1,31 @@
 package repositories
 
 import (
+	"fmt"
+
 	"real-time-forum/backend/models"
 )
 
-func (appRep *AppRepository) CreateComment(comment *models.Comment) error {
-	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?)`
+func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
+	comment_created := &models.Comment{}
+	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) RETURNING *`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return err
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
 	defer stmt.Close()
-	if _, err := stmt.Exec(comment.PostId, comment.UserId, comment.Content); err != nil {
-		return err
+	if err := stmt.QueryRow(comment.PostId, comment.UserId, comment.Content).Scan(
+		&comment_created.Id, &comment_created.PostId,
+		&comment_created.UserId, &comment_created.CreatedAt,
+		&comment_created.Content); err != nil {
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
-	return nil
+	username, errJSon := appRep.getUserNameById(comment_created.UserId)
+	if errJSon != nil {
+		return nil, models.NewErrorJson(500, *errJSon)
+	}
+	comment_created.Username = username
+	return comment_created, nil
 }
 
 // But hna comments dyal wa7d l post specific
@@ -42,7 +53,7 @@ func (appRep *AppRepository) GetComments(postId int) ([]models.Comment, error) {
 
 // BUT THE COMBINAISON OF postID+userID is not unique !!
 // the latest one
-// 204 no content 
+// 204 no content
 func (appRepo *AppRepository) GetWrittenComment(userId int, postId int) (*models.Comment, *models.ErrorJson) {
 	comment := models.NewComment()
 	query := `SELECT commentID, userID, postID, createdAt , content FROM comments WHERE userID = ? AND postID = ?`
@@ -52,5 +63,3 @@ func (appRepo *AppRepository) GetWrittenComment(userId int, postId int) (*models
 
 	return comment, nil
 }
-
-
