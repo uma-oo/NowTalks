@@ -13,6 +13,14 @@ export function createPostsSections() {
     let addPostBtn = createButton("+", 'button', "")
     addPostBtn.addEventListener('click', (e) => {
     })
+
+    let createPostFormContainer = document.createElement('div')
+    createPostFormContainer.classList.add('create-Post-Form_Container')
+
+
+
+
+    
     let posts = getPostsApi()
     posts.then(data => {
         if ( data?.status == 401){
@@ -21,7 +29,7 @@ export function createPostsSections() {
             postsContainer.append(...createPostCards(data))
         }
     })
-    postsSection.append(postsContainer, addPostBtn)
+    postsSection.append(postsContainer, createPostFormContainer ,addPostBtn)
     return postsSection
 }
 
@@ -29,4 +37,9 @@ function createPostCards(data){
     if (data == null) return "No Posts Available"
     
     return data.map(postData => createPostCard(postData))
+}
+
+
+function expandCreatePostForm() {
+    
 }
