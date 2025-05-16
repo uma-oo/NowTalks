@@ -19,6 +19,10 @@ type UserHanlder struct {
 	service *service.AppService
 }
 
+type UserData struct {
+	service *service.AppService
+}
+
 type Logout UserHanlder
 
 func NewLogoutHandler(service *service.AppService) *Logout {
@@ -35,6 +39,10 @@ func NewPostHandler(service *service.AppService) *PostHandler {
 
 func NewUserHandler(service *service.AppService) *UserHanlder {
 	return &UserHanlder{service: service}
+}
+
+func NewUserDataHanlder(service *service.AppService) *UserData {
+	return &UserData{service: service}
 }
 
 // NewPostService

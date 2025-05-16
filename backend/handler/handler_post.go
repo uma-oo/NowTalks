@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 
 	"real-time-forum/backend/models"
 )
@@ -26,16 +27,22 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
-	err_ := Phandler.service.AddPost(post)
+	postCreated, err_ := Phandler.service.AddPost(post)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 		return
 	}
-	WriteDataBack(w, post)
+	WriteDataBack(w, postCreated)
 }
 
-func (Phandler *PostHandler) getPosts(w http.ResponseWriter) {
-	posts, err := Phandler.service.GetPosts()
+func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
+	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
+	limit, errConvlim := strconv.Atoi(r.URL.Query().Get("limit"))
+	if errConvlim!= nil || errConvoff != nil {
+		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset or limit!"))
+		return
+	}
+	posts, err := Phandler.service.GetPosts(limit, offset)
 	if err != nil {
 		WriteJsonErrors(w, *err)
 		return
@@ -52,7 +59,7 @@ func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodGet:
-		Phandler.getPosts(w)
+		Phandler.getPosts(w,r)
 		return
 	case http.MethodPost:
 		Phandler.addPost(w, r)

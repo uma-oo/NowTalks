@@ -19,6 +19,3 @@ func (s *AppService) GetUser(login *models.Login) (*models.User, *models.ErrorJs
 
 
 
-func (s *AppService) IsLoggedIn() bool {
-	return true
-}

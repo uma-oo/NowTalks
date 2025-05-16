@@ -1,27 +1,42 @@
 package repositories
 
 import (
+	"fmt"
+
 	"real-time-forum/backend/models"
 )
 
-func (appRep *AppRepository) CreateComment(comment *models.Comment) error {
-	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?)`
+func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
+	comment_created := &models.Comment{}
+	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) RETURNING *`
 	stmt, err := appRep.db.Prepare(query)
-	defer stmt.Close()
 	if err != nil {
-		return err
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
-	if _, err := stmt.Exec(comment.PostId, comment.UserId, comment.Content); err != nil {
-		return err
+	defer stmt.Close()
+	if err := stmt.QueryRow(comment.PostId, comment.UserId, comment.Content).Scan(
+		&comment_created.Id, &comment_created.PostId,
+		&comment_created.UserId, &comment_created.CreatedAt,
+		&comment_created.Content); err != nil {
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
-	return nil
+	username, errJSon := appRep.getUserNameById(comment_created.UserId)
+	if errJSon != nil {
+		return nil, models.NewErrorJson(500, *errJSon)
+	}
+	comment_created.Username = username
+	return comment_created, nil
 }
 
 // But hna comments dyal wa7d l post specific
-func (appRep *AppRepository) GetComments(postId int) ([]models.Comment, error) {
+func (appRep *AppRepository) GetComments(postId int, limit int, offset int) ([]models.Comment, error) {
 	var comments []models.Comment
-	query := `SELECT commentID, userID, postID, createdAt , content FROM comments WHERE postID = ?`
-	rows, err := appRep.db.Query(query, postId)
+	query := `SELECT commentID, userID, postID, createdAt , content 
+	FROM comments 
+	WHERE postID = ?
+	ORDER BY createdAt
+	LIMIT ? OFFSET ? ;`
+	rows, err := appRep.db.Query(query, postId, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -35,3 +50,8 @@ func (appRep *AppRepository) GetComments(postId int) ([]models.Comment, error) {
 	defer rows.Close()
 	return comments, nil
 }
+
+
+
+
+

@@ -11,7 +11,7 @@ import (
 func (logout *Logout) Logout(w http.ResponseWriter, r *http.Request) {
 	// delete from the database before
 	cookie, _ := r.Cookie("session")
-	session, errJson := logout.service.GetUserSessionByTokenEnsureAuth(cookie.Value)
+	session, errJson := logout.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	if errJson != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(errJson.Status, errJson.Message))
 		return

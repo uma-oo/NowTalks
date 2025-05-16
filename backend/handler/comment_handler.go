@@ -28,24 +28,26 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 		return
 
 	}
-	err_ := CHanlder.service.AddComment(comment)
+	comment_created, err_ := CHanlder.service.AddComment(comment)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 		return
 	}
-	WriteDataBack(w, comment)
+	WriteDataBack(w, comment_created)
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {
-	// get the posts of a specific ID
+	// get the comments of a specific ID
 	// FOR NOW let's just get them from the query
-	postId, err := strconv.ParseInt(r.URL.Query().Get("postId"), 10, 64)
-	if err != nil {
-		errJson := models.ErrorJson{Status: 400, Message: "Bad Request! Post Not Found"}
+	limit, errConvlim := strconv.Atoi(r.URL.Query().Get("limit"))
+	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
+	postId, err := strconv.Atoi(r.URL.Query().Get("post"))
+	if err != nil || errConvlim != nil || errConvoff != nil {
+		errJson := models.ErrorJson{Status: 400, Message: "Bad Request!! Post Not Found Or Incorrect offset or limit!"}
 		WriteJsonErrors(w, errJson)
 		return
 	}
-	comments, err_ := CHanlder.service.GetComments(int(postId))
+	comments, err_ := CHanlder.service.GetComments(postId, limit, offset)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 	}
