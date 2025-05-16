@@ -16,29 +16,32 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
-	err = stmt.QueryRow( post.UserId, post.Title, post.Content).Scan(&post_created.Id, &post_created.UserId,
-		 &post_created.CreatedAt, &post_created.Title, 
-		 &post_created.Content, &post_created.TotalComments)
+	err = stmt.QueryRow(post.UserId, post.Title, post.Content).Scan(&post_created.Id, &post_created.UserId,
+		&post_created.CreatedAt, &post_created.Title,
+		&post_created.Content, &post_created.TotalComments)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-    username ,errJson := appRep.getUserNameById(post_created.UserId)
+	username, errJson := appRep.getUserNameById(post_created.UserId)
 	if errJson != nil {
-		return nil , errJson
+		return nil, errJson
 	}
 	post_created.Username = username
 	return post_created, nil
 }
 
 // all the posts
-// add the offset and the limit after 
-func (appRep *AppRepository) GetPosts( ) ([]models.Post, *models.ErrorJson) {
+// add the offset and the limit after
+func (appRep *AppRepository) GetPosts(limit int, offset int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT posts.postID , users.nickname, posts.createdAt, posts.title, posts.content FROM posts 
 	INNER JOIN users 
-	ON posts.userID = users.userID;
+	ON posts.userID = users.userID
+	ORDER BY posts.createdAt DESC
+	LIMIT ?
+	OFFSET ?;
 	`
-	rows, err := appRep.db.Query(query)
+	rows, err := appRep.db.Query(query, limit, offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
