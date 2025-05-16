@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"real-time-forum/backend/models"
@@ -21,13 +20,15 @@ func (d *UserData) GetLoggedIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user_data, errJson := d.service.IsLoggedInUser(cookie.Value)
-	fmt.Println("user data", user_data)
+	userData, errJson := d.service.IsLoggedInUser(cookie.Value)
+
 	if errJson != nil {
 		user_data.IsLoggedIn = false
 		WriteDataBack(w, user_data)
 		return
 	}
 	user_data.IsLoggedIn = true
+	user_data.Id = userData.Id
+	user_data.Nickname = userData.Nickname
 	WriteDataBack(w, user_data)
 }

@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS categories ;
 
 CREATE TABLE IF NOT EXISTS categories (
     categoryID INTEGER PRIMARY KEY,
-    category TEXT NOT NULL
+    category TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS postCategories (

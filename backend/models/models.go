@@ -23,13 +23,19 @@ type Session struct {
 }
 
 type Post struct {
-	Id            int    `json:"id,omitempty"`
-	UserId        int    `json:"user_id,omitempty"`
-	Username      string `json:"user_name,omitempty"`
-	Title         string `json:"title"`
-	Content       string `json:"content"`
-	CreatedAt     string `json:"created_at,omitempty"`
-	TotalComments int    `json:"total_comments"`
+	Id            int      `json:"id,omitempty"`
+	UserId        int      `json:"user_id,omitempty"`
+	Username      string   `json:"user_name,omitempty"`
+	Title         string   `json:"title"`
+	Content       string   `json:"content"`
+	Categories    []string `json:"categories"`
+	CreatedAt     string   `json:"created_at,omitempty"`
+	TotalComments int      `json:"total_comments"`
+}
+
+type PostCategory struct {
+	postId     int `json:"post_id"`
+	categoryId int `json:"category_id"`
 }
 
 type Comment struct {
@@ -65,10 +71,6 @@ type Login struct {
 	LoginField string `json:"login"`
 	Password   string `json:"password"`
 }
-
-
-
-
 
 type UserData struct {
 	IsLoggedIn bool   `json:"is_logged_in"`
@@ -114,6 +116,10 @@ func NewUser() *User {
 
 func NewSession() *Session {
 	return &Session{}
+}
+
+func NewPostCategory() *PostCategory {
+	return &PostCategory{}
 }
 
 func (session *Session) IsExpired() bool {

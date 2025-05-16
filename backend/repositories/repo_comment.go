@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"database/sql"
 	"fmt"
 
 	"real-time-forum/backend/models"
@@ -34,12 +35,16 @@ func (appRep *AppRepository) GetComments(postId int, limit int, offset int) ([]m
 	query := `SELECT commentID, userID, postID, createdAt , content 
 	FROM comments 
 	WHERE postID = ?
-	ORDER BY createdAt
+	ORDER BY createdAt DESC
 	LIMIT ? OFFSET ? ;`
 	rows, err := appRep.db.Query(query, postId, limit, offset)
+	if rows.Err() == sql.ErrNoRows {
+		return comments, nil
+	}
 	if err != nil {
 		return nil, err
 	}
+
 	for rows.Next() {
 		var comment models.Comment
 		if err = rows.Scan(&comment.Id, &comment.UserId, &comment.PostId, &comment.CreatedAt, &comment.Content); err != nil {
@@ -50,8 +55,3 @@ func (appRep *AppRepository) GetComments(postId int, limit int, offset int) ([]m
 	defer rows.Close()
 	return comments, nil
 }
-
-
-
-
-
