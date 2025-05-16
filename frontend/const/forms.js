@@ -188,8 +188,8 @@ export const PostForm = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'postTitle',
-                name: 'postTitle',
+                id: 'title',
+                name: 'title',
                 placeholder: "Your post title here",
             },
             style: {
@@ -201,8 +201,8 @@ export const PostForm = {
             label: 'Post Content:',
             attributes: {
                 required: 'true',
-                id: 'postContent',
-                name: 'postContent',
+                id: 'content',
+                name: 'content',
                 placeholder: "Your post content goes here...",
             },
             style: {
@@ -237,20 +237,15 @@ export const CommentForm = {
                 placeholder: "Add a comment...",
             },
             style: {
-                width: '100%'
+                // width: '100%'
             }
         },
     ],
     buttons: [
         {
             type: 'submit',
-            content: 'Send Comment',
+            content: '>>',
             style: 'primary-btn'
-        },
-        {
-            type: 'reset',
-            content: 'Del',
-            style: 'secondary-btn'
         }
     ]
 }

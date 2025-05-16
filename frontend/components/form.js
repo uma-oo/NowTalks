@@ -1,8 +1,9 @@
 import { createButton } from "./button.js";
 import { navigateTo, setAttributes, setOpions } from "../../utils.js";
 import { createUser, loginUser } from "../api/user.js";
+import { addPostApi } from "../api/posts.js";
 
-export function renderForm(formRepresentaion, id) {
+export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
     formElement.id = id
 
@@ -41,12 +42,16 @@ export function handleForm(event) {
      event.preventDefault()
         let form = new FormData(event.target)
         const formData = Object.fromEntries(form.entries())
+        console.log(formData)
         switch(event.target.id) {
             case "login-form":
                 login(event.target, formData)
                 break;
             case "register-form":
                 register(event.target, formData)
+                break;
+            case "create-post-form":
+                createPost(event.target, formData)
             default:
                 break;
         }
@@ -74,3 +79,13 @@ export function register(form,data){
     .catch(error => console.log("error submitting register form: ",error))
 }
 
+export function createPost(form, data) {
+    // get the user id from app.dataset.userId
+    let app = document.querySelector("#app")
+    data.user_id  = 1
+    addPostApi(data)
+    .then(response=> {
+        console.log(response)
+    })
+    .catch(error => console.log("error creating new post"))
+}
