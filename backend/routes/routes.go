@@ -3,6 +3,8 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"real-time-forum/backend/handler"
 	m "real-time-forum/backend/middleware"
