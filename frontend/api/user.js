@@ -11,9 +11,9 @@ export async function createUser(data) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        return response;
+        return response.json();
     } catch (error) {
-        console.error(error)
+        console.error(`Error trying to register user: ${error}`)
         return response.json()
     }
 }
@@ -27,10 +27,12 @@ export async function loginUser(data) {
         })
         return response
     } catch (error) {
-        console.error(error);
+        console.error(`Error trying to login${error}`);
         return response.json()
     }
 }
+
+
 
 export async function logoutUser() {
     try {
@@ -39,6 +41,16 @@ export async function logoutUser() {
             headers: { 'Content-Type': 'application/json' }
         })
     } catch (error) {
-        throw error
+        console.log(`Error trying to logout: ${error}`)
+    }
+}
+
+
+export async function isLoggedIn() {
+    try {
+        let response = await fetch("api/loggedin")
+        return await response.json()
+    } catch (error) {
+        console.log(error)
     }
 }

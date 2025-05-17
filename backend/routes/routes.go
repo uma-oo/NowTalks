@@ -33,7 +33,5 @@ func handleSPA(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "../frontend/index.html")
 		return
 	}
-
 	http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
-
 }

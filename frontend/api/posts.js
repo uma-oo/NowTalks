@@ -12,9 +12,9 @@ export async function addPostApi(postData) {
     }
 }
 
-export async function getPostsApi() {
+export async function getPostsApi(offset=0) {
     try {
-        const response = await fetch('/api/post', {
+        const response = await fetch(`/api/post?offset=$offset}&limit=10`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })

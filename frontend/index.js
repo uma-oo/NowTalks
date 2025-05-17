@@ -1,3 +1,4 @@
+import { isLoggedIn } from "./api/user.js";
 import { renderErrorPage } from "./pages/errorPage.js";
 import { renderHomePage } from "./pages/homePage.js"
 import { renderLoginPage } from "./pages/loginPage.js";
