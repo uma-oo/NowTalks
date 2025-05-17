@@ -10,8 +10,8 @@ import (
 // bash ghan3mr hadshi :)
 // add offsets and limits
 
-func (s *AppService) GetPosts(limit int, offset int ) ([]models.Post, *models.ErrorJson) {
-	posts, err := s.repo.GetPosts(limit , offset)
+func (s *AppService) GetPosts(limit int, offset int) ([]models.Post, *models.ErrorJson) {
+	posts, err := s.repo.GetPosts(limit, offset)
 	fmt.Println("posts inside the service", posts)
 	if err != nil {
 		return nil, err
@@ -40,4 +40,10 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	return post_created, nil
 }
 
-
+func (s *AppService) GetPostsByCategory(limit int, offset int, category ...string) ([]models.Post, *models.ErrorJson) {
+	posts, errJson := s.repo.GetPostsByCategory(limit, offset, category...)
+	if errJson != nil {
+		return nil, errJson
+	}
+	return posts, nil
+}

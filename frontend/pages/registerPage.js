@@ -7,6 +7,8 @@ import { isLoggedIn } from "../api/user.js"
 export function renderRegisterPage(app) {
     isLoggedIn().then(data => {
         if (!data.is_logged_in) {
+            app.dataset.nickname = data.nickname
+            app.dataset.id = data.id
             app.innerHTML = ""
             let header = document.createElement('h1')
             let formError = document.createElement('div')
@@ -18,11 +20,14 @@ export function renderRegisterPage(app) {
             let LoginLink = creatLink("Log In", "", "")
             goToLogin.append(LoginLink)
             LoginLink.addEventListener("click", (e) => {
-                e.preventDefault()
                 navigateTo('./login')
             })
             app.append(header, formError, registerFomlement, goToLogin)
         }
-        else navigateTo("/")
+        else {
+            app.dataset.nickname = data.nickname
+            app.dataset.id = data.id
+            navigateTo("/")
+        }
     })
 }

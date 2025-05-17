@@ -47,12 +47,10 @@ export function createPostCard(postData) {
 
     let commentForm = createForm(CommentForm,"comment-form")
     commentForm.classList.add("hide","toggleable")
-    console.log(commentForm)
 
     postContainer.append(postHeader,postBody,postFooter,postCommentsContainer,commentForm,viewPostBtn,closeBtn)
     return postContainer
 }
-
 
 function togglePost(btnClicked, postContainer) {
     postContainer.classList.toggle("post-container_expand")
@@ -60,37 +58,6 @@ function togglePost(btnClicked, postContainer) {
     elementsToHide.forEach(elem => {
         elem.classList.toggle("hide")
     });
-}
-
-
-
-
-
-function expandPost(viewPostBtn, postContainer) {
-    postContainer.classList.add("post-container_expand")
-
-    let elementsToHide = postContainer.querySelectorAll(".hide")
-    elementsToHide.forEach(elem => {
-        elem.classList.replace("hide","show")
-    });
-    let closeBtn = createButton("<- Go Back.","button",["close-btn","show"])
-    if (!postContainer.querySelector('.close-btn')) {
-        postContainer.append(closeBtn)
-        viewPostBtn.classList.replace("show","hide")
-        closeBtn.addEventListener("click", ()=>shrinkPost(viewPostBtn,postContainer) )
-    }
-}
-
-
-
-function shrinkPost(viewPostBtn, postContainer){
-    postContainer.classList.remove("post-container_expand")
-    let elementsToHide = postContainer.querySelectorAll(".show")
-    elementsToHide.forEach(elem => {
-        elem.classList.replace("show","hide")
-    });
-    viewPostBtn.classList.replace("hide","show")
-
 }
 
 
