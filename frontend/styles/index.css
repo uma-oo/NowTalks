@@ -323,3 +323,7 @@ form {
     background:whitesmoke;
 }
 
+
+#app:has(#login-form, #register-form) {
+
+}

@@ -6,8 +6,8 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'nickName',
-                name: 'nickName',
+                id: 'nickname',
+                name: 'nickname',
                 placeholder: "nickname...",
                 minlength: 4,
                 maxlenght: 20,
@@ -50,8 +50,8 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'firstName',
-                name: 'firstName',
+                id: 'firstname',
+                name: 'firstname',
                 placeholder: "Enter Your First Name...",
             },
             style: {
@@ -64,8 +64,8 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'lastName',
-                name: 'lastName',
+                id: 'lastname',
+                name: 'lastname',
                 placeholder: "Enter Your Last Name...",
             },
             style: {

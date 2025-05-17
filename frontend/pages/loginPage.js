@@ -10,7 +10,7 @@ export function renderLoginPage(app) {
             app.innerHTML = ""
             let header = document.createElement('h1')
             let formError = document.createElement('div')
-            formError.className = "form-Error"
+            formError.className = "form-error"
             header.textContent = "Log In"
             let loginFormElement = createForm(loginForm, "login-form")
             let goToRegister = document.createElement('p')

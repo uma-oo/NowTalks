@@ -1,9 +1,10 @@
-import { getPostsApi, throttle } from "../api/posts.js"
+import { getPostsApi } from "../api/posts.js"
 import { navigateTo } from "../../utils.js"
 import { createButton } from "./button.js"
 import { createPostCard } from "./postCard.js"
 import { createForm } from "./form.js"
 import { PostForm } from "../const/forms.js"
+import { throttle, throttledScrollFetcher } from "../utils.js"
 
 export function createPostsSections() {
     let postsSection = document.createElement('section')
@@ -22,24 +23,21 @@ export function createPostsSections() {
         toggleCreatePostFormContainer(createPostFormContainer)
     })
 
-    loadPosts(postsContainer)
-    postsContainer.addEventListener("scroll", e => throttle(loadPosts(e.target)))
-
+    fetchPosts(postsContainer)
+    const throttledScrollHandler = throttledScrollFetcher(fetchPosts)
+    postsContainer.addEventListener('scroll', throttledScrollHandler)
     postsSection.append(postsContainer, createPostFormContainer, addPostBtn)
     return postsSection
 }
 
-function loadPosts(container) {
+function fetchPosts(container) {
+    console.log(`fetching posts offset:${container.dataset.offset}`)
     getPostsApi(container.dataset.offset).then(data => {
-        console.log(data)
         if (data?.status == 401) {
             navigateTo('/login')
-        } else if (!data) {
-            container.append("no more posts to fetch")
-        } else {
+        } else if (data) {
             container.append(...createPostCards(data))
-            container.dataset.offset++
-
+            container.dataset.offset = +container.dataset.offset + 10
         }
     }).catch(error => console.error(error))
 }

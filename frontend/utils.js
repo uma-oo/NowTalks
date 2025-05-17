@@ -33,8 +33,33 @@ export function timeAgo(timestamp, locale = 'en') {
 }
 
 
+export function throttledScrollFetcher(func) {
+    return throttle((e) => {
+            const container = e.target
+            const scrollTop = container.scrollTop
+            const scrollHeight = container.scrollHeight
+            const clientHeight = container.clientHeight
+    
+            if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+                func(container)
+            }
+        }, 300)
+}
 
 
+
+export function throttle(func, delay) {
+    let delayPassed = true
+    return function (...arg) {
+        if (delayPassed) {
+            func(...arg);
+            delayPassed = false
+            setTimeout(() => {
+                delayPassed = true
+            }, delay)
+        }
+    }
+}
 
 
 export function setAttributes(elem, attributes) {

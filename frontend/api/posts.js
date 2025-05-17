@@ -25,17 +25,5 @@ export async function getPostsApi(offset=0) {
 }
 
 
-export function throttle(func, delay=1000) {
-    let delayPassed = true
-    return function (...arg) {
-        if (delayPassed) {
-            console.log(func)
-            func(...arg);
-            delayPassed = false
-            setTimeout(() => {
-                delayPassed = true
-            }, delay)
-        }
-    }
-}
+
 

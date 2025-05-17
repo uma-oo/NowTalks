@@ -4,9 +4,7 @@ import { renderHomePage } from "./pages/homePage.js"
 import { renderLoginPage } from "./pages/loginPage.js";
 import { renderRegisterPage } from "./pages/registerPage.js";
 
-let app  = document.querySelector('#app')
-
-console.log(document.cookie)
+export let app  = document.querySelector('#app')
 
 export function renderApp() {
     app.innerHTML = ""
