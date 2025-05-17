@@ -11,7 +11,7 @@ export async function createUser(data) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        return await response.json();
+        return [response.status, await response.json()];
     } catch (error) {
         console.error(`Error trying to register user: ${error}`)
     }
@@ -24,7 +24,7 @@ export async function loginUser(data) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
-        return await response.json()
+        return [response.status, await response.json()]
     } catch (error) {
         console.error(`Error trying to login${error}`);
     }

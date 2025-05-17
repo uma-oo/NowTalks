@@ -62,15 +62,14 @@ export function handleForm(event) {
 }
 
 export function login(form, data) {
-    loginUser(data).then(response => {
-        console.log(response
-        )
+    loginUser(data).then(([status, data]) => {
+        console.log(status,data)
         let formError = form.parentElement.querySelector(".form-error")
-        if (response.status == 200) navigateTo("/")
-        else if (response.status == 400) {
+        if (status == 200 ) navigateTo("/")
+        else if (status == 400) {
             formError.innerText = ""
-            loadFormErrors(form, response.errors)
-        } else if (response.status == 401) {
+            loadFormErrors(form, data.errors)
+        } else if (status == 401) {
             let errors = form.querySelectorAll(".input-error")
             errors.forEach(error => error.textContent = "")
             formError.innerText = "ERROR!! Username or Email does not exist! Or Password Incorrect!"
