@@ -9,3 +9,5 @@ func (s *AppService) GetAllCategories() ([]models.Category, *models.ErrorJson) {
 	}
 	return categories, nil
 }
+
+

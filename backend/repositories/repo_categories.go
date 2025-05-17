@@ -6,23 +6,27 @@ import (
 	"real-time-forum/backend/models"
 )
 
-// Insert the categories (received as a slice of strings)
-func (appRep *AppRepository) AddPostCategories(categoryIds []int, postId int) *models.ErrorJson {
-	for _, id := range categoryIds {
-		query := `INSERT INTO postCategories (categoryID, category) VALUES (? , ?)`
+// Insert the categories (received as a slice of INT)
+func (appRep *AppRepository) AddPostCategories(post *models.Post, categories []any) (*models.Post, *models.ErrorJson) {
+	for _, id := range categories {
+		query := `INSERT INTO postCategories (categoryID, postID) VALUES (? , ?)
+		RETURNING (SELECT category FROM categories WHERE categories.categoryID = postCategories.categoryID);`
 		stmt, err := appRep.db.Prepare(query)
 		if err != nil {
-			return models.NewErrorJson(500, fmt.Sprintf("%v", err))
+			return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 		}
 		defer stmt.Close()
-		_, err = stmt.Exec(id, postId)
+		var category string
+		err = stmt.QueryRow(id, post.Id).Scan(&category)
 		if err != nil {
-			return models.NewErrorJson(500, fmt.Sprintf("%v", err))
+			return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 		}
+		post.PostCategories = append(post.PostCategories, category)
 	}
-	return nil
+	return post, nil
 }
 
+// THIS is for the getCategories endpoint
 func (appRepo *AppRepository) GetAllCategories() ([]models.Category, *models.ErrorJson) {
 	categories := []models.Category{}
 	query := `SELECT categoryID, category FROM categories`
@@ -47,10 +51,4 @@ func (appRepo *AppRepository) GetAllCategories() ([]models.Category, *models.Err
 	return categories, nil
 }
 
-
-
-// Given 
-func  (appRepo *AppRepository) GetPostCategories(post *models.Post) (*models.Post, *models.ErrorJson) {
-
- 
-}
+// Given a postid and category_ids get the name of the categories

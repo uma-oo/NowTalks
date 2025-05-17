@@ -11,6 +11,7 @@ import (
 // OMG
 
 func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *models.ErrorJson) {
+	fmt.Println("POST", post)
 	post_created := models.NewPost()
 	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING postID, title , content ,createdAt, total_comments`
 	stmt, err := appRep.db.Prepare(query)
@@ -22,6 +23,12 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 		&post_created.Content, &post_created.CreatedAt, &post_created.TotalComments)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+	}
+
+	post_created, errJson := appRep.AddPostCategories(post_created, post.PostCategories)
+	fmt.Println("post_created", post_created)
+	if errJson != nil {
+		return nil, errJson
 	}
 	username, errJson := appRep.getUserNameById(post.UserId)
 	if errJson != nil {
@@ -35,7 +42,7 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 // add the offset and the limit after
 func (appRep *AppRepository) GetPosts(limit, offset int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
-	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content FROM posts 
+	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content  FROM posts 
 	INNER JOIN users 
 	ON posts.userID = users.userID
 	ORDER BY posts.createdAt DESC
