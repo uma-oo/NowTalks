@@ -47,6 +47,8 @@ type Comment struct {
 	Username  string `json:"user_name,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
 	Content   string `json:"content"`
+	TotalLikes     int    `json:"total_likes"`
+	TotalDislikes  int    `json:"total_dislikes"`
 }
 
 type PostError struct {

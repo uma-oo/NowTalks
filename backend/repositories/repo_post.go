@@ -11,7 +11,6 @@ import (
 // OMG
 
 func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *models.ErrorJson) {
-	fmt.Println("POST", post)
 	post_created := models.NewPost()
 	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING postID, title , content ,createdAt, total_comments`
 	stmt, err := appRep.db.Prepare(query)
@@ -26,7 +25,6 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 	}
 
 	post_created, errJson := appRep.AddPostCategories(post_created, post.PostCategories)
-	fmt.Println("post_created", post_created)
 	if errJson != nil {
 		return nil, errJson
 	}
@@ -72,13 +70,13 @@ func (appRep *AppRepository) GetPosts(limit, offset int) ([]models.Post, *models
 // Filter by MyPosts // by userId
 // Filter based on categories
 // based on the len of the category
+// how to do see the posts based on the categories 
 func (appRep *AppRepository) GetPostsByCategory(limit, offset int, category ...string) ([]models.Post, *models.ErrorJson) {
 	posts := []models.Post{}
 	if len(category) == 0 {
 		return appRep.GetPosts(limit, offset)
 	}
 	categories := strings.Join(category, ",")
-	fmt.Println("categories", categories)
 	query := fmt.Sprintf(`SELECT * 
 	FROM posts INNER JOIN postCategories 
 	ON posts.postID = postCategories.postID
@@ -111,17 +109,22 @@ func (appRep *AppRepository) GetPostsByCategory(limit, offset int, category ...s
 	return posts, nil
 }
 
-func (appRep *AppRepository) GetPostsByUser(user_id, offset, limit int) ([]models.Post, *models.ErrorJson) {
+
+
+
+// My posts sections 
+// Posts by user ??? // to be added to the filter 
+func (appRep *AppRepository) GetPostsByUser(username string, offset, limit int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content FROM posts 
 	INNER JOIN users 
 	ON posts.userID = users.userID
-	WHERE users.userID = ?
+	WHERE users.nickname = ?
 	ORDER BY posts.createdAt DESC
 	LIMIT ?
 	OFFSET ?;
 	`
-	rows, err := appRep.db.Query(query, user_id, limit, offset)
+	rows, err := appRep.db.Query(query, username, limit, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
 	}
