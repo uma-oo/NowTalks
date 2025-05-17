@@ -12,19 +12,18 @@ import (
 
 func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *models.ErrorJson) {
 	post_created := models.NewPost()
-	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING *`
+	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING postID, title , content ,createdAt, total_comments`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
-	err = stmt.QueryRow(post.UserId, post.Title, post.Content).Scan(&post_created.Id, &post_created.UserId,
-		&post_created.CreatedAt, &post_created.Title,
-		&post_created.Content, &post_created.TotalComments)
+	err = stmt.QueryRow(post.UserId, post.Title, post.Content).Scan(&post_created.Id, &post_created.Title,
+		&post_created.Content, &post_created.CreatedAt, &post_created.TotalComments)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	username, errJson := appRep.getUserNameById(post_created.UserId)
+	username, errJson := appRep.getUserNameById(post.UserId)
 	if errJson != nil {
 		return nil, errJson
 	}

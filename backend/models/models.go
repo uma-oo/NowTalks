@@ -23,14 +23,14 @@ type Session struct {
 }
 
 type Post struct {
-	Id            int      `json:"id,omitempty"`
-	UserId        int      `json:"user_id,omitempty"`
-	Username      string   `json:"user_name,omitempty"`
-	Title         string   `json:"title"`
-	Content       string   `json:"content"`
-	Categories    []string `json:"categories"`
-	CreatedAt     string   `json:"created_at,omitempty"`
-	TotalComments int      `json:"total_comments"`
+	Id             int      `json:"id,omitempty"`
+	UserId         int      `json:"user_id,omitempty"`
+	Username       string   `json:"user_name,omitempty"`
+	Title          string   `json:"title"`
+	Content        string   `json:"content"`
+	PostCategories []string `json:"categories,omitempty"`
+	CreatedAt      string   `json:"created_at,omitempty"`
+	TotalComments  int      `json:"total_comments"`
 }
 
 type PostCategory struct {
