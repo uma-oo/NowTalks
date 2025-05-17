@@ -23,6 +23,10 @@ type UserData struct {
 	service *service.AppService
 }
 
+type CategoriesHandler struct {
+	service *service.AppService
+}
+
 type Logout UserHanlder
 
 func NewLogoutHandler(service *service.AppService) *Logout {
@@ -43,6 +47,10 @@ func NewUserHandler(service *service.AppService) *UserHanlder {
 
 func NewUserDataHanlder(service *service.AppService) *UserData {
 	return &UserData{service: service}
+}
+
+func NewCategoriesHandler(service *service.AppService) *CategoriesHandler {
+	return &CategoriesHandler{service: service}
 }
 
 // NewPostService

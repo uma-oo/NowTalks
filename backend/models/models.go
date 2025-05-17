@@ -23,19 +23,21 @@ type Session struct {
 }
 
 type Post struct {
-	Id             int      `json:"id,omitempty"`
-	UserId         int      `json:"user_id,omitempty"`
-	Username       string   `json:"user_name,omitempty"`
-	Title          string   `json:"title"`
-	Content        string   `json:"content"`
-	PostCategories []string `json:"categories,omitempty"`
-	CreatedAt      string   `json:"created_at,omitempty"`
-	TotalComments  int      `json:"total_comments"`
+	Id             int    `json:"id,omitempty"`
+	UserId         int    `json:"user_id,omitempty"`
+	Username       string `json:"user_name,omitempty"`
+	Title          string `json:"title"`
+	Content        string `json:"content"`
+	PostCategories []any  `json:"category_ids"`
+	CreatedAt      string `json:"created_at,omitempty"`
+	TotalComments  int    `json:"total_comments"`
+	TotalLikes     int    `json:"total_likes"`
+	TotalDislikes  int    `json:"total_dislikes"`
 }
 
-type PostCategory struct {
-	postId     int `json:"post_id"`
-	categoryId int `json:"category_id"`
+type Category struct {
+	CategoryId   int    `json:"category_id"`
+	CategoryName string `json:"category_name"`
 }
 
 type Comment struct {
@@ -45,11 +47,14 @@ type Comment struct {
 	Username  string `json:"user_name,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
 	Content   string `json:"content"`
+	TotalLikes     int    `json:"total_likes"`
+	TotalDislikes  int    `json:"total_dislikes"`
 }
 
 type PostError struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
+	Categories string  `json:"category_ids"`
 }
 
 type CommentError struct {
@@ -116,10 +121,6 @@ func NewUser() *User {
 
 func NewSession() *Session {
 	return &Session{}
-}
-
-func NewPostCategory() *PostCategory {
-	return &PostCategory{}
 }
 
 func (session *Session) IsExpired() bool {

@@ -42,6 +42,9 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset or limit!"))
 		return
 	}
+    // read the body of the request 
+	
+
 	posts, err := Phandler.service.GetPosts(limit, offset)
 	if err != nil {
 		WriteJsonErrors(w, *err)
