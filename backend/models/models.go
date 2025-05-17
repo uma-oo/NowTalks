@@ -33,9 +33,9 @@ type Post struct {
 	TotalComments  int      `json:"total_comments"`
 }
 
-type PostCategory struct {
-	postId     int `json:"post_id"`
-	categoryId int `json:"category_id"`
+type Category struct {
+	CategoryId int `json:"category_id"`
+	CategoryName string  `json:"category_name"`
 }
 
 type Comment struct {
@@ -118,9 +118,6 @@ func NewSession() *Session {
 	return &Session{}
 }
 
-func NewPostCategory() *PostCategory {
-	return &PostCategory{}
-}
 
 func (session *Session) IsExpired() bool {
 	return session.ExpDate.Before(time.Now())
