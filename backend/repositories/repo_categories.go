@@ -26,6 +26,8 @@ func (appRep *AppRepository) AddPostCategories(post *models.Post, categories []a
 	return post, nil
 }
 
+
+
 // THIS is for the getCategories endpoint
 func (appRepo *AppRepository) GetAllCategories() ([]models.Category, *models.ErrorJson) {
 	categories := []models.Category{}
@@ -51,4 +53,3 @@ func (appRepo *AppRepository) GetAllCategories() ([]models.Category, *models.Err
 	return categories, nil
 }
 
-// Given a postid and category_ids get the name of the categories

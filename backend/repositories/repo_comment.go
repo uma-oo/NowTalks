@@ -31,8 +31,8 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 // But hna comments dyal wa7d l post specific
 func (appRep *AppRepository) GetComments(postId int, limit int, offset int) ([]models.Comment, error) {
 	var comments []models.Comment
-	query := `SELECT commentID, userID, postID, createdAt , content 
-	FROM comments 
+	query := `SELECT users.nickname,commentID, postID, createdAt , content 
+	FROM comments INNER JOIN on users.userID = comments.userID
 	WHERE postID = ?
 	ORDER BY createdAt DESC
 	LIMIT ? OFFSET ? ;`
@@ -46,7 +46,7 @@ func (appRep *AppRepository) GetComments(postId int, limit int, offset int) ([]m
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Id, &comment.UserId, &comment.PostId, &comment.CreatedAt, &comment.Content); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.PostId, &comment.CreatedAt, &comment.Content); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)

@@ -37,22 +37,36 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 
 func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
-	limit, errConvlim := strconv.Atoi(r.URL.Query().Get("limit"))
-	if errConvlim!= nil || errConvoff != nil {
+	if errConvoff != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset or limit!"))
 		return
 	}
-    // read the body of the request 
-	
 
-	posts, err := Phandler.service.GetPosts(limit, offset)
-	if err != nil {
-		WriteJsonErrors(w, *err)
-		return
+	categories, ok := r.URL.Query()["category"]
+	fmt.Println("categories", categories , "ok", ok )
+	var posts []models.Post
+	err_get := &models.ErrorJson{}
+	if ok && categories!= nil {
+		posts, err_get = Phandler.service.GetPostsByCategory(offset, categories...)
+		if err_get != nil {
+			WriteJsonErrors(w, *err_get)
+			return
+		}
+	} else {
+		posts, err_get = Phandler.service.GetPosts(offset)
+		fmt.Println("posts", posts)
+		if err_get != nil {
+			WriteJsonErrors(w, *err_get)
+			return
+		}
+
 	}
+
+	// read the body of the request
+
 	err_ := json.NewEncoder(w).Encode(posts)
 	if err_ != nil {
-		errJSon := models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		errJSon := models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err_)}
 		WriteJsonErrors(w, errJSon)
 		return
 	}
@@ -62,7 +76,7 @@ func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodGet:
-		Phandler.getPosts(w,r)
+		Phandler.getPosts(w, r)
 		return
 	case http.MethodPost:
 		Phandler.addPost(w, r)

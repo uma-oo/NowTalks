@@ -11,8 +11,8 @@ import (
 // bash ghan3mr hadshi :)
 // add offsets and limits
 
-func (s *AppService) GetPosts(limit int, offset int) ([]models.Post, *models.ErrorJson) {
-	posts, err := s.repo.GetPosts(limit, offset)
+func (s *AppService) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
+	posts, err := s.repo.GetPosts(offset)
 	if err != nil {
 		return nil, err
 	}
@@ -29,10 +29,10 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 		message.Title = "ERROR: Empty Title Content!!"
 	}
 
-	if len(post.PostCategories)==0 || !utils.CheckPOSTCategories(post.PostCategories) {
-		message.Categories= "ERROR: Incorrect Format of category ID or There is No category affected!"
+	if len(post.PostCategories) == 0 || !utils.CheckPOSTCategories(post.PostCategories) {
+		message.Categories = "ERROR: Incorrect Format of category ID or There is No category affected!"
 	}
-	if message.Content != "" || message.Title != "" {
+	if message.Content != "" || message.Title != "" || message.Categories!="" {
 		errorJson.Status = 400
 		errorJson.Message = message
 		return nil, errorJson
@@ -44,8 +44,8 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	return post_created, nil
 }
 
-func (s *AppService) GetPostsByCategory(limit int, offset int, category ...string) ([]models.Post, *models.ErrorJson) {
-	posts, errJson := s.repo.GetPostsByCategory(limit, offset, category...)
+func (s *AppService) GetPostsByCategory(offset int, category ...string) ([]models.Post, *models.ErrorJson) {
+	posts, errJson := s.repo.GetPostsByCategory(offset, category...)
 	if errJson != nil {
 		return nil, errJson
 	}

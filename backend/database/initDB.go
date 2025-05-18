@@ -8,8 +8,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-
-
 type Database struct {
 	Database *sql.DB
 }
@@ -19,17 +17,16 @@ func InitDB(nameDB string) (*Database, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Database{db}, nil 
+	return &Database{db}, nil
 }
 
-func (db *Database) ReadSQL( filename string) error {
+func (db *Database) ReadSQL(filename string) error {
 	schema, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}
 
 	statements := strings.Split(string(schema), ";")
-
 	for _, st := range statements {
 		_, err := db.Database.Exec(st + ";")
 		if err != nil {
