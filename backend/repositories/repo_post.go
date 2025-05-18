@@ -69,9 +69,6 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 
 func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
-	if len(categories) == 0 {
-		return appRep.GetPosts(offset)
-	}
 	new_catagories := []string{}
 	for _, category := range categories {
 		cate := fmt.Sprintf(`'%v'`, category)
@@ -90,12 +87,12 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 1", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
 	rows, err := stmt.Query(offset)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 2", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
@@ -112,17 +109,19 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 	return posts, nil
 }
 
-func (appRep *AppRepository) GetPostsByUser(username string, offset, limit int) ([]models.Post, *models.ErrorJson) {
+
+
+func (appRep *AppRepository) GetPostsByUser(user_id , offset, limit int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content FROM posts 
 	INNER JOIN users 
 	ON posts.userID = users.userID
-	WHERE users.nickname = ?
+	WHERE users.userID = ?
 	ORDER BY posts.createdAt DESC
 	LIMIT ?
 	OFFSET ?;
 	`
-	rows, err := appRep.db.Query(query, username, limit, offset)
+	rows, err := appRep.db.Query(query, user_id, limit, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
 	}
