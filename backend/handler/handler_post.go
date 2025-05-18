@@ -54,7 +54,6 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		posts, err_get = Phandler.service.GetPosts(offset)
-		fmt.Println("posts", posts)
 		if err_get != nil {
 			WriteJsonErrors(w, *err_get)
 			return
