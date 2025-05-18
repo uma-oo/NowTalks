@@ -32,7 +32,7 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	if len(post.PostCategories) == 0 || !utils.CheckPOSTCategories(post.PostCategories) {
 		message.Categories = "ERROR: Incorrect Format of category ID or There is No category affected!"
 	}
-	if message.Content != "" || message.Title != "" {
+	if message.Content != "" || message.Title != "" || message.Categories!="" {
 		errorJson.Status = 400
 		errorJson.Message = message
 		return nil, errorJson
