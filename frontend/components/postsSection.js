@@ -24,6 +24,7 @@ export function createPostsSections() {
     })
 
     let filterContainer = createFilterContainer()
+    
 
     let filterBtn = createButton({icon:"filter"}, 'button', "filter-btn")
     filterBtn.addEventListener('click', (e)=> {
@@ -64,8 +65,6 @@ function toggleCreatePostFormContainer(container) {
     console.log(container.querySelector("#create-post-form"))
     if (!container.querySelector("#create-post-form")) {
         container.append(createForm(PostForm, "create-post-form"))
-    } else {
-        container.innerHTML = ""
     }
 }
 

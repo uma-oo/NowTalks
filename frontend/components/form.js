@@ -9,6 +9,7 @@ export function createForm(formRepresentaion, id) {
     formElement.noValidate = true
     formElement.id = id
 
+
     formRepresentaion.elements.forEach((elem) => {
         let formGrp = document.createElement('div')
         formGrp.className = 'form-grp'
@@ -38,15 +39,14 @@ export function createForm(formRepresentaion, id) {
         formElement.append(createButton(buttonContent, button.type, [button.style]))
     })
 
-    formElement.addEventListener('submit', (e) => { handleForm(e) })
+    formElement.addEventListener('submit', (e) => { handleFormSubmit(e) })
     return formElement
 }
 
-export function handleForm(event) {
+export function handleFormSubmit(event) {
     event.preventDefault()
     let form = new FormData(event.target)
     const formData = Object.fromEntries(form.entries())
-    console.log(formData)
     switch (event.target.id) {
         case "login-form":
             login(event.target, formData)
@@ -64,7 +64,6 @@ export function handleForm(event) {
 
 export function login(form, data) {
     loginUser(data).then(([status, data]) => {
-        console.log(status,data)
         let formError = form.parentElement.querySelector(".form-error")
         if (status == 200 ) navigateTo("/")
         else if (status == 400) {
@@ -104,10 +103,8 @@ export function createPost(form, data) {
 
 
 function loadFormErrors(form, data) {
-    console.log(data)
     for (let [fieldId, error] of Object.entries(data)) {
         let inputError = form.querySelector(`#${fieldId}`).nextSibling
         inputError.textContent = error;
     }
-
 }
