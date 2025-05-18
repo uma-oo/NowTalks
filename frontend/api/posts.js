@@ -11,11 +11,14 @@ export async function addPostApi(postData) {
     }
 }
 
-export async function getPostsApi(offset=0,filterData) {
-    let categories = filterData.categories.join("&categories=")
-    console.log(categories)
+export async function getPostsApi(filterData,offset) {
+    console.log(filterData)
+    let categoriesQuery = filterData.categories ? `&categories=${filterData.categories}` : ""
+    let likedpostsQuery = filterData.likedPosts ? `&likedposts=${filterData.likedPosts}` : ""
+    let createdPosts = filterData.createdPosts ? `&createdposts=${filterData.createdPosts}`: ""
+
     try {
-        const response = await fetch(`/api/post?offset=${offset}&limit=10`, {
+        const response = await fetch(`/api/post?offset=${offset}&limit=10&categories=${filterData.categories}&likedposts=${filterData.likedPosts}&createdPosts=${filterData.createdPosts}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -29,7 +32,7 @@ export async function getPostsApi(offset=0,filterData) {
 export async function getCategories() {
     try {
         let response = await fetch(`/api/categories`)
-        console.log(response)
+        return await response.json()
     } catch (error) {
         console.error("ERROR while trying to get posts categories: ", error)
     }

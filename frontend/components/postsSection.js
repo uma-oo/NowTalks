@@ -38,8 +38,13 @@ export function createPostsSections() {
 }
 
 function fetchPosts(container) {
-    console.log(`fetching posts offset:${container.dataset.offset}`)
-    getPostsApi(container.dataset.offset).then(data => {
+    let offset = container.dataset.offset
+    let filterData = {
+        categories : container.dataset.categories,
+        likedPosts : container.dataset.likedPosts,
+        createdPosts : container.dataset.createdPosts
+    }
+    getPostsApi(filterData, offset).then(data => {
         if (data?.status == 401) {
             navigateTo('/login')
         } else if (data) {

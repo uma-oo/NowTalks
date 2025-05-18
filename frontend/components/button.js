@@ -6,9 +6,9 @@ export function createButton(content, type, style) {
 
     button.setAttribute('type', type)
     button.classList.add(...style)
-    let icon = createIcon(content.icon)
-    let contentSpan = document.createElement('span')
-    contentSpan.textContent = content.text
-    button.append(contentSpan)
+    let icon = content.icon ? createIcon(content.icon) : "" 
+    let contentSpan = document.createElement('span') 
+    contentSpan.textContent = content.text ? content.text : ""
+    button.append(icon, contentSpan)
     return button
 }

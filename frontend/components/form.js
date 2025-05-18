@@ -81,13 +81,12 @@ export function login(form, data) {
 export function register(form, data) {
     data.age = parseInt(data.age)
     createUser(data)
-        .then(response => {
-            if (response.ok ) {
+        .then(([status,data]) => {
+            if (status === 200 ) {
                 navigateTo("/")
             }
-            else if (response.status === 400 ) {
-                console.log("bad request", response)
-                loadFormErrors(form, response.errors)
+            else if (status === 400 ) {
+                loadFormErrors(form, data.errors)
             }
         })
         .catch(error => console.log("error submitting register form: ", error))

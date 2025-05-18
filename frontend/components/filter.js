@@ -4,9 +4,10 @@ export function createFilterContainer() {
     let filterContainer = document.createElement('div')
     filterContainer.classList.add("filter-container","toggleable")
 
+
     
     
-    getCategories.then(response=>console.log(response))
+    getCategories().then(response=>console.log(response))
 
     
 
