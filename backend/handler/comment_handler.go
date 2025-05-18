@@ -41,7 +41,7 @@ func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Reque
 	// FOR NOW let's just get them from the query
 	limit, errConvlim := strconv.Atoi(r.URL.Query().Get("limit"))
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
-	postId, err := strconv.Atoi(r.URL.Query().Get("post"))
+	postId, err := strconv.Atoi(r.URL.Query().Get("postId"))
 	if err != nil || errConvlim != nil || errConvoff != nil {
 		errJson := models.ErrorJson{Status: 400, Message: "Bad Request!! Post Not Found Or Incorrect offset or limit!"}
 		WriteJsonErrors(w, errJson)

@@ -1,0 +1,13 @@
+export let iconsKit = {
+    filter: "fa-filter",
+    like: "fa-thumbs-up",
+    dislike: "fa-thumbs-down",
+    heart: "fa-heart",
+    pen: "fa-pen",
+    comment: "fa-comment",
+    xmark: "fa-xmark",
+    plus: "fa-plus",
+    logout:"fa-arrow-right-from-bracket",
+    share: "fa-share",
+    chat: "fa-comments"
+}

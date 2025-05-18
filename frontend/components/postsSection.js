@@ -4,7 +4,8 @@ import { createButton } from "./button.js"
 import { createPostCard } from "./postCard.js"
 import { createForm } from "./form.js"
 import { PostForm } from "../const/forms.js"
-import { throttle, throttledScrollFetcher } from "../utils.js"
+import { throttledScrollFetcher } from "../utils.js"
+import { createFilterContainer } from "./filter.js"
 
 export function createPostsSections() {
     let postsSection = document.createElement('section')
@@ -17,10 +18,16 @@ export function createPostsSections() {
     let createPostFormContainer = document.createElement('div')
     createPostFormContainer.classList.add('create-Post-Form-Container')
 
-    let addPostBtn = createButton("+", 'button', "")
-
+    let addPostBtn = createButton({icon:"plus"}, 'button', "add-post-btn")
     addPostBtn.addEventListener('click', (e) => {
         toggleCreatePostFormContainer(createPostFormContainer)
+    })
+
+    let filterContainer = createFilterContainer()
+
+    let filterBtn = createButton({icon:"filter"}, 'button', "filter-btn")
+    filterBtn.addEventListener('click', (e)=> {
+        toggleFilterContainer()
     })
 
     fetchPosts(postsContainer)
@@ -55,4 +62,12 @@ function toggleCreatePostFormContainer(container) {
     } else {
         container.innerHTML = ""
     }
+}
+
+function toggleFilterContainer(container) {
+    container.classList.toggle("filter-container_expanded")
+    let elementsToHide = container.querySelectorAll(".toggleable")
+    elementsToHide.forEach(elem => {
+        elem.classList.toggle("hide")
+    });
 }

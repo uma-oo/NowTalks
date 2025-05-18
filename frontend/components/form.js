@@ -34,7 +34,8 @@ export function createForm(formRepresentaion, id) {
     });
 
     formRepresentaion.buttons.forEach(button => {
-        formElement.append(createButton(button.content, button.type, [button.style]))
+        let buttonContent = {text:button.content}
+        formElement.append(createButton(buttonContent, button.type, [button.style]))
     })
 
     formElement.addEventListener('submit', (e) => { handleForm(e) })

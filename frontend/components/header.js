@@ -8,6 +8,7 @@ export function createHeader() {
     logo.href = '/'
     logo.textContent = 'Talkaa'
     logo.className = 'logo'
+    
     let logOut = createButton("Log-Out",'button',['logout-btn'])
     logOut.addEventListener("click", (e) => {
         logoutUser().then(data=>navigateTo("/login"));

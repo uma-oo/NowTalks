@@ -4,7 +4,6 @@ export async function addPostApi(postData) {
         const response = await fetch('/api/post', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(postData)
         })
         return await response.json()
     } catch (error) {
@@ -12,15 +11,13 @@ export async function addPostApi(postData) {
     }
 }
 
-export async function getPostsApi(offset=0) {
-    let data = {
-                test : "abcd"
-            }
+export async function getPostsApi(offset=0,filterData) {
+    let categories = filterData.categories.join("&categories=")
+    console.log(categories)
     try {
         const response = await fetch(`/api/post?offset=${offset}&limit=10`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            body:  JSON.stringify(data)
         })
         return await response.json()
     } catch (error) {
@@ -29,5 +26,12 @@ export async function getPostsApi(offset=0) {
 }
 
 
-
+export async function getCategories() {
+    try {
+        let response = await fetch(`/api/categories`)
+        console.log(response)
+    } catch (error) {
+        console.error("ERROR while trying to get posts categories: ", error)
+    }
+}
 
