@@ -38,16 +38,16 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 
 // all the posts
 // add the offset and the limit after
-func (appRep *AppRepository) GetPosts(limit, offset int) ([]models.Post, *models.ErrorJson) {
+func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content  FROM posts 
 	INNER JOIN users 
 	ON posts.userID = users.userID
 	ORDER BY posts.createdAt DESC
-	LIMIT ?
+	LIMIT 10
 	OFFSET ?;
 	`
-	rows, err := appRep.db.Query(query, limit, offset)
+	rows, err := appRep.db.Query(query, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
 	}
@@ -67,40 +67,43 @@ func (appRep *AppRepository) GetPosts(limit, offset int) ([]models.Post, *models
 	return posts, nil
 }
 
-// Filter by MyPosts // by userId
-// Filter based on categories
-// based on the len of the category
-// how to do see the posts based on the categories 
-func (appRep *AppRepository) GetPostsByCategory(limit, offset int, category ...string) ([]models.Post, *models.ErrorJson) {
-	posts := []models.Post{}
-	if len(category) == 0 {
-		return appRep.GetPosts(limit, offset)
+func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string) ([]models.Post, *models.ErrorJson) {
+	var posts []models.Post
+	if len(categories) == 0 {
+		return appRep.GetPosts(offset)
 	}
-	categories := strings.Join(category, ",")
+	new_catagories := []string{}
+	for _, category := range categories {
+		cate := fmt.Sprintf(`'%v'`, category)
+		new_catagories = append(new_catagories, cate)
+	}
+
 	query := fmt.Sprintf(`SELECT * 
 	FROM posts INNER JOIN postCategories 
 	ON posts.postID = postCategories.postID
 	INNER JOIN categories ON postCategories.categoryID = categories.categoryID
 	WHERE categories.category IN (%v)
 	ORDER BY posts.createdAt DESC
-	LIMIT ? OFFSET ?`,
-		categories)
+	LIMIT 10 OFFSET ?`,
+		strings.Join(new_catagories, ","))
+
+
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 1", err)}
 	}
 	defer stmt.Close()
-	rows, err := stmt.Query(query, limit, offset)
+	rows, err := stmt.Query(offset)
+	if err != nil {
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 2", err)}
+	}
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
-	}
-	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	for rows.Next() {
 		post := models.Post{}
 		if err := rows.Scan(&post); err != nil {
-			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 3", err)}
 		}
 		posts = append(posts, post)
 	}
@@ -109,11 +112,6 @@ func (appRep *AppRepository) GetPostsByCategory(limit, offset int, category ...s
 	return posts, nil
 }
 
-
-
-
-// My posts sections 
-// Posts by user ??? // to be added to the filter 
 func (appRep *AppRepository) GetPostsByUser(username string, offset, limit int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content FROM posts 
