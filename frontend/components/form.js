@@ -29,9 +29,6 @@ export function createForm(formRepresentaion, id) {
         formGrp.append(label, formInput,inputError)
 
         formElement.append(formGrp)
-        formInput.addEventListener('blur', () => {
-            formInput.classList.add('input-filled');
-        });
     });
 
     formRepresentaion.buttons.forEach(button => {
@@ -67,11 +64,13 @@ export function login(form, data) {
         if (status == 200 ) navigateTo("/")
         else if (status == 400) {
             formError.innerText = ""
+            formError.classList.remove("form-have-error")
             loadFormErrors(form, data.errors)
         } else if (status == 401) {
             let errors = form.querySelectorAll(".input-error")
             errors.forEach(error => error.textContent = "")
             formError.innerText = "ERROR!! Username or Email does not exist! Or Password Incorrect!"
+            formError.classList.add("form-have-error")
         }   
     }).catch(error => console.error("Error submitting login form", error))
 }
@@ -91,12 +90,18 @@ export function register(form, data) {
 }
 
 export function createPost(form, data) {
+    
     data.user_id = app.dataset.id
     addPostApi(data)
-        .then(response => {
-            console.log(response)
+        .then(([status,data]) => {
+            if (status === 200 ) {
+                navigateTo("/")
+            }
+            else if (status === 400 ) {
+                loadFormErrors(form, data.errors)
+            }
         })
-        .catch(error => console.log("error creating new post"))
+        .catch(error => console.log("error submitting register form: ", error))
 }
 
 

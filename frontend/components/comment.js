@@ -3,7 +3,7 @@ import {timeAgo} from "../utils.js"
 
 export function createComment(data) {
     let commentContainer = document.createElement('div')
-    commentContainer.className = 'commentContainer'
+    commentContainer.className = 'comment-container'
     
     let commentHeader = document.createElement('p')
     commentHeader.classList.add("comment-header")

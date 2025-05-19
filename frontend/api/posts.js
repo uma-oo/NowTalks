@@ -5,7 +5,7 @@ export async function addPostApi(postData) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         })
-        return await response.json()
+        return [response.status, await response.json()]
     } catch (error) {
         console.error(error)
     }

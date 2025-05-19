@@ -24,6 +24,7 @@ export function createPostsSections() {
     })
 
     let filterContainer = createFilterContainer()
+    console.log(filterContainer)
     
 
     let filterBtn = createButton({icon:"filter"}, 'button', "filter-btn")
@@ -62,9 +63,14 @@ function createPostCards(data) {
 
 function toggleCreatePostFormContainer(container) {
     container.classList.toggle("create-Post-Form-Container_expanded")
-    console.log(container.querySelector("#create-post-form"))
+    let bottonIcon = document.querySelector(".add-post-btn>i")
+    console.log(bottonIcon)
     if (!container.querySelector("#create-post-form")) {
         container.append(createForm(PostForm, "create-post-form"))
+        bottonIcon.classList.replace("fa-plus","fa-xmark")
+    }else {
+        bottonIcon.classList.replace("fa-xmark","fa-plus")
+        container.innerHTML = ""
     }
 }
 
