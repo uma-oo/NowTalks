@@ -40,7 +40,7 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 // add the offset and the limit after
 func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
-	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content  FROM posts 
+	query := `SELECT  users.nickname, posts.postID ,posts.createdAt, posts.title, posts.content  FROM posts 
 	INNER JOIN users 
 	ON posts.userID = users.userID
 	ORDER BY posts.createdAt DESC
@@ -54,12 +54,34 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-
+	// let's attempt it
 	for rows.Next() {
 		var post models.Post
-		if err := rows.Scan(&post.Username, &post.CreatedAt, &post.Title, &post.Content); err != nil {
+		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title, &post.Content); err != nil {
 			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
+		query_fetch_categories := `
+		SELECT  categories.category
+		FROM categories INNER JOIN postCategories ON 
+		categories.categoryID = postCategories.categoryID
+		INNER JOIN posts ON postCategories.postID = posts.postID 
+		WHERE posts.postID = ? 
+		`
+		rows_, errQuery := appRep.db.Query(query_fetch_categories, post.Id)
+		if errQuery != nil {
+			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v   5", err)}
+		}
+		categories := []string{}
+		for rows_.Next() {
+			var category string
+			errScan := rows_.Scan(&category)
+			if errScan != nil {
+				return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+			}
+			categories = append(categories, category)
+
+		}
+		post.PostCategories = append(post.PostCategories, categories)
 		posts = append(posts, post)
 
 	}
@@ -83,7 +105,6 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 	ORDER BY posts.createdAt DESC
 	LIMIT 10 OFFSET ?`,
 		strings.Join(new_catagories, ","))
-
 
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
@@ -109,9 +130,7 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 	return posts, nil
 }
 
-
-
-func (appRep *AppRepository) GetPostsByUser(user_id , offset, limit int) ([]models.Post, *models.ErrorJson) {
+func (appRep *AppRepository) GetPostsByUser(user_id, offset, limit int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `SELECT  users.nickname, posts.createdAt, posts.title, posts.content FROM posts 
 	INNER JOIN users 

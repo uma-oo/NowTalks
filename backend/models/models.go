@@ -55,7 +55,7 @@ type Comment struct {
 type PostError struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
-	Categories string `json:"category_ids"`
+	Categories string `json:"categories"`
 }
 
 type CommentError struct {

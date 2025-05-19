@@ -38,12 +38,11 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {
-		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset or limit!"))
+		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset"))
 		return
 	}
 
 	categories, ok := r.URL.Query()["category"]
-	fmt.Println("categories", categories , "ok", ok )
 	var posts []models.Post
 	err_get := &models.ErrorJson{}
 	if ok && categories!= nil {
