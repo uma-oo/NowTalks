@@ -40,9 +40,10 @@ export function createPostCard(postData) {
         postCommentsContainer.append(createComment(comment))
     });
 
-    let viewPostBtn = createButton("viewPost >>",'button',["linkBtn", "viewPost","toggleable"])
+    let viewPostBtn = createButton({text:"see post",icon:"arrowright"},'button',["linkBtn", "viewPost","toggleable","row-reverse"])
     viewPostBtn.addEventListener('click', (e)=>togglePost(e.target, postContainer))
-    let closeBtn = createButton("<- Go Back.","button",["close-btn","hide","toggleable"])
+
+    let closeBtn = createButton({text: "close", icon: "xmark"},"button",["close-btn","hide","toggleable"])
     closeBtn.addEventListener('click', (e)=>togglePost(e.target, postContainer))
 
     let commentForm = createForm(CommentForm,"comment-form")

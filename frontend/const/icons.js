@@ -9,5 +9,7 @@ export let iconsKit = {
     plus: "fa-plus",
     logout:"fa-arrow-right-from-bracket",
     share: "fa-share",
-    chat: "fa-comments"
+    chat: "fa-comments",
+    arrowright: "fa-arrow-right-long",
+    share: "fa-share"
 }

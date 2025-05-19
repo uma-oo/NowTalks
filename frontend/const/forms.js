@@ -121,12 +121,16 @@ export const registerFom = {
     buttons: [
         {
             type: 'submit',
-            content: 'Register',
+            content: {
+                text: "Register"
+            },
             style: 'primary-btn'
         },
         {
             type: 'reset',
-            content: 'Cancel',
+            content: {
+                text: "Reset"
+            },
             style: 'secondary-btn'
         }
     ]
@@ -168,12 +172,16 @@ export const loginForm = {
     buttons: [
         {
             type: 'submit',
-            content: 'Log In',
+            content: {
+                text : 'Log In',
+            },
             style: 'primary-btn'
         },
         {
             type: 'reset',
-            content: 'Cancel',
+            content: {
+                text : "Reset",
+            },
             style: 'secondary-btn'
         }
     ]
@@ -213,13 +221,18 @@ export const PostForm = {
     buttons: [
         {
             type: 'submit',
-            content: 'Share Post',
-            style: 'primary-btn'
+            content: {
+                text : "share",
+                icon : "share"
+            },
+            style: ['primary-btn','row-reverse']
         },
         {
             type: 'reset',
-            content: 'Cancel',
-            style: 'secondary-￼btn'
+            content: {
+                text : "cancell"
+            },
+            style: 'secondary-btn'
         }
     ]
 }
@@ -244,7 +257,9 @@ export const CommentForm = {
     buttons: [
         {
             type: 'submit',
-            content: '>>',
+            content: {
+                icon : "share"
+            },
             style: 'primary-btn'
         }
     ]

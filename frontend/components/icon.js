@@ -4,4 +4,5 @@ export function createIcon(icon) {
     let style = "fa-solid"
     let i = document.createElement('i')
     i.classList.add(style, iconsKit[icon])
+    return i
 }
