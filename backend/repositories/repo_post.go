@@ -54,7 +54,7 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	// let's attempt it
+	
 	for rows.Next() {
 		var post models.Post
 		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title, &post.Content); err != nil {
@@ -88,6 +88,8 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 	defer rows.Close()
 	return posts, nil
 }
+
+// got everything done here 
 
 func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
@@ -123,7 +125,30 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 		if err := rows.Scan(&post); err != nil {
 			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 3", err)}
 		}
+		query_fetch_categories := `
+		SELECT  categories.category
+		FROM categories INNER JOIN postCategories ON 
+		categories.categoryID = postCategories.categoryID
+		INNER JOIN posts ON postCategories.postID = posts.postID 
+		WHERE posts.postID = ? 
+		`
+		rows_, errQuery := appRep.db.Query(query_fetch_categories, post.Id)
+		if errQuery != nil {
+			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v   5", err)}
+		}
+		categories := []string{}
+		for rows_.Next() {
+			var category string
+			errScan := rows_.Scan(&category)
+			if errScan != nil {
+				return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+			}
+			categories = append(categories, category)
+
+		}
+		post.PostCategories = append(post.PostCategories, categories)
 		posts = append(posts, post)
+
 	}
 	defer rows.Close()
 

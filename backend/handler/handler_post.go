@@ -70,6 +70,14 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
+func (Phandler *PostHandler) ReactToPost(w http.ResponseWriter, r *http.Request){
+ 
+
+}
+
+
+
 func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
@@ -86,3 +94,6 @@ func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+
+

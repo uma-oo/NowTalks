@@ -58,6 +58,18 @@ func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+
+
+
+func (Phandler *PostHandler) ReactToComment(w http.ResponseWriter, r *http.Request){
+
+
+}
+
+
+
+
+
 func (CHanlder *CommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
