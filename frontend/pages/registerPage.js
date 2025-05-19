@@ -13,7 +13,7 @@ export function renderRegisterPage(app) {
             let header = document.createElement('h1')
             let formError = document.createElement('div')
             formError.className = "form-Error"
-            header.textContent = "Register"
+            header.innerHTML = "Create account </br> and become a new member in our forum"
             let registerFomlement = createForm(registerFom, "register-form")
             let goToLogin = document.createElement('p')
             goToLogin.textContent = "Already have an account ? "

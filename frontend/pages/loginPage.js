@@ -11,7 +11,7 @@ export function renderLoginPage(app) {
             let header = document.createElement('h1')
             let formError = document.createElement('div')
             formError.className = "form-error"
-            header.textContent = "Log In"
+            header.innerHTML = "Welcome Back </br> Login to your account."
             let loginFormElement = createForm(loginForm, "login-form")
             let goToRegister = document.createElement('p')
             goToRegister.textContent = "Don't have an account? "

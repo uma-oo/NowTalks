@@ -28,14 +28,15 @@ export function createPostsSections() {
     
 
     let filterBtn = createButton({icon:"filter"}, 'button', "filter-btn")
+    console.log(filterBtn)
     filterBtn.addEventListener('click', (e)=> {
-        toggleFilterContainer()
+        toggleFilterContainer(filterContainer)
     })
 
     fetchPosts(postsContainer)
     const throttledScrollHandler = throttledScrollFetcher(fetchPosts)
     postsContainer.addEventListener('scroll', throttledScrollHandler)
-    postsSection.append(postsContainer, createPostFormContainer, addPostBtn)
+    postsSection.append(postsContainer, createPostFormContainer,filterContainer,  filterBtn,addPostBtn)
     return postsSection
 }
 

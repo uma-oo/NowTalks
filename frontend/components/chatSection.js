@@ -1,5 +1,6 @@
 import { users } from "../const/data.js"
 import { createChatUserCard } from "./chatUserCard.js"
+import { createIcon } from "./icon.js"
 
 export function createChatSections(){
     let chatSection = document.createElement('section')
@@ -8,8 +9,9 @@ export function createChatSections(){
 
     let chatSectionHeader = document.createElement('div')
     chatSectionHeader.classList.add("chat_section-header")
-    let appUser = document.createElement('p')
-    appUser.append("Chat To Other Users")
+    let chatsIcon = createIcon("chats")
+    let appUser = document.createElement('h2')
+    appUser.append("Chats: ")
     chatSectionHeader.append(appUser)
 
     let chatUsersCardsContainer = document.createElement('div')
@@ -19,6 +21,6 @@ export function createChatSections(){
         chatUsersCardsContainer.append(createChatUserCard(user))
     });
 
-    chatSection.append(chatUsersCardsContainer)
+    chatSection.append(chatSectionHeader,chatUsersCardsContainer)
     return chatSection;
 }

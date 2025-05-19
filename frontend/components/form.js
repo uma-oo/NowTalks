@@ -31,9 +31,14 @@ export function createForm(formRepresentaion, id) {
         formElement.append(formGrp)
     });
 
+    let formButtons = document.createElement('div')
+    formButtons.classList.add("form-buttons")
+
     formRepresentaion.buttons.forEach(button => {
-        formElement.append(createButton(button.content, button.type, [button.style]))
+        formButtons.append(createButton(button.content, button.type, [button.style]))
     })
+
+    formElement.append(formButtons)
 
     formElement.addEventListener('submit', (e) => { handleFormSubmit(e) })
     return formElement

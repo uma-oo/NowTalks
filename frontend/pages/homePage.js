@@ -14,7 +14,7 @@ export function renderHomePage(app) {
             let header = createHeader()
             let main =  document.createElement('main')
             main.classList.add("home-main")
-            main.append(createPostsSections(), createChatSections())
+            main.append(createChatSections(),createPostsSections() )
             app.append(header,main)
         } else {navigateTo("/login")}
     })

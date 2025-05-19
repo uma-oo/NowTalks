@@ -11,5 +11,9 @@ export let iconsKit = {
     share: "fa-share",
     chat: "fa-comments",
     arrowright: "fa-arrow-right-long",
-    share: "fa-share"
+    share: "fa-share",
+    user: "fa-user",
+    lock: "fa-lock",
+    chats: "fa-comments",
+    usericon: "fa-circle-user"
 }

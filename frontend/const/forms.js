@@ -26,7 +26,7 @@ export const registerFom = {
             },
             options: ["Male", "Female"],
             style: {
-                width: '50%'
+                width: '100%'
             }
         },
         {
@@ -41,7 +41,7 @@ export const registerFom = {
                 default: 18
             },
             style: {
-                width: '50%'
+                width: '100%'
             }
         },
         {
