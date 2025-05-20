@@ -55,6 +55,7 @@ type Reaction struct {
 	Id           int    `json:"id,omitempty"`
 	EntityTypeId int    `json:"entity_type_id"`
 	EntityType   string `json:"entity_type"`
+	EntityId     int    `json:"entity_id"`
 	Reaction     int    `json:"reaction"`
 	UserId       int    `json:"user_id"`
 }
