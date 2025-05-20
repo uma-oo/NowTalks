@@ -45,7 +45,7 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 	categories, ok := r.URL.Query()["category"]
 	var posts []models.Post
 	err_get := &models.ErrorJson{}
-	if ok && categories!= nil {
+	if ok && categories != nil {
 		posts, err_get = Phandler.service.GetPostsByCategory(offset, categories...)
 		if err_get != nil {
 			WriteJsonErrors(w, *err_get)
@@ -70,30 +70,46 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// need to handle the like and dislike process
 
-func (Phandler *PostHandler) ReactToPost(w http.ResponseWriter, r *http.Request){
- 
-
+func (Phandler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("heereeee"))
+	
 }
 
-
+func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("theeeeeeeeeereeee"))
+}
 
 func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("URL", r.URL.Path)
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodGet:
+		fmt.Println("hereeee")
 		Phandler.getPosts(w, r)
 		return
 	case http.MethodPost:
-		Phandler.addPost(w, r)
-		return
+		switch r.URL.Path[1:] {
+		case "api/post/like":
+			Phandler.LikePost(w, r)
+			return
+		case "api/post/dislike":
+			Phandler.DislikePost(w, r)
+			return
+		case "api/post/":
+			Phandler.addPost(w, r)
+			return
+
+		default:
+			WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "ERROR!! Page Not Found!!"})
+			return
+		}
+		
+
 	default:
 		errJson := models.ErrorJson{Status: 405, Message: "Method Not Allowed!!"}
-		w.WriteHeader(errJson.Status)
-		json.NewEncoder(w).Encode(errJson)
+		WriteJsonErrors(w, errJson)
 		return
 	}
 }
-
-
-

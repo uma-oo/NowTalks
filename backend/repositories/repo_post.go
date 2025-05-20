@@ -15,13 +15,13 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING postID, title , content ,createdAt, total_comments`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 1", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
 	err = stmt.QueryRow(post.UserId, post.Title, post.Content).Scan(&post_created.Id, &post_created.Title,
 		&post_created.Content, &post_created.CreatedAt, &post_created.TotalComments)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 2", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 
 	post_created, errJson := appRep.AddPostCategories(post_created, post.PostCategories)
@@ -81,6 +81,7 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 			categories = append(categories, category)
 
 		}
+		fmt.Println("categories", categories)
 		post.PostCategories = append(post.PostCategories, categories)
 		posts = append(posts, post)
 
@@ -123,7 +124,7 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 	for rows.Next() {
 		post := models.Post{}
 		if err := rows.Scan(&post); err != nil {
-			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v 3", err)}
+			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		query_fetch_categories := `
 		SELECT  categories.category
@@ -134,7 +135,7 @@ func (appRep *AppRepository) GetPostsByCategory(offset int, categories ...string
 		`
 		rows_, errQuery := appRep.db.Query(query_fetch_categories, post.Id)
 		if errQuery != nil {
-			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v   5", err)}
+			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		categories := []string{}
 		for rows_.Next() {

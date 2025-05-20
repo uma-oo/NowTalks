@@ -2,7 +2,6 @@ package models
 
 import "time"
 
-
 type User struct {
 	Id            int    `json:"id,omitempty"`
 	Nickname      string `json:"nickname"`
@@ -29,7 +28,7 @@ type Post struct {
 	Username       string `json:"user_name,omitempty"`
 	Title          string `json:"title"`
 	Content        string `json:"content"`
-	PostCategories []any  `json:"category_ids"`
+	PostCategories []any  `json:"categories"`
 	CreatedAt      string `json:"created_at,omitempty"`
 	TotalComments  int    `json:"total_comments"`
 	TotalLikes     int    `json:"total_likes"`
@@ -50,6 +49,14 @@ type Comment struct {
 	Content       string `json:"content"`
 	TotalLikes    int    `json:"total_likes"`
 	TotalDislikes int    `json:"total_dislikes"`
+}
+
+type Reaction struct {
+	Id           int    `json:"id,omitempty"`
+	EntityTypeId int    `json:"entity_type_id"`
+	EntityType   string `json:"entity_type"`
+	Reaction     int    `json:"reaction"`
+	UserId       int    `json:"user_id"`
 }
 
 type PostError struct {
