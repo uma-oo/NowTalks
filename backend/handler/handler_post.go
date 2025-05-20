@@ -73,8 +73,9 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 // need to handle the like and dislike process
 
 func (Phandler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("heereeee"))
 	
+	w.Write([]byte("heereeee"))
+
 }
 
 func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request) {
