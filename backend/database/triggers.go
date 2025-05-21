@@ -7,7 +7,7 @@ package database
 // 			BEGIN 
 // 				UPDATE posts
 // 				SET total_comments=total_comments+1 
-// 				WHERE posts.postID = NEW.post_id;
+// 				WHERE posts.postID = NEW.postID;
 // 			END;`
 // 	trigger_total_likes_comments_insert := `CREATE TRIGGER IF NOT EXISTS increment_or_decrement_total_likes_comments_insert
 // 	   AFTER INSERT ON comment_reactions

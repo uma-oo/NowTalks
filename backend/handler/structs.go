@@ -64,3 +64,11 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 	w.WriteHeader(200)
 	json.NewEncoder(w).Encode(&data)
 }
+
+
+
+// so the server will be a map of connexions and a mutex with it 
+
+type ChatServer struct {
+
+}
