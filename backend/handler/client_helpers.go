@@ -6,10 +6,10 @@ import (
 	"real-time-forum/backend/models"
 )
 
-func (server *ChatServer) AddClient(client *Client) {
+func (server *ChatServer) AddClient(client *Client, userId int) {
 	server.Lock()
 	defer server.Unlock()
-	server.clients[client] = true
+	server.clients[userId] = append(server.clients[userId], client)
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {

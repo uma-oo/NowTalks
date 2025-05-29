@@ -70,7 +70,7 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 
 // so the server will be a map of connexions and a mutex with it
 // section for the chat implemenatation
-type ClientList map[*Client]bool
+type ClientList map[int][]*Client
 
 type Client struct {
 	service *service.AppService
