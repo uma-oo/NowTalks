@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"strings"
 
@@ -25,15 +26,23 @@ func (db *Database) ReadSQL(filename string) error {
 	if err != nil {
 		return err
 	}
+	lines := 0
 
 	statements := strings.Split(string(schema), ";")
 	for _, st := range statements {
+		lines++
 		_, err := db.Database.Exec(st + ";")
 		if err != nil {
+			fmt.Println("err", lines, err, st)
 			return err
 		}
 
 	}
+
+	// err = db.Triggers()
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

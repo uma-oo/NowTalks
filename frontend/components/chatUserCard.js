@@ -2,6 +2,7 @@ import { createIcon } from "./icon.js";
 
 export function createChatUserCard(user) {
     let chatUserCard = document.createElement('div');
+    chatUserCard.dataset.open = ""
     chatUserCard.classList.add("chat-user-card")
 
     let chatUserCardHeader = document.createElement('div')

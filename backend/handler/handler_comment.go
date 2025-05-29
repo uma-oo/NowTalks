@@ -58,6 +58,12 @@ func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+func (CHanlder *CommentHandler) LikeComment(w http.ResponseWriter, r *http.Request) {
+}
+
+func (CHanlder *CommentHandler) DislikeComment(w http.ResponseWriter, r *http.Request) {
+}
+
 func (CHanlder *CommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
@@ -65,12 +71,24 @@ func (CHanlder *CommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		CHanlder.getComments(w, r)
 		return
 	case http.MethodPost:
-		CHanlder.addComment(w, r)
-		return
+		switch r.URL.Path[1:] {
+		case "api/comment/like":
+			CHanlder.LikeComment(w, r)
+			return
+		case "api/comment/dislike":
+			CHanlder.DislikeComment(w, r)
+			return
+		case "api/comment/":
+			CHanlder.addComment(w, r)
+			return
+		default:
+			errJson := models.ErrorJson{Status: 404, Message: "ERROR!! Page Not Found!!"}
+			WriteJsonErrors(w, errJson)
+			return
+		}
 	default:
-		errJson := models.ErrorJson{Status: 405, Message: "Method Not Allowed!!"}
-		w.WriteHeader(errJson.Status)
-		json.NewEncoder(w).Encode(errJson)
+		errJson := models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!!"}
+		WriteJsonErrors(w, errJson)
 		return
 
 	}

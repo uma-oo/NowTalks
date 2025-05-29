@@ -1,26 +1,20 @@
 import { users } from "../const/data.js"
+import { createElement } from "../utils.js"
 import { createChatUserCard } from "./chatUserCard.js"
-import { createIcon } from "./icon.js"
+import { openChatWindow } from "./chatWindow.js"
 
-export function createChatSections(){
-    let chatSection = document.createElement('section')
-    chatSection.classList.add("chat_section","tab_section")
-
-
-    let chatSectionHeader = document.createElement('div')
-    chatSectionHeader.classList.add("chat_section-header")
-    let chatsIcon = createIcon("chats")
-    let appUser = document.createElement('h2')
-    appUser.append("Chats: ")
-    chatSectionHeader.append(appUser)
-
-    let chatUsersCardsContainer = document.createElement('div')
-    chatUsersCardsContainer.classList.add("chat_users_cards-container")
-
-    users.forEach(user => {
-        chatUsersCardsContainer.append(createChatUserCard(user))
+export function createChatSection() {
+    let chatSectionHeader = createElement('div', "chats-section-header")
+    let chatSectionHeaderTitle = createElement('h3', null, "Chats: ")
+    let chatList = createElement('div', 'chat-list')
+    let chats = users.map(user => {
+        let userCard = createChatUserCard(user)
+        let userCardClone = userCard.cloneNode(true)
+        userCard.addEventListener("click",e => openChatWindow(userCard, userCardClone))
+        return userCard
     });
 
-    chatSection.append(chatSectionHeader,chatUsersCardsContainer)
-    return chatSection;
+    chatSectionHeader.append(chatSectionHeaderTitle)
+    chatList.append(...chats)
+    return [chatSectionHeader, chatList];
 }

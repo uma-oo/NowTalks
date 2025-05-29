@@ -1,25 +1,17 @@
-import {timeAgo} from "../utils.js"
+import {createElement, timeAgo} from "../utils.js"
 
 
 export function createComment(data) {
-    let commentContainer = document.createElement('div')
-    commentContainer.className = 'comment-container'
-    
-    let commentHeader = document.createElement('p')
-    commentHeader.classList.add("comment-header")
-    commentHeader.textContent = data.username
-    
-    
-    let commentBody = document.createElement('p')
-    commentBody.classList.add("comment-body")
-    commentBody.textContent = data.content
+    let commentContainer = createElement('div', "comment-container")
+    let commentHeader = createElement('p', "comment-header", data.username)
+    let commentBody = createElement('p', "comment-body", data.content)
+    let commentFooter = createElement('div', 'comment-footer')
 
-    let commentFooter = document.createElement('div')
-    commentFooter.classList.add("comment-footer")
-    let createdAt = document.createElement('p')  
+    let createdAt = createElement('p',null, timeAgo(data.createdAt) )
+    document.createElement('p')
+
     createdAt.textContent = timeAgo(data.createdAt)
     commentFooter.append(createdAt)
-
     commentContainer.append(commentHeader,commentBody,commentFooter)
     return commentContainer
 }

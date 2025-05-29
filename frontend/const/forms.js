@@ -264,3 +264,30 @@ export const CommentForm = {
         }
     ]
 }
+
+export const MessageForm = {
+    elements: [
+        {
+            tag: 'input',
+            attributes: {
+                required: 'true',
+                type: 'text',
+                id: 'chatMessage',
+                name: 'chatMessage',
+                placeholder: "Send a message..."
+            },
+            style: {
+                // width: '100%'
+            }
+        },
+    ],
+    buttons: [
+        {
+            type: 'submit',
+            content: {
+                icon : "share"
+            },
+            style: 'primary-btn'
+        }
+    ]
+}

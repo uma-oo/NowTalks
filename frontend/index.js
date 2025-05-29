@@ -1,4 +1,3 @@
-import { isLoggedIn } from "./api/user.js";
 import { renderErrorPage } from "./pages/errorPage.js";
 import { renderHomePage } from "./pages/homePage.js"
 import { renderLoginPage } from "./pages/loginPage.js";
@@ -19,7 +18,7 @@ export function renderApp() {
             renderHomePage(app)
             break;
         default:
-            renderErrorPage(app)
+            renderErrorPage(app,'404')
             break;
     }
 }

@@ -9,7 +9,7 @@ export function createHeader() {
     logo.textContent = 'Talkaa'
     logo.className = 'logo'
     
-    let logOut = createButton({text: "log out", icon: "logout"},'button',['logout-btn'])
+    let logOut = createButton({text: "log out", icon: "logout"},'button','logout-btn')
     logOut.addEventListener("click", (e) => {
         logoutUser().then(data=>navigateTo("/login"));
         

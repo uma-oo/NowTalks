@@ -1,3 +1,6 @@
-export function renderErrorPage(app){
+export function renderErrorPage(app, status){
     app.append("error page")
+
+
+
 };

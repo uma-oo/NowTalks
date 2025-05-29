@@ -35,7 +35,7 @@ export function createForm(formRepresentaion, id) {
     formButtons.classList.add("form-buttons")
 
     formRepresentaion.buttons.forEach(button => {
-        formButtons.append(createButton(button.content, button.type, [button.style]))
+        formButtons.append(createButton(button.content, button.type, button.style))
     })
 
     formElement.append(formButtons)

@@ -12,7 +12,6 @@ export async function addPostApi(postData) {
 }
 
 export async function getPostsApi(filterData,offset) {
-    console.log(filterData)
     let categoriesQuery = filterData.categories ? `&categories=${filterData.categories}` : ""
     let likedpostsQuery = filterData.likedPosts ? `&likedposts=${filterData.likedPosts}` : ""
     let createdPosts = filterData.createdPosts ? `&createdposts=${filterData.createdPosts}`: ""

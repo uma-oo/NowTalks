@@ -1,75 +1,80 @@
-import { timeAgo } from "../../utils.js"
+import { timeAgo } from "../utils.js"
 import { Comments } from "../const/data.js"
 import { CommentForm } from "../const/forms.js"
+import { createElement } from "../utils.js"
 import { createButton } from "./button.js"
 import { createComment } from "./comment.js"
 import { createForm } from "./form.js"
+import { createIcon } from "./icon.js"
 
-export function createPostCard(postData) {
-    let postContainer = document.createElement('div')
-    postContainer.className = 'postContainer'
 
-    let postHeader = document.createElement('div')
-    postHeader.className = 'post-header'
-    let postTitle = document.createElement('p')
-    postTitle.className = 'post-title'
-    postTitle.textContent = postData.title
-    postHeader.append(postTitle)
+let reactions = [
+    { type: "likes", icon: "like" },
+    { type: "dislikes", icon: "dislike" },
+    { type: "comments", icon: "comment" },
+]
 
-    let postBody = document.createElement('div')
-    postBody.className = 'post-body'
-    let postContent = document.createElement('p')
-    postContent.className = 'post-content'
-    postContent.textContent = postData.content
+export function createPostCard({
+    id,
+    user_name,
+    title,
+    content,
+    categories,
+    created_at,
+    total_comments,
+    total_likes,
+    total_dislikes
+}) {
+    let container = createElement('div', 'post-container')
+    container.dataset.id = id
+
+    let postHeader = createElement('div', 'post-header')
+    let postTitle = createElement('p', 'post-title', title)
+    let postWriter = createElement('span', null, `@${user_name}`)
+    let timestamp = createElement('span', null, timeAgo(created_at))
+    let categoriesList = createElement('div', 'categories')
+    categories.forEach(category => {
+        let categoryTag = createElement('span', 'tag', `#${category}`)
+        categoriesList.append(categoryTag)
+    });
+
+    let postBody = createElement('div', 'post-body')
+    let postContent = createElement('p', 'post-content', content)
+
+    let postFooter = createElement('div', 'post-footer')
+    let reactionElements = reactions.map(reaction => {
+        let container = createElement('div', 'reaction-container');
+        container.dataset.reaction = reaction.type;
+        let icon = createIcon(reaction.icon);
+        let count = createElement('span', null, '0');
+        container.append(icon, count);
+        return container;
+    });
+
+
+    let postCommentsContainer = createElement('div', "post-comments-container toggleable hide")
+    let comments = Comments.map(comment => createComment(comment));
+
+    let viewPostBtn = createButton({ text: "see post", icon: "arrowright" }, 'button', "linkBtn viewPost toggleable row-reverse")
+    let closeBtn = createButton({ text: "close", icon: "xmark" }, "button", "close-btn hide toggleable")
+
+    viewPostBtn.addEventListener('click', (e) => togglePost(e.target, container))
+    closeBtn.addEventListener('click', (e) => togglePost(e.target, container))
+
+    let commentForm = createForm(CommentForm, "comment-form")
+    commentForm.classList.add("hide", "toggleable")
+
+    postHeader.append(postTitle, postWriter, timestamp, categoriesList)
     postBody.append(postContent)
-
-    let postFooter = document.createElement('div')
-    postFooter.className = 'post-Footer'
-    let postWriter = document.createElement('p')
-    postWriter.textContent = postData.user_name
-    let postTimePosted = document.createElement('p')
-    postTimePosted.textContent = timeAgo(postData.created_at)
-    postFooter.append(postWriter,postTimePosted)
-
-
-    let postCommentsContainer = document.createElement('div')
-    postCommentsContainer.classList.add("post-comments-container","toggleable","hide")
-    postCommentsContainer.append("Comments")
-
-    Comments.forEach(comment => {
-        postCommentsContainer.append(createComment(comment))
-    });
-
-    let viewPostBtn = createButton({text:"see post",icon:"arrowright"},'button',["linkBtn", "viewPost","toggleable","row-reverse"])
-    viewPostBtn.addEventListener('click', (e)=>togglePost(e.target, postContainer))
-
-    let closeBtn = createButton({text: "close", icon: "xmark"},"button",["close-btn","hide","toggleable"])
-    closeBtn.addEventListener('click', (e)=>togglePost(e.target, postContainer))
-
-    let commentForm = createForm(CommentForm,"comment-form")
-    commentForm.classList.add("hide","toggleable")
-
-    postContainer.append(postHeader,postBody,postFooter,postCommentsContainer,commentForm,viewPostBtn,closeBtn)
-    return postContainer
+    postFooter.append(...reactionElements);
+    postCommentsContainer.append("Comments", ...comments)
+    container.append(postHeader, postBody, postFooter, postCommentsContainer, commentForm, viewPostBtn, closeBtn)
+    return container
 }
 
-function togglePost(btnClicked, postContainer) {
-    postContainer.classList.toggle("post-container_expand")
-    let elementsToHide = postContainer.querySelectorAll(".toggleable")
-    elementsToHide.forEach(elem => {
-        elem.classList.toggle("hide")
-    });
+function togglePost(button, container) {
+    container.classList.toggle('post-container_expand')
+    let toggleableElements = container.querySelectorAll('.toggleable')
+    toggleableElements.forEach(elem => elem.classList.toggle('hide'))
+    container.scrollIntoView({ block: "center" })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

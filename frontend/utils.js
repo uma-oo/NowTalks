@@ -61,6 +61,12 @@ export function throttle(func, delay) {
     }
 }
 
+export function createElement(tag, className, text='') {
+    let element = document.createElement(tag)
+    if (className) element.className = className
+    if (text) element.textContent = text
+    return element
+}
 
 export function setAttributes(elem, attributes) {
     for ( let [key,val] of Object.entries(attributes)) {

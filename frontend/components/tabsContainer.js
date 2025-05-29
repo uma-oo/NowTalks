@@ -3,12 +3,12 @@ import { createButton } from "./button.js"
 const tabs = [
     {
         content: "Posts",
-        classes :['active-tab-btn', 'tab-btn'],
+        className :'active-tab-btn tab-btn',
         section: 'posts_section'
     },
     {
         content: "Chat",
-        classes : ['tab-btn'],
+        className : 'tab-btn',
         section: 'chat_section'
     }
 ]
@@ -17,7 +17,7 @@ export function createTabsContainer() {
     let tabsContainer = document.createElement('div')
     tabsContainer.classList.add('tabs-container')
     tabs.forEach(tab => {
-        let tabBtn = createButton(tab.content,'button',tab.classes)
+        let tabBtn = createButton(tab.content,'button', tab.className)
         tabBtn.dataset.section = tab.section
         tabsContainer.append(tabBtn)
         

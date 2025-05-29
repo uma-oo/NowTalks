@@ -14,7 +14,7 @@ func (appRep *AppRepository) IsLoggedInUser(token string) (*models.UserData, *mo
     WHERE sessionToken = ? `
 	if err := appRep.db.QueryRow(query, token).Scan(&user_data.Id, &user_data.Nickname); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorizes Access"}
+			return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorized Access"}
 		}
 	}
 	return user_data, nil

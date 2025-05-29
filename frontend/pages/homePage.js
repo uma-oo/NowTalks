@@ -1,8 +1,8 @@
 import { isLoggedIn } from "../api/user.js";
-import { createChatSections } from "../components/chatSection.js";
+import { createChatSection } from "../components/chatSection.js";
 import { createHeader } from "../components/header.js";
-import { createPostsSections } from "../components/postsSection.js";
-import { navigateTo } from "../utils.js";
+import { createPostsSection } from "../components/postsSection.js";
+import { navigateTo, createElement } from "../utils.js";
 
 
 
@@ -11,10 +11,15 @@ export function renderHomePage(app) {
         if (data.is_logged_in) {
             app.dataset.nickname = data.nickname
             app.dataset.id = data.id
+
             let header = createHeader()
-            let main =  document.createElement('main')
-            main.classList.add("home-main")
-            main.append(createChatSections(),createPostsSections() )
+            let main = createElement('main',"home-main")
+            let aside = createElement('aside', "chats-container")
+            let containersWrapper = createElement('div', "containers-wrapper")
+            let chatWindowSection =  createElement('div', "chat-window")
+            containersWrapper.append(createPostsSection(),chatWindowSection)
+            aside.append(...createChatSection())
+            main.append(aside,containersWrapper)
             app.append(header,main)
         } else {navigateTo("/login")}
     })
