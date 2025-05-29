@@ -3,9 +3,12 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"sync"
 
 	"real-time-forum/backend/models"
 	"real-time-forum/backend/service"
+
+	"github.com/gorilla/websocket"
 )
 
 type PostHandler struct {
@@ -65,10 +68,38 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 	json.NewEncoder(w).Encode(&data)
 }
 
+// so the server will be a map of connexions and a mutex with it
+// section for the chat implemenatation
+type ClientList map[*Client]bool
 
-
-// so the server will be a map of connexions and a mutex with it 
+type Client struct {
+	connection *websocket.Conn
+	chatServer *ChatServer
+}
 
 type ChatServer struct {
+	clients ClientList
+	upgrader websocket.Upgrader
+	sync.RWMutex
+}
 
+
+
+
+// https://stackoverflow.com/questions/65034144/how-to-add-a-trusted-origin-to-gorilla-websockets-checkorigin
+func NewChatServer() *ChatServer {
+	return &ChatServer{
+		clients: make(ClientList),
+		upgrader: websocket.Upgrader {
+			ReadBufferSize: 1024,
+			WriteBufferSize: 1024,
+		},
+	}
+}
+
+func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
+	return &Client{
+		connection: conn,
+		chatServer: server,
+	}
 }

@@ -16,7 +16,9 @@ func SetRoutes(Phandler *handler.PostHandler,
 	logout *handler.Logout,
 	loggedin *handler.UserData,
 	categories *handler.CategoriesHandler,
+	chat   *handler.ChatServer,
 	service *s.AppService,
+
 ) {
 	http.Handle("/api/comment/", m.NewMiddleWare(Chandler, service))
 	http.Handle("/api/post/", m.NewMiddleWare(Phandler, service))
@@ -24,6 +26,7 @@ func SetRoutes(Phandler *handler.PostHandler,
 	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
 	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
 	http.HandleFunc("/api/categories", categories.GetCategories)
+	http.Handle("/ws/", m.NewLoginMiddleware(chat, service) )
 	http.HandleFunc("/", handleSPA)
 }
 
