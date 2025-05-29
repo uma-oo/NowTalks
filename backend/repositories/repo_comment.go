@@ -20,7 +20,7 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 		&comment_created.CreatedAt); err != nil {
 		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
-	username, errJSon := appRep.getUserNameById(comment.UserId)
+	username, errJSon := appRep.GetUserNameById(comment.UserId)
 	if errJSon != nil {
 		return nil, models.NewErrorJson(500, *errJSon)
 	}

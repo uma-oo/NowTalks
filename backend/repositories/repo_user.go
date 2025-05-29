@@ -69,7 +69,10 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 	return user, nil
 }
 
-func (appRep *AppRepository) getUserNameById(user_id int) (string, *models.ErrorJson) {
+
+
+// get the username from the userId 
+func (appRep *AppRepository) GetUserNameById(user_id int) (string, *models.ErrorJson) {
 	var username string
 	query := `SELECT nickname FROM users WHERE userID = ?`
 	err := appRep.db.QueryRow(query, user_id).Scan(&username)

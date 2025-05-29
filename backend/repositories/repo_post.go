@@ -28,7 +28,7 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 	if errJson != nil {
 		return nil, errJson
 	}
-	username, errJson := appRep.getUserNameById(post.UserId)
+	username, errJson := appRep.GetUserNameById(post.UserId)
 	if errJson != nil {
 		return nil, errJson
 	}

@@ -23,16 +23,16 @@ type Session struct {
 }
 
 type Post struct {
-	Id             int    `json:"id,omitempty"`
-	UserId         int    `json:"user_id,omitempty"`
-	Username       string `json:"user_name,omitempty"`
-	Title          string `json:"title"`
-	Content        string `json:"content"`
-	PostCategories []any  `json:"categories"`
-	CreatedAt      string `json:"created_at,omitempty"`
-	TotalComments  int    `json:"total_comments"`
-	TotalLikes     int    `json:"total_likes"`
-	TotalDislikes  int    `json:"total_dislikes"`
+	Id             int       `json:"id,omitempty"`
+	UserId         int       `json:"user_id,omitempty"`
+	Username       string    `json:"user_name,omitempty"`
+	Title          string    `json:"title"`
+	Content        string    `json:"content"`
+	PostCategories []any     `json:"categories"`
+	CreatedAt      time.Time `json:"created_at,omitempty"`
+	TotalComments  int       `json:"total_comments"`
+	TotalLikes     int       `json:"total_likes"`
+	TotalDislikes  int       `json:"total_dislikes"`
 }
 
 type Category struct {
@@ -41,14 +41,14 @@ type Category struct {
 }
 
 type Comment struct {
-	Id            int    `json:"id,omitempty"`
-	PostId        int    `json:"post_id,omitempty"`
-	UserId        int    `json:"user_id,omitempty"`
-	Username      string `json:"user_name,omitempty"`
-	CreatedAt     string `json:"created_at,omitempty"`
-	Content       string `json:"content"`
-	TotalLikes    int    `json:"total_likes"`
-	TotalDislikes int    `json:"total_dislikes"`
+	Id            int       `json:"id,omitempty"`
+	PostId        int       `json:"post_id,omitempty"`
+	UserId        int       `json:"user_id,omitempty"`
+	Username      string    `json:"user_name,omitempty"`
+	CreatedAt     time.Time `json:"created_at,omitempty"`
+	Content       string    `json:"content"`
+	TotalLikes    int       `json:"total_likes"`
+	TotalDislikes int       `json:"total_dislikes"`
 }
 
 type Reaction struct {
@@ -99,7 +99,22 @@ type ErrorJson struct {
 	Message any `json:"errors"`
 }
 
-//
+//  Message stuff ;)
+
+type Message struct {
+	SenderID         int       `json:"sender_id,omitempty"`
+	SenderUsername   string    `json:"sender_username,omitempty"`
+	ReceiverID       int       `json:"receiver_id"`
+	ReceiverUsername string    `json:"receiver_username"`
+	Message          string    `json:"message"`
+	CreatedAt        time.Time `json:"created_at,omitempty"`
+	Status           string    `json:"status,omitempty"`
+}
+
+type MessageErr struct {
+	Message    string `json:"message"`
+	ReceiverID any    `json:"receiver_id"`
+}
 
 func NewErrorJson(status int, message any) *ErrorJson {
 	return &ErrorJson{
@@ -122,6 +137,10 @@ func NewComment() *Comment {
 
 func NewCommentErr() *CommentError {
 	return &CommentError{}
+}
+
+func NewMessageErr() *MessageErr {
+	return &MessageErr{}
 }
 
 func NewUser() *User {

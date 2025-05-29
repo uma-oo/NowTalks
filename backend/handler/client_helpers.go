@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
-
-	"github.com/gorilla/websocket"
+	"real-time-forum/backend/models"
 )
 
 func (server *ChatServer) AddClient(client *Client) {
@@ -22,20 +22,19 @@ func (server *ChatServer) RemoveClient(client *Client) {
 }
 
 func (client *Client) ReadMessages() {
-    defer client.chatServer.RemoveClient(client)
+	defer client.chatServer.RemoveClient(client)
 
 	for {
-		messageType, payload, err := client.connection.ReadMessage()
+		_, payload, err := client.connection.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseAbnormalClosure, websocket.CloseGoingAway) {
-				fmt.Println(err)
-			}
 			break
 		}
-		fmt.Println(messageType)
+		message := models.Message{}
+		json.Unmarshal(payload, &message)
 		fmt.Println("payload", string(payload))
 
 	}
+
 }
 
 func (client *Client) WriteMessages() {
