@@ -268,7 +268,7 @@ export const CommentForm = {
 export const MessageForm = {
     elements: [
         {
-            tag: 'input',
+            tag: 'textarea',
             attributes: {
                 required: 'true',
                 type: 'text',
