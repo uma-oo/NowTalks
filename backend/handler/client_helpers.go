@@ -67,6 +67,29 @@ func (client *Client) WriteMessages() {
 
 }
 
+
+// other than only sending the message back l khuna li sift l mssg 
+// broadcastih l connections dyal nfss l user 
+// broadcasti l message l receiver (message mashi errJson channel )
+
+
+// to be done 
+// create another endpoint for the online users (hakka bghit if it can be possible)
+
+// finish the like/ dislike things by tomorrow
+
+
+
+
+
+
+
+
+
+
+
+
+
 // dummy way to delete a connection but i'm done
 func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_deleted *Client) {
 	index := -1
