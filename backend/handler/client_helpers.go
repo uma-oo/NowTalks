@@ -34,7 +34,7 @@ func (client *Client) ReadMessages() {
 			client.ErrorJson <- errJson
 			continue
 		}
-		client.Send <- message
+		client.Message <- message
 	}
 
 }
@@ -43,11 +43,23 @@ func (client *Client) WriteMessages() {
 	defer client.chatServer.RemoveClient(client)
 
 	for {
-		err := client.connection.WriteJSON(client.Send)
+		select {
+		case message := <-client.Message:
+			err := client.connection.WriteJSON(message)
+			if err != nil {
+				return
+			}
+		case errJson := <-client.ErrorJson:
+			err := client.connection.WriteJSON(errJson)
+			if err != nil {
+				return
+			}
+		}
 	}
 
 }
 
+// dummy way to delete a connection but i'm done
 func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_deleted *Client) {
 	index := -1
 	for i, value := range clientList[userId] {

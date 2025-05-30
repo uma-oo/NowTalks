@@ -76,7 +76,7 @@ type Client struct {
 	service    *service.AppService
 	connection *websocket.Conn
 	chatServer *ChatServer
-	Send       chan *models.Message
+	Message       chan *models.Message
 	ErrorJson  chan *models.ErrorJson
 	userId     int
 }
@@ -105,7 +105,7 @@ func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
 		service:    server.service,
 		connection: conn,
 		chatServer: server,
-		Send:       make(chan *models.Message),
+		Message:       make(chan *models.Message),
 		ErrorJson:  make(chan *models.ErrorJson),
 	}
 }
