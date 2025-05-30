@@ -13,6 +13,11 @@ func (server *ChatServer) AddClient(client *Client) {
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
+	client.CloseOnce.Do(func() {
+		close(client.Message)
+		close(client.ErrorJson)
+		close(client.Done)
+	})
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)
@@ -27,6 +32,7 @@ func (client *Client) ReadMessages() {
 		message := &models.Message{}
 		err := client.connection.ReadJSON(&message)
 		if err != nil {
+			close(client.Done)
 			break
 		}
 		message, errJson := client.chatServer.service.ValidateMessage(message)
@@ -54,6 +60,8 @@ func (client *Client) WriteMessages() {
 			if err != nil {
 				return
 			}
+		case <-client.Done:
+			return
 		}
 	}
 
