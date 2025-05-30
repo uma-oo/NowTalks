@@ -10,13 +10,14 @@ import (
 func (repo *AppRepository) AddMessage(message *models.Message) (*models.Message, *models.ErrorJson) {
 	message_created := &models.Message{}
 	query := `INSERT INTO messages (senderID,receiverID,message) 
-	VALUES (?,?,?) RETURNING message;`
+	VALUES (?,?,?) RETURNING message, createdAt;`
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
 	defer stmt.Close()
-	if err = stmt.QueryRow(query, message.SenderID, message.ReceiverID, message.Message).Scan(&message_created.Message); err != nil {
+	if err = stmt.QueryRow(query, message.SenderID, message.ReceiverID, message.Message).Scan(
+		&message_created.Message, message_created.CreatedAt); err != nil {
 		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
 	receiver, errRec := repo.GetUserNameById(message.ReceiverID)

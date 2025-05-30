@@ -73,28 +73,28 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 type ClientList map[int][]*Client
 
 type Client struct {
-	service *service.AppService
+	service    *service.AppService
 	connection *websocket.Conn
 	chatServer *ChatServer
+	Send       chan *models.Message
+	ErrorJson  chan *models.ErrorJson
+	userId     int
 }
 
 type ChatServer struct {
-	service *service.AppService
-	clients ClientList
+	service  *service.AppService
+	clients  ClientList
 	upgrader websocket.Upgrader
 	sync.RWMutex
 }
 
-
-
-
 // https://stackoverflow.com/questions/65034144/how-to-add-a-trusted-origin-to-gorilla-websockets-checkorigin
-func NewChatServer(service  *service.AppService) *ChatServer {
+func NewChatServer(service *service.AppService) *ChatServer {
 	return &ChatServer{
 		service: service,
 		clients: make(ClientList),
-		upgrader: websocket.Upgrader {
-			ReadBufferSize: 1024,
+		upgrader: websocket.Upgrader{
+			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
 		},
 	}
@@ -102,8 +102,10 @@ func NewChatServer(service  *service.AppService) *ChatServer {
 
 func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
 	return &Client{
-		service: server.service,
+		service:    server.service,
 		connection: conn,
 		chatServer: server,
+		Send:       make(chan *models.Message),
+		ErrorJson:  make(chan *models.ErrorJson),
 	}
 }

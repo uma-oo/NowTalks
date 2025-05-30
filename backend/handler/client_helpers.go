@@ -1,42 +1,63 @@
 package handler
 
 import (
-	"encoding/json"
-	"fmt"
 	"real-time-forum/backend/models"
 )
 
-func (server *ChatServer) AddClient(client *Client, userId int) {
+func (server *ChatServer) AddClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	server.clients[userId] = append(server.clients[userId], client)
+	server.clients[client.userId] = append(server.clients[client.userId], client)
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	if _, ok := server.clients[client]; ok {
+	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
-		delete(server.clients, client)
+		deleteConnection(server.clients, client.userId, client)
 	}
 }
 
+// first time working with channels and they seem great :!
 func (client *Client) ReadMessages() {
 	defer client.chatServer.RemoveClient(client)
 
 	for {
-		_, payload, err := client.connection.ReadMessage()
+		message := &models.Message{}
+		err := client.connection.ReadJSON(&message)
 		if err != nil {
 			break
 		}
-		message := models.Message{}
-		json.Unmarshal(payload, &message)
-		fmt.Println("payload", string(payload))
-
+		message, errJson := client.chatServer.service.ValidateMessage(message)
+		if errJson != nil {
+			client.ErrorJson <- errJson
+			continue
+		}
+		client.Send <- message
 	}
 
 }
 
 func (client *Client) WriteMessages() {
+	defer client.chatServer.RemoveClient(client)
 
+	for {
+		err := client.connection.WriteJSON(client.Send)
+	}
+
+}
+
+func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_deleted *Client) {
+	index := -1
+	for i, value := range clientList[userId] {
+		if value == client_to_be_deleted {
+			index = i
+			break
+		}
+
+	}
+	if index != -1 {
+		clientList[userId] = append(clientList[userId][:index], clientList[userId][index+1:]...)
+	}
 }

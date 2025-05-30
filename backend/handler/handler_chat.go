@@ -16,7 +16,16 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, *models.NewErrorJson(500, "ERROR!! Internal Server Error"))
 		return
 	}
+	cookie, _ := r.Cookie("session")
+	session, errJson := server.service.GetSessionByTokenEnsureAuth(cookie.Value)
+	if errJson != nil {
+		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
+		return
+	}
+	// we need to dial the user id and the connection
 	client := NewClient(connection, server)
+	// kinda of repetitive but i'm really done with everything!!!
+	client.userId = session.UserId
 	server.AddClient(client)
 	go client.ReadMessages()
 	go client.WriteMessages()
