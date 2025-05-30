@@ -25,6 +25,7 @@ func (appRepo *AppRepository) AddReactionLike(reaction *models.Reaction) *models
 }
 
 func (appRepo *AppRepository) UpdateReactionLike(reaction *models.Reaction) *models.ErrorJson {
+	fmt.Println("hnaaaaaaaaaaaaaaaaaa")
 	query := `UPDATE reactions SET reaction = CASE reaction
               WHEN 0 THEN 1
               ELSE 0
@@ -32,11 +33,14 @@ func (appRepo *AppRepository) UpdateReactionLike(reaction *models.Reaction) *mod
 	          WHERE reactionID = ? ;`
 	stmt, err := appRepo.db.Prepare(query)
 	if err != nil {
+		fmt.Println("err hhh", err)
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
+	fmt.Println("err  ddd",reaction.Id )
 	_, err = stmt.Exec(reaction.Id)
 	if err != nil {
+		fmt.Println("err  ddd", err)
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 

@@ -103,8 +103,6 @@ CREATE TABLE IF NOT EXISTS reactions(
 
 
 
-/* Messages section e7m */
-
 
 CREATE TABLE IF NOT EXISTS messages (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
