@@ -53,10 +53,10 @@ type Comment struct {
 
 type Reaction struct {
 	Id           int    `json:"id,omitempty"`
-	EntityTypeId int    `json:"entity_type_id"`
-	EntityType   string `json:"entity_type"`
+	EntityTypeId int    `json:"entity_type_id,omitempty"`
+	EntityType   string `json:"entity_type,omitempty"`
 	EntityId     int    `json:"entity_id"`
-	Reaction     int    `json:"reaction"`
+	Reaction     int    `json:"reaction,omitempty"`
 	UserId       int    `json:"user_id"`
 }
 
@@ -115,6 +115,13 @@ type MessageErr struct {
 	Message    string `json:"message"`
 	ReceiverID any    `json:"receiver_id"`
 }
+
+type ReactionErr struct {
+	EntityId string `json:"entity_id"`
+}
+
+
+
 
 func NewErrorJson(status int, message any) *ErrorJson {
 	return &ErrorJson{

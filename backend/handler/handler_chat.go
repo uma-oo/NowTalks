@@ -2,8 +2,9 @@ package handler
 
 import (
 	"net/http"
-	"real-time-forum/backend/models"
 	"strings"
+
+	"real-time-forum/backend/models"
 )
 
 func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,12 +30,15 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 	server.AddClient(client)
 	go client.ReadMessages()
 	go client.WriteMessages()
-
 }
 
 // HERE fin l handler ghadi yt9ad and we'll be handling everything
 func (server *ChatServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	if r.Method != http.MethodGet {
+		WriteJsonErrors(w, *models.NewErrorJson(405, "ERROR!! Method Not Allowed!"))
+		return
+	}
 	switch r.URL.Path {
 	case "/ws/chat":
 		server.ChatServerHandler(w, r)
@@ -46,7 +50,6 @@ func (server *ChatServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("not found !!"))
 		return
 	}
-
 }
 
 // f had l7ala we need to return 400

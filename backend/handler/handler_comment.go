@@ -59,6 +59,34 @@ func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Reque
 }
 
 func (CHanlder *CommentHandler) LikeComment(w http.ResponseWriter, r *http.Request) {
+
+	cookie, _ := r.Cookie("session")
+	session, _ := CHanlder.service.GetSessionByTokenEnsureAuth(cookie.Value)
+	liked := models.Reaction{}
+	if err := json.NewEncoder(w).Encode(&liked); err != nil {
+		if err == io.EOF {
+			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
+				EntityId:   "ERROR!! Empty EntityID field!",
+			}})
+			return
+		}
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
+		return
+	}
+	liked.UserId = session.UserId
+	entity_type_id := CHanlder.service.GetTypeIdByName("comment")
+	if entity_type_id == 0 {
+		// to be verified if the status code is 500 or 400
+		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
+		WriteJsonErrors(w, errJson)
+		return
+	}
+	liked.EntityTypeId = entity_type_id
+	if errJson := CHanlder.service.HanldeReaction(&liked, "comment"); errJson != nil {
+		WriteJsonErrors(w, *errJson)
+		return
+	}
+	fmt.Println("liked", liked)
 }
 
 func (CHanlder *CommentHandler) DislikeComment(w http.ResponseWriter, r *http.Request) {

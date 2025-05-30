@@ -49,11 +49,14 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 
 
+DROP TABLE IF EXISTS categories;
 
 CREATE TABLE IF NOT EXISTS categories (
     categoryID INTEGER PRIMARY KEY AUTOINCREMENT,
     category TEXT NOT NULL UNIQUE
 );
+
+
 
 INSERT INTO categories (category) VALUES
   ('Discussions'),
@@ -73,11 +76,14 @@ CREATE TABLE IF NOT EXISTS postCategories (
 );
 
 
+DROP TABLE IF EXISTS types;
 
 CREATE TABLE IF NOT EXISTS types (
   entityTypeID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   entityType  TEXT NOT NULL UNIQUE
 );
+
+
 
 INSERT INTO types (entityType) VALUES 
   ('post'),
@@ -106,8 +112,8 @@ CREATE TABLE IF NOT EXISTS messages (
   receiverID INTEGER NOT NULL,
   message TEXT NOT NULL,
   readStatus BOOLEAN NOT NULL DEFAULT 0 CHECK (readStatus IN (0, 1)),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   FOREIGN KEY (senderID) REFERENCES users (userID) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (receiverID) REFERENCES users (userID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CHECK (senderID != receiverID),
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CHECK (senderID != receiverID)
 );

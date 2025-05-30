@@ -45,6 +45,8 @@ func (client *Client) ReadMessages() {
 
 }
 
+// i used the channels buy not sure if this is the correct way to handle this 
+
 func (client *Client) WriteMessages() {
 	defer client.chatServer.RemoveClient(client)
 
@@ -77,6 +79,16 @@ func (client *Client) WriteMessages() {
 // create another endpoint for the online users (hakka bghit if it can be possible)
 
 // finish the like/ dislike things by tomorrow
+
+// in this case 
+// 1-  alrady writed  in the same connection 
+// 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa 
+func BroadCastTheMessage(sender *Client , receiver *Client, message *models.Message) {
+     
+}
+
+
+
 
 
 

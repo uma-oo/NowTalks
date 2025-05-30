@@ -14,6 +14,7 @@ import (
 type PostHandler struct {
 	service *service.AppService
 }
+
 type CommentHandler struct {
 	service *service.AppService
 }
@@ -112,3 +113,4 @@ func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
 		Done:       make(chan struct{}),
 	}
 }
+
