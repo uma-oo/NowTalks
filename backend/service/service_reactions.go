@@ -25,7 +25,7 @@ func (service *AppService) React(reaction *models.Reaction, type_entity string) 
 	return nil
 }
 
-func (service *AppService) HanldeReaction(reaction *models.Reaction, type_entity string) *models.ErrorJson {
+func (service *AppService)  HanldeReaction(reaction *models.Reaction) *models.ErrorJson {
 	reaction_existed, err := service.repo.HanldeReaction(reaction)
 	if err != nil {
 		return &models.ErrorJson{Status: err.Status, Message: err.Message}
@@ -36,7 +36,7 @@ func (service *AppService) HanldeReaction(reaction *models.Reaction, type_entity
 			return errJson
 		}
 	} else {
-		errJson := service.UpdateReactionLike(reaction)
+		errJson := service.UpdateReactionLike(reaction_existed)
 		if errJson != nil {
 			return errJson
 		}

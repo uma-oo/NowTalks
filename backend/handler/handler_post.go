@@ -102,7 +102,7 @@ func (Phandler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("liked", liked)
 	liked.EntityTypeId = entity_type_id
-	if errJson := Phandler.service.HanldeReaction(&liked, "post"); errJson != nil {
+	if errJson := Phandler.service.HanldeReaction(&liked); errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
