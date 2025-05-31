@@ -50,14 +50,6 @@ CREATE TABLE IF NOT EXISTS categories (
     category TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS postCategories (
-    categoryID INTEGER NOT NULL,
-    postID INTEGER NOT NULL,
-    PRIMARY KEY (categoryID, postID)
-    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
-    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) ON UPDATE CASCADE
-);
-
 
 
 INSERT INTO categories (category) VALUES
@@ -69,6 +61,51 @@ INSERT INTO categories (category) VALUES
   ('Issues');
 
 
-/* */
+CREATE TABLE IF NOT EXISTS postCategories (
+    categoryID INTEGER NOT NULL,
+    postID INTEGER NOT NULL,
+    PRIMARY KEY (categoryID, postID),
+    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
+    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) ON DELETE CASCADE
+);
 
 
+DROP TABLE IF EXISTS types;
+
+CREATE TABLE IF NOT EXISTS types (
+  entityTypeID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  entityType  TEXT NOT NULL UNIQUE
+);
+
+
+
+INSERT INTO types (entityType) VALUES 
+  ('post'),
+  ('comment');
+
+
+CREATE TABLE IF NOT EXISTS reactions(
+  reactionID INTEGER NOT NULL PRIMARY KEY, 
+  entityTypeID INTEGER NOT NULL,
+  entityID INTEGER NOT NULL,
+  reaction INTEGER NOT NULL DEFAULT 0 CHECK (reaction IN (-1,0,1)), 
+  userID INTEGER NOT NULL,
+  FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE,
+  FOREIGN KEY (entityTypeID) REFERENCES types(entityTypeID),
+  UNIQUE(userID, entityTypeID, entityID)
+);
+
+
+
+
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  senderID INTEGER NOT NULL,
+  receiverID INTEGER NOT NULL,
+  message TEXT NOT NULL,
+  readStatus BOOLEAN NOT NULL DEFAULT 0 CHECK (readStatus IN (0, 1)),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  FOREIGN KEY (senderID) REFERENCES users (userID) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (receiverID) REFERENCES users (userID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CHECK (senderID != receiverID)
+);

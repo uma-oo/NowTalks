@@ -75,9 +75,39 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 // need to handle the like and dislike process
 
 func (Phandler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
-	
-	w.Write([]byte("heereeee"))
-
+	cookie, _ := r.Cookie("session")
+	session, _ := Phandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
+	liked := models.Reaction{}
+	if err := json.NewDecoder(r.Body).Decode(&liked); err != nil {
+		if err == io.EOF {
+			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
+				EntityId: "ERROR!! Empty EntityID field!",
+			}})
+			return
+		}
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
+		return
+	}
+	fmt.Println("hnaaaa")
+	if errJson := Phandler.service.React(&liked, "post"); errJson != nil {
+		WriteJsonErrors(w, *errJson)
+		return
+	}
+	// check if the post exists and if we provide inside the body request
+	liked.UserId = session.UserId
+	entity_type_id := Phandler.service.GetTypeIdByName("post")
+	if entity_type_id == 0 {
+		// to be verified if the status code is 500 or 400
+		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
+		WriteJsonErrors(w, errJson)
+		return
+	}
+	fmt.Println("liked", liked)
+	liked.EntityTypeId = entity_type_id
+	if errJson := Phandler.service.HanldeReaction(&liked, "post"); errJson != nil {
+		WriteJsonErrors(w, *errJson)
+		return
+	}
 }
 
 func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request) {
@@ -89,7 +119,6 @@ func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodGet:
-		fmt.Println("hereeee")
 		Phandler.getPosts(w, r)
 		return
 	case http.MethodPost:
@@ -103,15 +132,13 @@ func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "api/post/":
 			Phandler.addPost(w, r)
 			return
-
 		default:
 			WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "ERROR!! Page Not Found!!"})
 			return
 		}
-		
 
 	default:
-		errJson := models.ErrorJson{Status: 405, Message: "Method Not Allowed!!"}
+		errJson := models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!!"}
 		WriteJsonErrors(w, errJson)
 		return
 	}

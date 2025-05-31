@@ -38,7 +38,7 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	}
 	post_created, err := s.repo.CreatePost(post)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hnaaa", err)}
 	}
 	return post_created, nil
 }

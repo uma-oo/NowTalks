@@ -11,12 +11,12 @@ import (
 func main() {
 	db, err := database.InitDB("./database/forum.db")
 	if err != nil {
-		fmt.Println("err DB", err)
+		fmt.Println("err DB 1", err)
 	}
 
 	err = db.ReadSQL("./database/db.sql")
 	if err != nil {
-		fmt.Println("err DB", err)
+		fmt.Println("err DB 2", err)
 	}
 	Init.InitSetup(db.Database)
 
