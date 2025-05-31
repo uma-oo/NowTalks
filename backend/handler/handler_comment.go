@@ -82,7 +82,7 @@ func (CHanlder *CommentHandler) LikeComment(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	liked.EntityTypeId = entity_type_id
-	if errJson := CHanlder.service.HanldeReaction(&liked); errJson != nil {
+	if errJson := CHanlder.service.HanldeReaction(&liked,1); errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}

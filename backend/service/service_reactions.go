@@ -2,8 +2,8 @@ package service
 
 import "real-time-forum/backend/models"
 
-func (service *AppService) AddReactionLike(reaction *models.Reaction) *models.ErrorJson {
-	if err := service.repo.AddReactionLike(reaction); err != nil {
+func (service *AppService) AddReaction(reaction *models.Reaction, reaction_type int) *models.ErrorJson {
+	if err := service.repo.AddReaction(reaction, reaction_type); err != nil {
 		return err
 	}
 	return nil
@@ -18,20 +18,20 @@ func (service *AppService) UpdateReactionLike(reaction *models.Reaction) *models
 
 //
 
-func (service *AppService) React(reaction *models.Reaction, type_entity string) *models.ErrorJson {
-	if err := service.repo.CheckEntityID(type_entity, reaction); err != nil {
+func (service *AppService) React(reaction *models.Reaction, type_entity string, reaction_type int ) *models.ErrorJson {
+	if err := service.repo.CheckEntityID(reaction, type_entity); err != nil {
 		return err
 	}
-	return nil
+	return service.HanldeReaction(reaction, reaction_type)
 }
 
-func (service *AppService)  HanldeReaction(reaction *models.Reaction) *models.ErrorJson {
+func (service *AppService) HanldeReaction(reaction *models.Reaction , reaction_type int ) *models.ErrorJson {
 	reaction_existed, err := service.repo.HanldeReaction(reaction)
 	if err != nil {
 		return &models.ErrorJson{Status: err.Status, Message: err.Message}
 	}
 	if reaction_existed == nil {
-		errJson := service.AddReactionLike(reaction)
+		errJson := service.AddReaction(reaction, reaction_type)
 		if errJson != nil {
 			return errJson
 		}
