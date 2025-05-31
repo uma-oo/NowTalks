@@ -9,23 +9,30 @@ func (service *AppService) AddReaction(reaction *models.Reaction, reaction_type 
 	return nil
 }
 
-func (service *AppService) UpdateReactionLike(reaction *models.Reaction) *models.ErrorJson {
-	if err := service.repo.UpdateReactionLike(reaction); err != nil {
-		return err
+func (service *AppService) UpdateReaction(reaction *models.Reaction, reaction_type int) *models.ErrorJson {
+	switch reaction_type {
+	case 1:
+		if err := service.repo.UpdateReactionLike(reaction); err != nil {
+			return err
+		}
+	case -1:
+		if err := service.repo.UpdateReactionDislike(reaction); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
 //
 
-func (service *AppService) React(reaction *models.Reaction, type_entity string, reaction_type int ) *models.ErrorJson {
+func (service *AppService) React(reaction *models.Reaction, type_entity string, reaction_type int) *models.ErrorJson {
 	if err := service.repo.CheckEntityID(reaction, type_entity); err != nil {
 		return err
 	}
 	return service.HanldeReaction(reaction, reaction_type)
 }
 
-func (service *AppService) HanldeReaction(reaction *models.Reaction , reaction_type int ) *models.ErrorJson {
+func (service *AppService) HanldeReaction(reaction *models.Reaction, reaction_type int) *models.ErrorJson {
 	reaction_existed, err := service.repo.HanldeReaction(reaction)
 	if err != nil {
 		return &models.ErrorJson{Status: err.Status, Message: err.Message}
@@ -36,7 +43,7 @@ func (service *AppService) HanldeReaction(reaction *models.Reaction , reaction_t
 			return errJson
 		}
 	} else {
-		errJson := service.UpdateReactionLike(reaction_existed)
+		errJson := service.UpdateReaction(reaction_existed, reaction_type)
 		if errJson != nil {
 			return errJson
 		}

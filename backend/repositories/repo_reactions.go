@@ -44,6 +44,30 @@ func (appRepo *AppRepository) UpdateReactionLike(reaction *models.Reaction) *mod
 	return nil
 }
 
+func (appRepo *AppRepository) UpdateReactionDislike(reaction *models.Reaction) *models.ErrorJson {
+	query := `UPDATE reactions SET reaction = CASE reaction
+              WHEN 0 THEN -1
+			  WHEN 1 THEN -1
+              ELSE 0
+              END
+	          WHERE reactionID = ? ;`
+	stmt, err := appRepo.db.Prepare(query)
+	if err != nil {
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v h", err)}
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(reaction.Id)
+	if err != nil {
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hh", err)}
+	}
+
+	return nil
+}
+
+
+
+
+
 func (appRepo *AppRepository) HanldeReaction(reaction *models.Reaction) (*models.Reaction, *models.ErrorJson) {
 	reaction_existed := &models.Reaction{}
 	query := `SELECT * FROM reactions WHERE userID = ? AND entityTypeID = ? AND entityID = ?`
