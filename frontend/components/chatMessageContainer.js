@@ -12,8 +12,8 @@ export function createChatMessageContainer({
     let messageContent = createElement('p', 'message-content', content)
     let timeStamp = createElement('span', null, timeAgo(timestamp))
 
-    messageBubble.append(sender, messageContent)
-    chatMessageContainer.append(messageBubble, timeStamp)
+    messageBubble.append(sender, messageContent, timeStamp)
+    chatMessageContainer.append(messageBubble )
 
     return chatMessageContainer
 }

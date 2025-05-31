@@ -1,6 +1,7 @@
 import { getCategories } from "../api/posts.js"
 import {  categories } from "../const/data.js"
 import { createCheckboxInput } from "./checkbox.js"
+import { createElement } from "../utils.js"
 
 
 const interactions = [
@@ -14,15 +15,11 @@ const interactions = [
 
 
 export function createFilterContainer() {
-    let filterContainer = document.createElement('div')
-    filterContainer.classList.add("filter-container","toggleable")
+    let filterContainer = createElement('div', 'filter-container toggleable')
 
+    let filterTitle = createElement('h2', null, "Filter:") 
 
-    let filterTitle = document.createElement('h2')
-    filterTitle.textContent = "Filter:"
-
-    let subTitlte1 = document.createElement('h4')
-    subTitlte1.innerText = "Filter by interaction : "
+    let subTitlte1 =createElement('h4', null, "Filter by interaction : ")
 
     let filterOptions1 = document.createElement('div')
     interactions.forEach(option => {
@@ -30,15 +27,17 @@ export function createFilterContainer() {
         filterOptions1.append(optionElem)
     })
 
-    let subTitlte2 = document.createElement('h4')
-    subTitlte2.textContent =  "Filter by categories :"
+    let subTitlte2 = createElement('h4', null, "Filter by categories :")
 
 
 
-
-    let filterOptions2 = document.createElement('div')
+    let app = document.querySelector('#app')
+    let categories = app.dataset.categories.split(',')
+    let filterOptions2 = createElement('div', null)
     categories.forEach(category => {
-        let optionElem = createCheckboxInput(`filter-category${category.category_id}`, category.category_name)
+        if (!category) return
+        let [id,name] = category.split('-')
+        let optionElem = createCheckboxInput(`filter-category${id}`, name)
         filterOptions2.append(optionElem)
     })
     

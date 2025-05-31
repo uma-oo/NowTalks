@@ -23,7 +23,7 @@ let messages = [
     },
     {
         content: "all good, wbu ?",
-        user: "bob",
+        user: "bob", 
         timestamp : "2025-05-06T15:00:16Z"
     },
     {
@@ -63,7 +63,9 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let messageform = createForm(MessageForm,"message-form")
 
 
-    // goBackBtn.
+    goBackBtn.addEventListener('click', e=>{
+        closeChatWindow(chatUserCard, chatWindow)
+    })
 
     chatWindowHeader.append(goBackBtn,chatUserCardClone)
     chatWindowBody.append(...messageContainers)
@@ -72,8 +74,9 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     return chatWindow
 }
 
-export function closeChatWindow() {
-    let chatWindow = document.querySelector('.chat-window')
+export function closeChatWindow(chatUserCard,chatWindow) {
+    console.log(chatWindow)
+    chatWindow.classList.remove("chat-window_expanded")
+    chatUserCard.dataset.open = ""
     chatWindow.innerHTML = ""
-    chatWindow.classList.remove(".chat-window_expanded")
 }

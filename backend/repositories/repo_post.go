@@ -81,7 +81,6 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 			categories = append(categories, category)
 
 		}
-		fmt.Println("categories", categories)
 		post.PostCategories = append(post.PostCategories, categories...)
 	
 		posts = append(posts, post)

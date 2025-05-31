@@ -31,7 +31,7 @@ export async function getPostsApi(filterData,offset) {
 export async function getCategories() {
     try {
         let response = await fetch(`/api/categories`)
-        return [await response.json()]
+        return [response.status, await response.json()]
     } catch (error) {
         console.error("ERROR while trying to get posts categories: ", error)
     }
