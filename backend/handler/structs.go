@@ -35,7 +35,14 @@ type ReactionHanlder struct {
 	service *service.AppService
 }
 
-type Logout UserHanlder
+type (
+	Logout UserHanlder
+	Users  UserHanlder
+)
+
+func NewUsersHandler(service *service.AppService) *Users {
+	return &Users{service: service}
+}
 
 func NewLogoutHandler(service *service.AppService) *Logout {
 	return &Logout{service: service}

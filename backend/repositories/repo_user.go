@@ -28,7 +28,7 @@ func (appRep *AppRepository) CreateUser(user *models.User) error {
 
 func (appRep *AppRepository) GetUsers(offset int) ([]models.User, *models.ErrorJson) {
 	var users []models.User
-	query := `SELECT userID , nickname FROM usersLIMIT 10 OFFSET ?`
+	query := `SELECT userID , nickname FROM users LIMIT 10 OFFSET ?`
 	rows, err := appRep.db.Query(query, offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
@@ -36,7 +36,7 @@ func (appRep *AppRepository) GetUsers(offset int) ([]models.User, *models.ErrorJ
 	for rows.Next() {
 		var user models.User
 		if err := rows.Scan(&user.Id, &user.Nickname); err != nil {
-			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v ", err)}
 		}
 		users = append(users, user)
 	}
