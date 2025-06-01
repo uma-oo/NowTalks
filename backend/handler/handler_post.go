@@ -104,10 +104,10 @@ func (Phandler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request) {
-		cookie, _ := r.Cookie("session")
+	cookie, _ := r.Cookie("session")
 	session, _ := Phandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
-	liked := models.Reaction{}
-	if err := json.NewDecoder(r.Body).Decode(&liked); err != nil {
+	disliked := models.Reaction{}
+	if err := json.NewDecoder(r.Body).Decode(&disliked); err != nil {
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
 				EntityId: "ERROR!! Empty EntityID field!",
@@ -119,7 +119,7 @@ func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request)
 	}
 
 	// check if the post exists and if we provide inside the body request
-	liked.UserId = session.UserId
+	disliked.UserId = session.UserId
 	entity_type_id := Phandler.service.GetTypeIdByName("post")
 	if entity_type_id == 0 {
 		// to be verified if the status code is 500 or 400
@@ -127,8 +127,8 @@ func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request)
 		WriteJsonErrors(w, *errJson)
 		return
 	}
-	liked.EntityTypeId = entity_type_id
-	if errJson := Phandler.service.React(&liked, "post", -1); errJson != nil {
+	disliked.EntityTypeId = entity_type_id
+	if errJson := Phandler.service.React(&disliked, "post", -1); errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}

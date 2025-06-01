@@ -73,7 +73,6 @@ func (CHanlder *CommentHandler) LikeComment(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	liked.UserId = session.UserId
-	fmt.Println("liked var", liked)
 	entity_type_id := CHanlder.service.GetTypeIdByName("comment")
 	if entity_type_id == 0 {
 		// to be verified if the status code is 500 or 400
@@ -82,14 +81,39 @@ func (CHanlder *CommentHandler) LikeComment(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	liked.EntityTypeId = entity_type_id
-	if errJson := CHanlder.service.HanldeReaction(&liked,1); errJson != nil {
+	if errJson := CHanlder.service.HanldeReaction(&liked, 1); errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
-	fmt.Println("liked", liked)
 }
 
 func (CHanlder *CommentHandler) DislikeComment(w http.ResponseWriter, r *http.Request) {
+	cookie, _ := r.Cookie("session")
+	session, _ := CHanlder.service.GetSessionByTokenEnsureAuth(cookie.Value)
+	disliked := models.Reaction{}
+	if err := json.NewEncoder(w).Encode(&disliked); err != nil {
+		if err == io.EOF {
+			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
+				EntityId: "ERROR!! Empty EntityID field!",
+			}})
+			return
+		}
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
+		return
+	}
+	disliked.UserId = session.UserId
+	entity_type_id := CHanlder.service.GetTypeIdByName("comment")
+	if entity_type_id == 0 {
+		// to be verified if the status code is 500 or 400
+		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
+		WriteJsonErrors(w, errJson)
+		return
+	}
+	disliked.EntityTypeId = entity_type_id
+	if errJson := CHanlder.service.HanldeReaction(&disliked, -1); errJson != nil {
+		WriteJsonErrors(w, *errJson)
+		return
+	}
 }
 
 func (CHanlder *CommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
