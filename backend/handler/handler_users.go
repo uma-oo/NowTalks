@@ -27,12 +27,9 @@ func (Users *Users) GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (users *Users) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not ALlowed!"})
-		return
-	}
-	if r.URL.Path != "/api/users" {
-		WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "ERROR!! Page Not Found!"})
 		return
 	}
 
