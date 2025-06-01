@@ -29,12 +29,14 @@ export function createPostCard({
     container.dataset.id = id
 
     let postHeader = createElement('div', 'post-header')
+    let postInfo = createElement('div', 'post-info')
     let postTitle = createElement('p', 'post-title', title)
-    let postWriter = createElement('span', null, `@${user_name}`)
+    let postWriter = createElement('span', null, `${user_name}`)
     let timestamp = createElement('span', null, timeAgo(created_at))
     let categoriesList = createElement('div', 'categories')
     categories.forEach(category => {
-        let categoryTag = createElement('span', 'tag', `#${category}`)
+        let categoryTag = createElement('span', 'tag', `${category}`)
+        // catego
         categoriesList.append(categoryTag)
     });
 
@@ -64,7 +66,10 @@ export function createPostCard({
     let commentForm = createForm(CommentForm, "comment-form")
     commentForm.classList.add("hide", "toggleable")
 
-    postHeader.append(postTitle, postWriter, timestamp, categoriesList)
+    postWriter.prepend(createIcon('user'))
+    timestamp.prepend(createIcon('calendar'))
+    postInfo.append(postWriter, timestamp)
+    postHeader.append(postInfo,categoriesList,postTitle)
     postBody.append(postContent)
     postFooter.append(...reactionElements);
     postCommentsContainer.append("Comments", ...comments)

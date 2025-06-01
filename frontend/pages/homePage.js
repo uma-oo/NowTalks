@@ -1,5 +1,6 @@
 import { getCategories } from "../api/posts.js";
 import { isLoggedIn } from "../api/user.js";
+import { createButton } from "../components/button.js";
 import { createChatSection } from "../components/chatSection.js";
 import { createHeader } from "../components/header.js";
 import { createPostsSection } from "../components/postsSection.js";
@@ -16,12 +17,11 @@ export function renderHomePage(app) {
                 let header = createHeader()
                 let main = createElement('main', "home-main")
                 let aside = createElement('aside', "chats-container")
-                let containersWrapper = createElement('div', "containers-wrapper")
+                let createPostBtn = createButton({text: "Create Post", icon: "edit"},'button','create-post-btn')
                 let chatWindowSection = createElement('div', "chat-window")
-                containersWrapper.append(createPostsSection(), chatWindowSection)
-                aside.append(...createChatSection())
-                main.append(aside, containersWrapper)
-                app.append(header, main)
+                aside.append( createPostBtn, ...createChatSection())
+                main.append(createPostsSection(), chatWindowSection)
+                app.append(header,aside, main)
             })
         } else { navigateTo("/login") }
     })

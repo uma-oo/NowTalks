@@ -1,8 +1,7 @@
-import { iconsKit } from "../const/icons.js"
+import { createElement } from "../utils.js"
 
-export function createIcon(icon) {
-    let style = "fa-solid"
-    let i = document.createElement('i')
-    i.classList.add(style, iconsKit[icon])
-    return i
+export function createIcon(name) {
+    let icon = createElement('img','icon')
+    icon.src = `../assets/icons/${name}.svg`
+    return icon
 }

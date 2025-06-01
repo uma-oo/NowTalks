@@ -2,10 +2,13 @@ import { users } from "../const/data.js"
 import { createElement } from "../utils.js"
 import { createChatUserCard } from "./chatUserCard.js"
 import { openChatWindow } from "./chatWindow.js"
+import { createIcon } from "./icon.js"
 
 export function createChatSection() {
     let chatSectionHeader = createElement('div', "chats-section-header")
-    let chatSectionHeaderTitle = createElement('h3', null, "Chats: ")
+    let chatSectionHeaderTitle = createElement('h2', null, "Chats: ")
+    chatSectionHeaderTitle.prepend(createIcon("chats"))
+
     let chatList = createElement('div', 'chat-list')
     let chats = users.map(user => {
         let userCard = createChatUserCard(user)

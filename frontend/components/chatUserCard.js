@@ -1,15 +1,11 @@
 import { createIcon } from "./icon.js";
+import { createElement } from "../utils.js";
 
 export function createChatUserCard(user) {
-    let chatUserCard = document.createElement('div');
+    let chatUserCard = createElement('div','chat-user-card') 
     chatUserCard.dataset.open = ""
-    chatUserCard.classList.add("chat-user-card")
 
-    let chatUserCardHeader = document.createElement('div')
-    chatUserCardHeader.classList.add("chat-user-card_header")
-    let userIcon = createIcon("usericon")
-    chatUserCardHeader.append(userIcon)
-
+    let chatUserCardHeader = createElement('div', 'chat-user-card-header') 
     let chatUserCardBody = document.createElement('div')
     chatUserCardBody.classList.add("chat-user-card_body")
     let userName = document.createElement('p')

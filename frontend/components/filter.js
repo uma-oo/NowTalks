@@ -18,7 +18,6 @@ export function createFilterContainer() {
     let filterContainer = createElement('div', 'filter-container toggleable')
 
     let filterTitle = createElement('h2', null, "Filter:") 
-
     let subTitlte1 =createElement('h4', null, "Filter by interaction : ")
 
     let filterOptions1 = document.createElement('div')
