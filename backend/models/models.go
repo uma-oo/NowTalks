@@ -118,6 +118,7 @@ type MessageErr struct {
 
 type ReactionErr struct {
 	EntityId string `json:"entity_id"`
+	EntityType string `json:"entity_type"`
 }
 
 

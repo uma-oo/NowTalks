@@ -14,8 +14,10 @@ func (s *AppService) GetUser(login *models.Login) (*models.User, *models.ErrorJs
 	return user, nil
 }
 
-
-
-
-
-
+func (s *AppService) GetUsers(offset int) ([]models.User, *models.ErrorJson) {
+	users, err := s.repo.GetUsers(offset)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}

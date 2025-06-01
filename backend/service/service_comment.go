@@ -8,8 +8,8 @@ import (
 )
 
 // add the offset and the limit thing after
-func (s *AppService) GetComments(postId int, limit int , offset int ) ([]models.Comment, *models.ErrorJson) {
-	comments, err := s.repo.GetComments(postId , limit , offset )
+func (s *AppService) GetComments(postId , offset int ) ([]models.Comment, *models.ErrorJson) {
+	comments, err := s.repo.GetComments(postId , offset )
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
