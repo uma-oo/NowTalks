@@ -104,7 +104,34 @@ func (Phandler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (Phandler *PostHandler) DislikePost(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("theeeeeeeeeereeee"))
+		cookie, _ := r.Cookie("session")
+	session, _ := Phandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
+	liked := models.Reaction{}
+	if err := json.NewDecoder(r.Body).Decode(&liked); err != nil {
+		if err == io.EOF {
+			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
+				EntityId: "ERROR!! Empty EntityID field!",
+			}})
+			return
+		}
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
+		return
+	}
+
+	// check if the post exists and if we provide inside the body request
+	liked.UserId = session.UserId
+	entity_type_id := Phandler.service.GetTypeIdByName("post")
+	if entity_type_id == 0 {
+		// to be verified if the status code is 500 or 400
+		errJson := &models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
+		WriteJsonErrors(w, *errJson)
+		return
+	}
+	liked.EntityTypeId = entity_type_id
+	if errJson := Phandler.service.React(&liked, "post", -1); errJson != nil {
+		WriteJsonErrors(w, *errJson)
+		return
+	}
 }
 
 func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
