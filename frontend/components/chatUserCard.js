@@ -1,22 +1,18 @@
 import { createIcon } from "./icon.js";
 import { createElement } from "../utils.js";
 
-export function createChatUserCard(user) {
+export function createChatUserCard(nickname) {
     let chatUserCard = createElement('div','chat-user-card') 
     chatUserCard.dataset.open = ""
 
-    let chatUserCardHeader = createElement('div', 'chat-user-card-header') 
-    let chatUserCardBody = document.createElement('div')
-    chatUserCardBody.classList.add("chat-user-card_body")
-    let userName = document.createElement('p')
-    userName.append(user.name)
-    chatUserCardBody.append(userName)
-
+    let chatUserCardHeader = createElement('div', 'chat-user-card-header online') 
+    let chatUserCardBody = createElement('div', 'chat-user-card-body') 
+    let chatUserCardFooter =  createElement('div', 'chat-user-card-footer') 
+    let userName = createElement('p', null, nickname)
+    
     // use it for time for latest message or is typing message 
-    let chatUserCardFooter = document.createElement('div')
-    chatUserCardFooter.classList.add("chat-user-card_footer")
-
-    user.online ? chatUserCardHeader.classList.add('online') : chatUserCardHeader.classList.add('offline')
+    
+    chatUserCardBody.append(userName)
     chatUserCard.append(chatUserCardHeader, chatUserCardBody,chatUserCardFooter)
     return chatUserCard
 }

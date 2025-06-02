@@ -42,7 +42,6 @@ let messages = [
 export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindow = document.querySelector('.chat-window')
     chatWindow.classList.add("chat-window_expanded")
-    console.log(chatUserCard.dataset.open)
     if (chatUserCard.dataset.open) {
         return
     } 

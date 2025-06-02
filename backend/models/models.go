@@ -5,13 +5,13 @@ import "time"
 type User struct {
 	Id            int    `json:"id,omitempty"`
 	Nickname      string `json:"nickname"`
-	Age           int    `json:"age"`
-	Gender        string `json:"gender"`
-	FirstName     string `json:"firstname"`
-	LastName      string `json:"lastname"`
-	Email         string `json:"email"`
-	Password      string `json:"password"`
-	VerifPassword string `json:"password2"`
+	Age           int    `json:"age,omitempty"`
+	Gender        string `json:"gender,omitempty"`
+	FirstName     string `json:"firstname,omitempty"`
+	LastName      string `json:"lastname,omitempty"`
+	Email         string `json:"email,omitempty"`
+	Password      string `json:"password,omitempty"`
+	VerifPassword string `json:"password2,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 }
 
@@ -118,6 +118,7 @@ type MessageErr struct {
 
 type ReactionErr struct {
 	EntityId string `json:"entity_id"`
+	EntityType string `json:"entity_type"`
 }
 
 

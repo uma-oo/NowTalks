@@ -13,6 +13,7 @@ export function renderHomePage(app) {
         if (data.is_logged_in) {
             app.dataset.nickname = data.nickname
             app.dataset.id = data.id
+            setUpWebsocket()
             setCategories(app).then(()=>{
                 let header = createHeader()
                 let main = createElement('main', "home-main")
@@ -29,7 +30,7 @@ export function renderHomePage(app) {
 
 
 
-function setCategories(app) {
+async function setCategories(app) {
     app.dataset.categories = ''
     return getCategories().then(([status, data]) => {
         console.log(status, data)
@@ -41,4 +42,9 @@ function setCategories(app) {
             navigateTo('/login')
         }
     }).catch(error => console.error(error))
+}
+
+function setUpWebsocket() {
+    let socket = new WebSocket("ws://localhost:8080/ws/chat");
+    
 }

@@ -31,7 +31,18 @@ type CategoriesHandler struct {
 	service *service.AppService
 }
 
-type Logout UserHanlder
+type ReactionHanlder struct {
+	service *service.AppService
+}
+
+type (
+	Logout UserHanlder
+	Users  UserHanlder
+)
+
+func NewUsersHandler(service *service.AppService) *Users {
+	return &Users{service: service}
+}
 
 func NewLogoutHandler(service *service.AppService) *Logout {
 	return &Logout{service: service}
@@ -57,6 +68,10 @@ func NewCategoriesHandler(service *service.AppService) *CategoriesHandler {
 	return &CategoriesHandler{service: service}
 }
 
+func NewReactionHandler(service *service.AppService) *ReactionHanlder {
+	return &ReactionHanlder{service: service}
+}
+
 // NewPostService
 
 func WriteJsonErrors(w http.ResponseWriter, errJson models.ErrorJson) {
@@ -80,7 +95,7 @@ type Client struct {
 	Message    chan *models.Message
 	ErrorJson  chan *models.ErrorJson
 	Done       chan struct{}
-	CloseOnce   sync.Once
+	CloseOnce  sync.Once
 	userId     int
 }
 
@@ -113,4 +128,3 @@ func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
 		Done:       make(chan struct{}),
 	}
 }
-

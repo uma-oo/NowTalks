@@ -12,18 +12,18 @@ export async function addPostApi(postData) {
 }
 
 export async function getPostsApi(filterData,offset) {
-    let categoriesQuery = filterData.categories ? `&categories=${filterData.categories}` : ""
-    let likedpostsQuery = filterData.likedPosts ? `&likedposts=${filterData.likedPosts}` : ""
-    let createdPosts = filterData.createdPosts ? `&createdposts=${filterData.createdPosts}`: ""
+    let categoriesQuery = filterData.categories ? `categories=${filterData.categories}` : ""
+    let likedpostsQuery = filterData.likedPosts ? `likedposts=${filterData.likedPosts}` : ""
+    let createdPosts = filterData.createdPosts ? `createdposts=${filterData.createdPosts}`: ""
 
     try {
-        const response = await fetch(`/api/post?offset=${offset}&limit=10&categories=${filterData.categories}&likedposts=${filterData.likedPosts}&createdPosts=${filterData.createdPosts}`, {
+        const response = await fetch(`/api/post?offset=${offset}&categories=${filterData.categories}&likedposts=${filterData.likedPosts}&createdPosts=${filterData.createdPosts}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })
         return await response.json()
     } catch (error) {
-        console.error(error);
+        console.error("trying to fetch posts",error);
     }
 }
 

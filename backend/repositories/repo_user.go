@@ -24,18 +24,19 @@ func (appRep *AppRepository) CreateUser(user *models.User) error {
 	return nil
 }
 
-func (appRep *AppRepository) GetUsers() ([]models.User, error) {
-	var users []models.User
-	query := `SELECT userID,nickname, age, gender, firstName, lastName, email FROM users`
-	rows, err := appRep.db.Query(query)
-	if err != nil {
-		return nil, err
-	}
+// TO GET THE USERS
 
+func (appRep *AppRepository) GetUsers(offset int) ([]models.User, *models.ErrorJson) {
+	var users []models.User
+	query := `SELECT userID , nickname FROM users LIMIT 10 OFFSET ?`
+	rows, err := appRep.db.Query(query, offset)
+	if err != nil {
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+	}
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.Id, &user.Nickname, &user, &user.Age, &user.Gender, &user.FirstName, &user.LastName, &user.Email); err != nil {
-			return users, err
+		if err := rows.Scan(&user.Id, &user.Nickname); err != nil {
+			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v ", err)}
 		}
 		users = append(users, user)
 	}
@@ -69,9 +70,7 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 	return user, nil
 }
 
-
-
-// get the username from the userId 
+// get the username from the userId
 func (appRep *AppRepository) GetUserNameById(user_id int) (string, *models.ErrorJson) {
 	var username string
 	query := `SELECT nickname FROM users WHERE userID = ?`

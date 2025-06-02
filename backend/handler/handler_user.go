@@ -6,6 +6,7 @@ import (
 	"real-time-forum/backend/models"
 )
 
+// add the endpoint of getusers
 func (Uhandler *UserHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json")
 	switch {

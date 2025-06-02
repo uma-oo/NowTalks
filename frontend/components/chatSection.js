@@ -1,5 +1,6 @@
+import { getUsers } from "../api/user.js"
 import { users } from "../const/data.js"
-import { createElement } from "../utils.js"
+import { createElement, navigateTo } from "../utils.js"
 import { createChatUserCard } from "./chatUserCard.js"
 import { openChatWindow } from "./chatWindow.js"
 import { createIcon } from "./icon.js"
@@ -10,14 +11,32 @@ export function createChatSection() {
     chatSectionHeaderTitle.prepend(createIcon("chats"))
 
     let chatList = createElement('div', 'chat-list')
-    let chats = users.map(user => {
-        let userCard = createChatUserCard(user)
-        let userCardClone = userCard.cloneNode(true)
-        userCard.addEventListener("click",e => openChatWindow(userCard, userCardClone))
-        return userCard
-    });
+    chatList.dataset.offset = 0
 
+
+    fetchUsers(chatList)
     chatSectionHeader.append(chatSectionHeaderTitle)
-    chatList.append(...chats)
     return [chatSectionHeader, chatList];
+}
+
+
+function fetchUsers(chatList) {
+    let offset = chatList.dataset.offset
+    getUsers(offset).then(([status, data]) => {
+        if (status == 401) {
+            navigateTo("login")
+        }
+        if (status == 200) {
+            console.log(data)
+            let chats = data.map(({id, nickname}) => {
+                let userCard = createChatUserCard(nickname)
+                userCard.dataset.id = id
+                let userCardClone = userCard.cloneNode(true)
+                userCard.addEventListener("click", e => openChatWindow(userCard, userCardClone))
+                return userCard
+            });
+            chatList.append(...chats)
+        }
+    })
+
 }

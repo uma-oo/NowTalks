@@ -1,7 +1,13 @@
 
-export async function getUsers() {
-    const response = await fetch('api/user');
-    return response.json();
+export async function getUsers(offset) {
+    try {
+        const response = await fetch(`api/users?offset=${offset}`);
+        return [ response.status , await response.json()];
+    } catch (error) {
+        console.error("error trying to get users", error)
+    }
+
+
 }
 
 export async function createUser(data) {

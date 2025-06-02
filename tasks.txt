@@ -1,4 +1,4 @@
-2. Add the likes and dislikes in a scalable way
-3. Cleaning the code and unnecessary code 
-4. The Websocket part 
-5. The front end part tooo 
+1. the endpoint of getting all the users done
+3. Cleaning the code and unnecessary code  (on going)
+4. The Websocket part (for tomorrow)
+5. The front end part tooo (later)

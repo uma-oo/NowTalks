@@ -7,7 +7,6 @@ export function createButton(content, type, className) {
 
     if (className) button.className = className
     let btnIcon = content.icon ? createIcon(content.icon) : "" 
-    console.log(content.icon)
     let btnText = createElement('span',null, content.text)
     button.append(btnIcon, btnText)
     return button

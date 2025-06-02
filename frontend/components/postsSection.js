@@ -10,8 +10,6 @@ import { createFilterContainer } from "./filter.js"
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
 
-
-
     // post creation elements
     let createPostFormContainer = createElement('div', 'create-post-form-container')
     let addPostBtn = createButton({ icon: "plus" }, 'button', "add-post-btn")
