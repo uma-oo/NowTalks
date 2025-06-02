@@ -42,10 +42,9 @@ func (client *Client) ReadMessages() {
 		}
 		client.Message <- message
 	}
-
 }
 
-// i used the channels buy not sure if this is the correct way to handle this 
+// i used the channels buy not sure if this is the correct way to handle this
 
 func (client *Client) WriteMessages() {
 	defer client.chatServer.RemoveClient(client)
@@ -66,41 +65,35 @@ func (client *Client) WriteMessages() {
 			return
 		}
 	}
-
 }
 
-
-// other than only sending the message back l khuna li sift l mssg 
-// broadcastih l connections dyal nfss l user 
+// other than only sending the message back l khuna li sift l mssg
+// broadcastih l connections dyal nfss l user
 // broadcasti l message l receiver (message mashi errJson channel )
 
-
-// to be done 
+// to be done
 // create another endpoint for the online users (hakka bghit if it can be possible)
 
-// finish the like/ dislike things by tomorrow
-
-// in this case 
-// 1-  alrady writed  in the same connection 
-// 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa 
-func BroadCastTheMessage(sender *Client , receiver *Client, message *models.Message) {
-     
+// in this case
+// 1-  alrady writed  in the same connection
+// 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa
+// we need a function to get the connections != of the connection of the sender (of the same client )
+func BroadCastTheMessage(sender *Client, receiver int, message *models.Message) {
+	for {
+		select {
+		case message := <-sender.Message:
+			connections_sender := GetConnectionsUser(sender)
+			for _, conn_receiver := range sender.chatServer.clients[receiver] {
+				conn_receiver.connection.WriteJSON(message)
+			}
+			for _, conn := range connections_sender {
+				conn.connection.WriteJSON(message)
+			}
+		case err := <-sender.ErrorJson:
+			sender.connection.WriteJSON(err)
+		}
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // dummy way to delete a connection but i'm done
 func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_deleted *Client) {
@@ -110,9 +103,20 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 			index = i
 			break
 		}
-
 	}
 	if index != -1 {
 		clientList[userId] = append(clientList[userId][:index], clientList[userId][index+1:]...)
 	}
+}
+
+// why do we need to return slice of the pointer instead of the normal slice i dunno
+func GetConnectionsUser(conn *Client) []*Client {
+	// get the conn that have the same username but different connections
+	clients := []*Client{}
+	for _, value := range conn.chatServer.clients[conn.userId] {
+		if value.connection != conn.connection {
+			clients = append(clients, value)
+		}
+	}
+	return clients
 }

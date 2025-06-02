@@ -23,6 +23,7 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
 		return
 	}
+
 	// we need to dial the user id and the connection
 	client := NewClient(connection, server)
 	// kinda of repetitive but i'm really done with everything!!!
