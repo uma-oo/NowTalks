@@ -1,12 +1,13 @@
 package service
 
 import (
-	"real-time-forum/backend/models"
 	"strings"
+
+	"real-time-forum/backend/models"
 )
 
 // let's check wash message huwa hadak
-
+// no need to check the sender Id kayn middleware
 func (service *AppService) ValidateMessage(message *models.Message) (*models.Message, *models.ErrorJson) {
 	errMessage := models.NewMessageErr()
 	trimmedMsg := strings.TrimSpace(message.Message)
@@ -20,7 +21,7 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 		errMessage.ReceiverID = "ERROR!! The Receiver Specified Does Not Exist!!"
 	}
 	if errMessage.Message != "" || errMessage.ReceiverID != "" {
-		return nil, models.NewErrorJson(400, errMessage)
+		return nil, &models.ErrorJson{Status: 400, Message: errMessage}
 	}
 	// We can go on and insert the message in the database
 	message_created, err := service.repo.AddMessage(message)

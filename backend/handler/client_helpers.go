@@ -1,7 +1,12 @@
 package handler
 
 import (
+	"fmt"
+	"log"
+
 	"real-time-forum/backend/models"
+
+	"github.com/gorilla/websocket"
 )
 
 func (server *ChatServer) AddClient(client *Client) {
@@ -13,11 +18,11 @@ func (server *ChatServer) AddClient(client *Client) {
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	client.CloseOnce.Do(func() {
-		close(client.Message)
-		close(client.ErrorJson)
-		close(client.Done)
-	})
+	// client.CloseOnce.Do(func() {
+	// 	close(client.Message)
+	// 	close(client.ErrorJson)
+	// 	close(client.Done)
+	// })
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)
@@ -32,15 +37,24 @@ func (client *Client) ReadMessages() {
 		message := &models.Message{}
 		err := client.connection.ReadJSON(&message)
 		if err != nil {
-			close(client.Done)
-			break
+			// close(client.Done)
+			fmt.Println("err", err)
+
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("error: %v", err)
+			}
+			continue
 		}
-		message, errJson := client.chatServer.service.ValidateMessage(message)
+		fmt.Println("message", message)
+		message_validated, errJson := client.chatServer.service.ValidateMessage(message)
 		if errJson != nil {
+			fmt.Println("heeeeeeeeeere", errJson.Message)
 			client.ErrorJson <- errJson
 			continue
 		}
-		client.Message <- message
+		fmt.Println("err", errJson)
+		fmt.Println("message valid", message_validated)
+		client.Message <- message_validated
 	}
 }
 
@@ -61,8 +75,8 @@ func (client *Client) WriteMessages() {
 			if err != nil {
 				return
 			}
-		case <-client.Done:
-			return
+			// case <-client.Done:
+			// 	return
 		}
 	}
 }
@@ -78,22 +92,22 @@ func (client *Client) WriteMessages() {
 // 1-  alrady writed  in the same connection
 // 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa
 // we need a function to get the connections != of the connection of the sender (of the same client )
-func BroadCastTheMessage(sender *Client, receiver int, message *models.Message) {
-	for {
-		select {
-		case message := <-sender.Message:
-			connections_sender := GetConnectionsUser(sender)
-			for _, conn_receiver := range sender.chatServer.clients[receiver] {
-				conn_receiver.connection.WriteJSON(message)
-			}
-			for _, conn := range connections_sender {
-				conn.connection.WriteJSON(message)
-			}
-		case err := <-sender.ErrorJson:
-			sender.connection.WriteJSON(err)
-		}
-	}
-}
+// func BroadCastTheMessage(sender *Client, receiver int, message *models.Message) {
+// 	for {
+// 		select {
+// 		case message := <-sender.Message:
+// 			connections_sender := GetConnectionsUser(sender)
+// 			for _, conn_receiver := range sender.chatServer.clients[receiver] {
+// 				conn_receiver.connection.WriteJSON(message)
+// 			}
+// 			for _, conn := range connections_sender {
+// 				conn.connection.WriteJSON(message)
+// 			}
+// 		case err := <-sender.ErrorJson:
+// 			sender.connection.WriteJSON(err)
+// 		}
+// 	}
+// }
 
 // dummy way to delete a connection but i'm done
 func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_deleted *Client) {
