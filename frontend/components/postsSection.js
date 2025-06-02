@@ -6,6 +6,7 @@ import { createForm } from "./form.js"
 import { PostForm } from "../const/forms.js"
 import { throttledScrollFetcher } from "../utils.js"
 import { createFilterContainer } from "./filter.js"
+import { createIcon } from "./icon.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
@@ -55,14 +56,17 @@ function createPostCards(data) {
     return data.map(postData => createPostCard(postData))
 }
 
-function toggleCreatePostFormContainer(container) {
+export function toggleCreatePostFormContainer() {
+    let container = document.querySelector('.create-post-form-container')
     container.classList.toggle("create-post-form-container_expanded")
-    let bottonIcon = document.querySelector(".add-post-btn>i")
     if (!container.querySelector("#create-post-form")) {
-        container.append(createForm(PostForm, "create-post-form"))
-        bottonIcon.classList.replace("fa-plus", "fa-xmark")
+        let title = createElement('h2', null , "Share your thoughts:")
+        let goBack = createIcon("arrow-square-left")
+
+        goBack.addEventListener('click', ()=> toggleCreatePostFormContainer())
+        title.prepend(goBack)
+        container.append(title, createForm(PostForm, "create-post-form"))
     } else {
-        bottonIcon.classList.replace("fa-xmark", "fa-plus")
         container.innerHTML = ""
     }
 }

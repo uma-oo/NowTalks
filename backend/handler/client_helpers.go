@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"real-time-forum/backend/models"
 )
 
@@ -16,7 +17,6 @@ func (server *ChatServer) RemoveClient(client *Client) {
 	client.CloseOnce.Do(func() {
 		close(client.Message)
 		close(client.ErrorJson)
-		close(client.Done)
 	})
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
@@ -40,6 +40,7 @@ func (client *Client) ReadMessages() {
 			client.ErrorJson <- errJson
 			continue
 		}
+		fmt.Println(message)
 		client.Message <- message
 	}
 

@@ -9,8 +9,8 @@ import { createIcon } from "./icon.js"
 
 
 let reactions = [
-    { type: "likes", icon: "like" },
-    { type: "dislikes", icon: "dislike" },
+    { type: "likes", icon: "heart" },
+    // { type: "dislikes", icon: "heart-slash" },
     { type: "comments", icon: "comment" },
 ]
 
