@@ -2,7 +2,7 @@ package handler
 
 import (
 	"fmt"
-	"log"
+	"io"
 
 	"real-time-forum/backend/models"
 
@@ -37,9 +37,18 @@ func (client *Client) ReadMessages() {
 		message := &models.Message{}
 		err := client.connection.ReadJSON(&message)
 		if err != nil {
-			// close(client.Done)
+			if err == io.EOF {
+				fmt.Println("heeeeeeeeeeeeeeere")
+				client.ErrorJson <- &models.ErrorJson{
+					Status: 400,
+					Message: models.MessageErr{
+						Message:    "ERROR!! Empty Message field",
+						ReceiverID: "ERROR!! Empty Receiver Id field",
+					}}
+				continue
+			}
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error: %v", err)
+				break
 			}
 			continue
 		}
@@ -62,13 +71,13 @@ func (client *Client) WriteMessages() {
 
 	for {
 		select {
-		case message := <-client.Message:
-			err := client.connection.WriteJSON(message)
+		case errJson := <-client.ErrorJson:
+			err := client.connection.WriteJSON(errJson)
 			if err != nil {
 				return
 			}
-		case errJson := <-client.ErrorJson:
-			err := client.connection.WriteJSON(errJson)
+		case message := <-client.Message:
+			err := client.connection.WriteJSON(message)
 			if err != nil {
 				return
 			}
