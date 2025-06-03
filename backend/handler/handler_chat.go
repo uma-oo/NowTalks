@@ -27,12 +27,12 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 	// we need to dial the user id and the connection
 	client := NewClient(connection, server)
 	// kinda of repetitive but i'm really done with everything!!!
+
 	client.userId = session.UserId
+	client.Username = session.Username
 	server.AddClient(client)
 	go client.ReadMessages()
 	go client.WriteMessages()
-
-
 }
 
 // HERE fin l handler ghadi yt9ad and we'll be handling everything
@@ -46,6 +46,7 @@ func (server *ChatServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "/ws/chat":
 		server.ChatServerHandler(w, r)
 		return
+
 	case "/ws/users":
 		w.Write([]byte("hhhhhhhhhhh"))
 		return

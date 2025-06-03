@@ -5,9 +5,10 @@ import (
 	"real-time-forum/backend/models"
 )
 
-// insert the message in the database :) ila 3awdt shddiit shi backend bghithum ybz9u 3lya
+
 
 func (repo *AppRepository) AddMessage(message *models.Message) (*models.Message, *models.ErrorJson) {
+	
 	message_created := &models.Message{}
 	query := `INSERT INTO messages (senderID,receiverID,message) 
 	VALUES (?,?,?) RETURNING senderID ,receiverID ,message, createdAt;`
