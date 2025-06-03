@@ -5,7 +5,6 @@ export async function navigateTo(pathname) {
     renderApp()
 }
 
-
 export function timeAgo(timestamp, locale = 'en') {
     let value;
     const diff = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
@@ -15,7 +14,6 @@ export function timeAgo(timestamp, locale = 'en') {
     const months = Math.floor(days / 30);
     const years = Math.floor(months / 12);
     const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
-
     if (years > 0) {
         value = rtf.format(-  years, "year");
     } else if (months > 0) {
@@ -32,7 +30,6 @@ export function timeAgo(timestamp, locale = 'en') {
     return value;
 }
 
-
 export function throttledScrollFetcher(func) {
     return throttle((e) => {
             const container = e.target
@@ -45,8 +42,6 @@ export function throttledScrollFetcher(func) {
             }
         }, 300)
 }
-
-
 
 export function throttle(func, delay) {
     let delayPassed = true
@@ -82,8 +77,6 @@ export function setOpions(selectElement, options) {
         selectElement.append(optionElement)
     })
 }
-
-
 
 export function loadFormErrors(form, data) {
     for (let [fieldId, error] of Object.entries(data)) {

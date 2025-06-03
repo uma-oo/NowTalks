@@ -27,7 +27,6 @@ function fetchUsers(chatList) {
             navigateTo("login")
         }
         if (status == 200) {
-            console.log(data)
             let chats = data.map(({id, nickname}) => {
                 let userCard = createChatUserCard(nickname)
                 userCard.dataset.id = id

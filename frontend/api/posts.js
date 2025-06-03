@@ -4,6 +4,7 @@ export async function addPostApi(postData) {
         const response = await fetch('/api/post', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body : JSON.stringify(postData)
         })
         return [response.status, await response.json()]
     } catch (error) {
@@ -26,7 +27,6 @@ export async function getPostsApi(filterData,offset) {
         console.error("trying to fetch posts",error);
     }
 }
-
 
 export async function getCategories() {
     try {

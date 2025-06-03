@@ -10,7 +10,6 @@ import { createIcon } from "./icon.js"
 
 let reactions = [
     { type: "likes", icon: "heart" },
-    // { type: "dislikes", icon: "heart-slash" },
     { type: "comments", icon: "comment" },
 ]
 
@@ -22,23 +21,24 @@ export function createPostCard({
     categories,
     created_at,
     total_comments,
-    total_likes,
-    total_dislikes
+    total_likes
 }) {
     let container = createElement('div', 'post-container')
     container.dataset.id = id
-
     let postHeader = createElement('div', 'post-header')
     let postInfo = createElement('div', 'post-info')
     let postTitle = createElement('p', 'post-title', title)
     let postWriter = createElement('span', null, `${user_name}`)
     let timestamp = createElement('span', null, timeAgo(created_at))
     let categoriesList = createElement('div', 'categories')
-    categories.forEach(category => {
-        let categoryTag = createElement('span', 'tag', `${category}`)
-        // catego
-        categoriesList.append(categoryTag)
-    });
+    if (categories) {
+
+        categories.forEach(category => {
+            let categoryTag = createElement('span', 'tag', `${category}`)
+            // catego
+            categoriesList.append(categoryTag)
+        });
+    }
 
     let postBody = createElement('div', 'post-body')
     let postContent = createElement('p', 'post-content', content)

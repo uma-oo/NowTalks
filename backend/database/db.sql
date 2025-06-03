@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS postCategories (
     categoryID INTEGER NOT NULL,
     postID INTEGER NOT NULL,
     PRIMARY KEY (categoryID, postID),
-    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
-    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) ON DELETE CASCADE
+    FOREIGN KEY (postID) REFERENCES posts(postID),
+    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) 
 );
 
 
