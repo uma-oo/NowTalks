@@ -9,10 +9,20 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+
+
 func (server *ChatServer) AddClient(client *Client) {
+	
 	server.Lock()
 	defer server.Unlock()
 	server.clients[client.userId] = append(server.clients[client.userId], client)
+    for _, value := range server.clients {
+		for _, conn := range value {
+			conn.OnlineUsers <- append(<-conn.OnlineUsers, models.User{Id: conn.userId, Nickname: conn.Username})
+			fmt.Println("conne", conn.Username)
+		}
+	}
+	
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {
@@ -37,24 +47,24 @@ func (client *Client) ReadMessages() {
 		message := &models.Message{}
 		err := client.connection.ReadJSON(&message)
 		if err != nil {
-			fmt.Println("ttt", err)
 			if err == io.EOF {
-				fmt.Println("heeeeeeeeeeeeeeere")
 				client.ErrorJson <- &models.ErrorJson{
 					Status: 400,
 					Message: models.MessageErr{
 						Message:    "ERROR!! Empty Message field",
 						ReceiverID: "ERROR!! Empty Receiver Id field",
-					}}
+					},
+				}
 				continue
 			}
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				fmt.Println("asdfasdf")
 				break
 			}
 			// continue
 		}
+
 		message.SenderID = client.userId
+
 		message_validated, errJson := client.chatServer.service.ValidateMessage(message)
 		if errJson != nil {
 			client.ErrorJson <- errJson
@@ -83,6 +93,11 @@ func (client *Client) WriteMessages() {
 			if err != nil {
 				return
 			}
+		case online_users := <-client.OnlineUsers:
+			err := client.connection.WriteJSON(online_users)
+			if err != nil {
+				return
+			}
 			// case <-client.Done:
 			// 	return
 		}
@@ -102,13 +117,11 @@ func (client *Client) WriteMessages() {
 // we need a function to get the connections != of the connection of the sender (of the same client )
 // DATA RACE DEETECTED IN the Broadcast function
 func (sender *Client) BroadCastTheMessage(message *models.Message) {
-	fmt.Println("hnaaa")
 	// braodcast to the connections dyal sender
 	sender.chatServer.Lock()
 	defer sender.chatServer.Unlock()
 	for _, conn := range sender.chatServer.clients[sender.userId] {
 		if conn.connection != sender.connection {
-
 			conn.Message <- message
 		}
 	}
@@ -131,3 +144,5 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 		clientList[userId] = append(clientList[userId][:index], clientList[userId][index+1:]...)
 	}
 }
+
+

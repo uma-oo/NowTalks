@@ -13,6 +13,8 @@ import (
 // Rewrite the PostHandler in the proper way
 // Write the added post f response again (good practice)
 func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
+	cookie, _ := r.Cookie("session")
+	session, _ := Phandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	var post *models.Post
 	err := json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
@@ -28,10 +30,10 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
+	// even if the userid is given wrong we insert the correct one 
+	post.UserId= session.UserId
 	postCreated, err_ := Phandler.service.AddPost(post)
 	if err_ != nil {
-		fmt.Println("error adding post")
-		fmt.Printf("err_: %v\n", err_)
 		WriteJsonErrors(w, *err_)
 		return
 	}
@@ -74,7 +76,6 @@ func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 
 
 func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("URL", r.URL.Path)
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case http.MethodGet:

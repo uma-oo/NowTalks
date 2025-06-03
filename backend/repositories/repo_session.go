@@ -26,8 +26,10 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 
 func (appRepo *AppRepository) GetSessionbyTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
 	session := models.Session{}
-	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
-	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, session.Token, session.ExpDate)
+	query := `SELECT sessions.userID, sessions.sessionToken , sessions.expiresAt, users.nickname 
+	FROM sessions INNER JOIN users ON users.userID = sessions.userID
+	WHERE sessionToken = ?`
+	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, &session.Token, &session.ExpDate, &session.Username)
 	if row == sql.ErrNoRows {
 		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorized Access"}
 	}

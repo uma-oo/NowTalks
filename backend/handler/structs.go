@@ -89,14 +89,16 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 type ClientList map[int][]*Client
 
 type Client struct {
-	service    *service.AppService
-	connection *websocket.Conn
-	chatServer *ChatServer
-	Message    chan *models.Message
-	ErrorJson  chan *models.ErrorJson
+	service     *service.AppService
+	connection  *websocket.Conn
+	chatServer  *ChatServer
+	Message     chan *models.Message
+	ErrorJson   chan *models.ErrorJson
+	OnlineUsers chan []models.User
 	// Done       chan struct{}
 	// CloseOnce  sync.Once
-	userId     int
+	userId   int
+	Username string
 }
 
 type ChatServer struct {
@@ -120,11 +122,11 @@ func NewChatServer(service *service.AppService) *ChatServer {
 
 func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
 	return &Client{
-		service:    server.service,
-		connection: conn,
-		chatServer: server,
-		Message:    make(chan *models.Message),
-		ErrorJson:  make(chan *models.ErrorJson),
-		// Done:       make(chan struct{}),
+		service:     server.service,
+		connection:  conn,
+		chatServer:  server,
+		Message:     make(chan *models.Message),
+		ErrorJson:   make(chan *models.ErrorJson),
+		OnlineUsers: make(chan []models.User),
 	}
 }

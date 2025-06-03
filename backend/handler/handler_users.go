@@ -12,7 +12,7 @@ import (
 func (Users *Users) GetUsers(w http.ResponseWriter, r *http.Request) {
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {
-		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "Bad Request!! Post Not Found Or Incorrect offset!"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "Bad Request!! Incorrect offset!"})
 		return
 	}
 	users, errJson := Users.service.GetUsers(offset)
