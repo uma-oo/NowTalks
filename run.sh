@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ./backend
-go run .
+go run -race main.go

@@ -51,7 +51,7 @@ func (client *Client) ReadMessages() {
 		}
 
 		client.Message <- message_validated
-		BroadCastTheMessage(client, message.ReceiverID, message_validated)
+		client.BroadCastTheMessage(message_validated)
 	}
 }
 
@@ -89,10 +89,15 @@ func (client *Client) WriteMessages() {
 // 1-  alrady writed  in the same connection
 // 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa
 // we need a function to get the connections != of the connection of the sender (of the same client )
-func BroadCastTheMessage(sender *Client, message *models.Message) {
+// DATA RACE DEETECTED IN the Broadcast function
+func (sender *Client) BroadCastTheMessage(message *models.Message) {
+	fmt.Println("hnaaa")
 	// braodcast to the connections dyal sender
+	sender.chatServer.Lock()
+	defer sender.chatServer.Unlock()
 	for _, conn := range sender.chatServer.clients[sender.userId] {
 		if conn.connection != sender.connection {
+
 			conn.Message <- message
 		}
 	}
