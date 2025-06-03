@@ -30,6 +30,7 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
+	// even if the userid is given wrong we insert the correct one 
 	post.UserId= session.UserId
 	postCreated, err_ := Phandler.service.AddPost(post)
 	if err_ != nil {
