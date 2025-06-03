@@ -89,14 +89,15 @@ func (client *Client) WriteMessages() {
 // 1-  alrady writed  in the same connection
 // 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa
 // we need a function to get the connections != of the connection of the sender (of the same client )
-func BroadCastTheMessage(sender *Client, receiver int, message *models.Message) {
-	// braodcast to the connections of the server
-	fmt.Println("message", message)
-	sender_connections := GetConnectionsUser(sender)
-	for _, sender_conn := range sender_connections {
-		sender_conn.Message <- message
+func BroadCastTheMessage(sender *Client, message *models.Message) {
+	// braodcast to the connections dyal sender
+	for _, conn := range sender.chatServer.clients[sender.userId] {
+		if conn.connection != sender.connection {
+			conn.Message <- message
+		}
 	}
-	for _, value := range sender.chatServer.clients[receiver] {
+	// dyal receiver
+	for _, value := range sender.chatServer.clients[message.ReceiverID] {
 		value.Message <- message
 	}
 }
@@ -113,16 +114,4 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 	if index != -1 {
 		clientList[userId] = append(clientList[userId][:index], clientList[userId][index+1:]...)
 	}
-}
-
-// why do we need to return slice of the pointer instead of the normal slice i dunno
-func GetConnectionsUser(conn *Client) []*Client {
-	// get the conn that have the same username but different connections
-	clients := []*Client{}
-	for _, value := range conn.chatServer.clients[conn.userId] {
-		if value.connection != conn.connection {
-			clients = append(clients, value)
-		}
-	}
-	return clients
 }
