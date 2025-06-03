@@ -5,15 +5,19 @@ import { createChatSection } from "../components/chatSection.js";
 import { createHeader } from "../components/header.js";
 import { createPostsSection, toggleCreatePostFormContainer } from "../components/postsSection.js";
 import { navigateTo, createElement } from "../utils.js";
+import { setUpWebsocket } from "../websocket.js";
+
 
 
 
 export function renderHomePage(app) {
+    console.log("rendering home page")
+    let socket 
     isLoggedIn().then(data => {
         if (data.is_logged_in) {
             app.dataset.nickname = data.nickname
             app.dataset.id = data.id
-            setUpWebsocket()
+            socket = setUpWebsocket()
             setCategories(app).then(() => {
                 let header = createHeader()
                 let main = createElement('main', "home-main")
@@ -51,12 +55,3 @@ async function setCategories(app) {
     }).catch(error => console.error(error))
 }
 
-function setUpWebsocket() {
-    let socket = new WebSocket("ws://localhost:8080/ws/chat");
-
-    socket.onopen = function (e) {
-        console.log("[open] Connection established");
-        console.log("Sending to server");
-        socket.send("My name is John");
-    };
-}

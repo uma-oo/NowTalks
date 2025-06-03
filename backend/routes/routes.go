@@ -26,7 +26,7 @@ func SetRoutes(
 	http.Handle("/api/post", m.NewMiddleWare(Phandler, service))
 	http.Handle("/api/react/", m.NewMiddleWare(Rhanlder, service))
 	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
-	http.Handle("/api/users", m.NewMiddleWare(users, service ))
+	http.Handle("/api/users", m.NewMiddleWare(users, service))
 	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
 	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
 	http.HandleFunc("/api/categories", categories.GetCategories)

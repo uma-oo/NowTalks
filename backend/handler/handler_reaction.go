@@ -18,6 +18,7 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
 				EntityId: "ERROR!! Empty EntityID field!",
+				EntityType: "ERROR!! Empty EntityType field!",
 			}})
 			return
 		}

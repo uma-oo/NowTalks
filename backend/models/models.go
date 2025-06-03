@@ -113,7 +113,7 @@ type Message struct {
 
 type MessageErr struct {
 	Message    string `json:"message"`
-	ReceiverID any    `json:"receiver_id"`
+	ReceiverID string    `json:"receiver_id"`
 }
 
 type ReactionErr struct {

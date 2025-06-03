@@ -1,9 +1,9 @@
 import { createButton } from "./button.js";
-import { navigateTo, setAttributes, setOpions } from "../../utils.js";
+// import {  } from "../../utils.js";
 import { createUser, loginUser } from "../api/user.js";
 import { addPostApi } from "../api/posts.js";
 import { app } from "../index.js"
-import { createElement } from "../utils.js";
+import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
 import { createCheckboxInput } from "./checkbox.js";
 
 export function createForm(formRepresentaion, id) {
@@ -46,7 +46,7 @@ export function createForm(formRepresentaion, id) {
             let optionElem = createCheckboxInput(`category${id}`, name)
             categoriesList.append(optionElem)
         })
-        categoriesFormGrp.append(categoriesLabel,categoriesList)
+        categoriesFormGrp.append(categoriesLabel, categoriesList)
         formElement.append(categoriesFormGrp)
 
 
@@ -80,8 +80,10 @@ export function handleFormSubmit(event) {
 export function login(form, data) {
     loginUser(data).then(([status, data]) => {
         let formError = form.parentElement.querySelector(".form-error")
-        if (status == 200) navigateTo("/")
-        else if (status == 400) {
+        if (status == 200) {
+            console.log('user is logged in')
+            navigateTo("/")
+        } else if (status == 400) {
             formError.innerText = ""
             formError.classList.remove("form-have-error")
             loadFormErrors(form, data.errors)
@@ -109,7 +111,6 @@ export function register(form, data) {
 }
 
 export function createPost(form, data) {
-
     data.user_id = app.dataset.id
     addPostApi(data)
         .then(([status, data]) => {
@@ -123,11 +124,3 @@ export function createPost(form, data) {
         .catch(error => console.log("error submitting register form: ", error))
 }
 
-
-
-function loadFormErrors(form, data) {
-    for (let [fieldId, error] of Object.entries(data)) {
-        let inputError = form.querySelector(`#${fieldId}`).nextSibling
-        inputError.textContent = error;
-    }
-}

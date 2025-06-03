@@ -82,3 +82,12 @@ export function setOpions(selectElement, options) {
         selectElement.append(optionElement)
     })
 }
+
+
+
+export function loadFormErrors(form, data) {
+    for (let [fieldId, error] of Object.entries(data)) {
+        let inputError = form.querySelector(`#${fieldId}`).nextSibling
+        inputError.textContent = error;
+    }
+}

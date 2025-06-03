@@ -13,4 +13,5 @@ import (
 
 func HandleAssets(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, filepath.Join("../frontend", r.URL.Path[1:]))
+	
 }
