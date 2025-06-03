@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -28,9 +29,11 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 	client := NewClient(connection, server)
 	// kinda of repetitive but i'm really done with everything!!!
 	client.userId = session.UserId
+	fmt.Println("user id ", client.userId)
 	server.AddClient(client)
 	go client.ReadMessages()
 	go client.WriteMessages()
+	
 }
 
 // HERE fin l handler ghadi yt9ad and we'll be handling everything

@@ -10,6 +10,26 @@
  "password2": "Abcd@2024"
 
 }
+// second username 
+{
+  
+ "nickname": "oumayma", 
+ "age" :25,
+ "gender": "Female",
+ "firstname" : "oumayma",
+ "lastname" : "ELFAHSI",
+ "email": "oumayma@gmail.com",
+ "password": "Abcd@2024",
+ "password2": "Abcd@2024"
+
+}
+
+// message query 
+
+{
+    "message":"salaam labas",
+    "receiver_id":1
+}
 
 
 {

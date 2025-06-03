@@ -38,23 +38,20 @@ func (client *Client) ReadMessages() {
 		err := client.connection.ReadJSON(&message)
 		if err != nil {
 			// close(client.Done)
-			fmt.Println("err", err)
-
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
 			}
 			continue
 		}
-		fmt.Println("message", message)
+		message.SenderID = client.userId
 		message_validated, errJson := client.chatServer.service.ValidateMessage(message)
 		if errJson != nil {
-			fmt.Println("heeeeeeeeeere", errJson.Message)
 			client.ErrorJson <- errJson
 			continue
 		}
-		fmt.Println("err", errJson)
-		fmt.Println("message valid", message_validated)
+
 		client.Message <- message_validated
+		BroadCastTheMessage(client, message.ReceiverID, message_validated)
 	}
 }
 
@@ -92,22 +89,17 @@ func (client *Client) WriteMessages() {
 // 1-  alrady writed  in the same connection
 // 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa
 // we need a function to get the connections != of the connection of the sender (of the same client )
-// func BroadCastTheMessage(sender *Client, receiver int, message *models.Message) {
-// 	for {
-// 		select {
-// 		case message := <-sender.Message:
-// 			connections_sender := GetConnectionsUser(sender)
-// 			for _, conn_receiver := range sender.chatServer.clients[receiver] {
-// 				conn_receiver.connection.WriteJSON(message)
-// 			}
-// 			for _, conn := range connections_sender {
-// 				conn.connection.WriteJSON(message)
-// 			}
-// 		case err := <-sender.ErrorJson:
-// 			sender.connection.WriteJSON(err)
-// 		}
-// 	}
-// }
+func BroadCastTheMessage(sender *Client, receiver int, message *models.Message) {
+	// braodcast to the connections of the server
+	fmt.Println("message", message)
+	sender_connections := GetConnectionsUser(sender)
+	for _, sender_conn := range sender_connections {
+		sender_conn.Message <- message
+	}
+	for _, value := range sender.chatServer.clients[receiver] {
+		value.Message <- message
+	}
+}
 
 // dummy way to delete a connection but i'm done
 func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_deleted *Client) {
