@@ -39,7 +39,6 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user, errJson := Uhandler.service.Login(login)
-	fmt.Println("USER", user)
 	if errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
@@ -49,13 +48,12 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 		Id:         user.Id,
 		Nickname:   user.Nickname,
 	}
-	fmt.Println("userData", UserData)
+
 	// We are kinda sure that if the user has a token he cannot be here
 	// we need now
 	// before setting the session we need the actual id of the user
 	// if there is a session update it
 	session, errJson := Uhandler.service.GetSessionByUserId(user.Id)
-	fmt.Println("session", session, "errjson", errJson)
 	if errJson != nil {
 		UserData = &models.UserData{
 			IsLoggedIn: false,
@@ -84,7 +82,6 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session, err_ := Uhandler.service.SetUserSession(user)
-	fmt.Println("sssss", session, err )
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 		return
