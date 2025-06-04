@@ -8,10 +8,7 @@ import { createForm } from "./form.js"
 import { createIcon } from "./icon.js"
 
 
-let reactions = [
-    { type: "likes", icon: "heart" },
-    { type: "comments", icon: "comment" },
-]
+
 
 export function createPostCard({
     id,
@@ -31,55 +28,50 @@ export function createPostCard({
     let postWriter = createElement('span', null, `${user_name}`)
     let timestamp = createElement('span', null, timeAgo(created_at))
     let categoriesList = createElement('div', 'categories')
-    if (categories) {
 
+    if (categories) {
         categories.forEach(category => {
             let categoryTag = createElement('span', 'tag', `${category}`)
-            // catego
             categoriesList.append(categoryTag)
         });
     }
 
     let postBody = createElement('div', 'post-body')
     let postContent = createElement('p', 'post-content', content)
-
     let postFooter = createElement('div', 'post-footer')
-    let reactionElements = reactions.map(reaction => {
-        let container = createElement('div', 'reaction-container');
-        container.dataset.reaction = reaction.type;
-        let icon = createIcon(reaction.icon);
-        let count = createElement('span', null, '0');
-        container.append(icon, count);
-        return container;
+
+    let reactions = [
+        { type: "like", icon: "heart", "total": total_likes },
+        { type: "comment", icon: "comment", "total": total_comments },
+    ]
+
+    let reactionElements = reactions.map(({ type, icon, total }) => {
+        let text = type === "like" ? `Like` : total === 0 ? "Add comment" : "See comments"
+        let containerElem = createElement('div', 'reaction-container',text);
+        containerElem.dataset.reaction = type;
+        let iconElem = createIcon(icon);
+        let countElem = createElement('span', null, '0');
+        
+        containerElem.prepend(iconElem, countElem);
+        return containerElem;
     });
 
+    let postCommentsSection = createElement('div', "post-comments-section")
+    let commentsContainer = createElement('div', "comments-container")
 
-    let postCommentsContainer = createElement('div', "post-comments-container toggleable hide")
     let comments = Comments.map(comment => createComment(comment));
 
-    let viewPostBtn = createButton({ text: "see post", icon: "arrowright" }, 'button', "linkBtn viewPost toggleable row-reverse")
-    let closeBtn = createButton({ text: "close", icon: "xmark" }, "button", "close-btn hide toggleable")
-
-    viewPostBtn.addEventListener('click', (e) => togglePost(e.target, container))
-    closeBtn.addEventListener('click', (e) => togglePost(e.target, container))
 
     let commentForm = createForm(CommentForm, "comment-form")
-    commentForm.classList.add("hide", "toggleable")
 
     postWriter.prepend(createIcon('user'))
     timestamp.prepend(createIcon('calendar'))
     postInfo.append(postWriter, timestamp)
-    postHeader.append(postInfo,categoriesList,postTitle)
+    postHeader.append(postInfo, categoriesList, postTitle)
     postBody.append(postContent)
     postFooter.append(...reactionElements);
-    postCommentsContainer.append("Comments", ...comments)
-    container.append(postHeader, postBody, postFooter, postCommentsContainer, commentForm, viewPostBtn, closeBtn)
+    commentsContainer.append(...comments)
+    postCommentsSection.append(commentsContainer, commentForm)
+    container.append(postHeader, postBody, postCommentsSection, postFooter)
     return container
-}
-
-function togglePost(button, container) {
-    container.classList.toggle('post-container_expand')
-    let toggleableElements = container.querySelectorAll('.toggleable')
-    toggleableElements.forEach(elem => elem.classList.toggle('hide'))
-    container.scrollIntoView({ block: "center" })
 }
