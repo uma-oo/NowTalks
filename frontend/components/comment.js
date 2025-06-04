@@ -1,17 +1,19 @@
 import {createElement, timeAgo} from "../utils.js"
+import { createIcon } from "./icon.js"
 
 
-export function createComment(data) {
+export function createComment({username,createdAt,content}) {
     let commentContainer = createElement('div', "comment-container")
-    let commentHeader = createElement('p', "comment-header", data.username)
-    let commentBody = createElement('p', "comment-body", data.content)
-    let commentFooter = createElement('div', 'comment-footer')
+    let commentContent = createElement('div', "comment-content")
+    let commentWriter = createElement('span', null, username)
+    let commentCreatedAt =  createElement('span',null, timeAgo(createdAt) )
+    let commentText = createElement('p', null, content)
+    let heartIcon = createIcon("heart")
 
-    let createdAt = createElement('p',null, timeAgo(data.createdAt) )
-    document.createElement('p')
 
-    createdAt.textContent = timeAgo(data.createdAt)
-    commentFooter.append(createdAt)
-    commentContainer.append(commentHeader,commentBody,commentFooter)
+    commentWriter.prepend(createIcon("user"))
+    commentCreatedAt.prepend(createIcon("calendar"))
+    commentContent.append(commentWriter, commentCreatedAt, commentText)
+    commentContainer.append(commentContent,heartIcon )
     return commentContainer
 }

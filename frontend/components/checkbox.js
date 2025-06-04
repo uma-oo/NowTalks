@@ -1,15 +1,15 @@
-export function createCheckboxInput(id, value) {
-    let label = document.createElement('label')
-    let labelText = document.createElement('span')
-    label.setAttribute("for", id)
-    label.classList.add("category-option")
-    labelText.textContent = value
+import { createElement } from "../utils.js"
+
+export function createCheckboxInput(label, categoryId, categoryName) {
+    let labelElem = createElement('label', "category-option", categoryName)
+    labelElem.setAttribute("for", label)
 
     let checkBoxInput = document.createElement('input')
-    checkBoxInput.id = id
+    checkBoxInput.id = label
     checkBoxInput.type = "checkbox"
-    checkBoxInput.value  = value
+    checkBoxInput.value  = categoryId
+    checkBoxInput.name = "categories"
 
-    label.append(checkBoxInput, labelText)
-    return label
+    labelElem.append(checkBoxInput)
+    return labelElem
 }

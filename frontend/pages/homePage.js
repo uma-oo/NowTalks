@@ -11,12 +11,11 @@ import { setUpWebsocket } from "../websocket.js";
 
 
 export function renderHomePage(app) {
-    console.log("rendering home page")
     let socket 
     isLoggedIn().then(data => {
         if (data.is_logged_in) {
-            app.dataset.nickname = data.nickname
-            app.dataset.id = data.id
+            sessionStorage.setItem("userId", data.id)
+            sessionStorage.setItem("userNickname", data.nickname)
             socket = setUpWebsocket()
             setCategories(app).then(() => {
                 let header = createHeader()
@@ -44,7 +43,6 @@ export function renderHomePage(app) {
 async function setCategories(app) {
     app.dataset.categories = ''
     return getCategories().then(([status, data]) => {
-        console.log(status, data)
         if (status == 200) {
             data.forEach(element => {
                 app.dataset.categories += `${element.category_id}-${element.category_name},`
