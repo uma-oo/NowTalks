@@ -1,5 +1,4 @@
-import { app } from "../index.js"
-import { addPostApi, getCategories } from "../api/posts.js";
+import { addPostApi } from "../api/posts.js";
 import { createButton } from "./button.js";
 import { createCheckboxInput } from "./checkbox.js";
 import { createUser, loginUser } from "../api/user.js";
@@ -12,6 +11,7 @@ export function createForm(formRepresentaion, id) {
 
     formRepresentaion.elements.forEach((elem) => {
         let formGrp = createElement('div', 'form-grp')
+        formGrp.dataset.for = elem.attributes.name
         let label = createElement('label', null, elem.label)
         label.setAttribute('for', elem.attributes.id)
         let formInput = createElement(elem.tag, null)
@@ -33,18 +33,21 @@ export function createForm(formRepresentaion, id) {
 
     if (id == 'create-post-form') {
         let categoriesFormGrp = createElement('div', 'form-grp')
+        categoriesFormGrp.dataset.for = "categories"
         let categoriesLabel = createElement('label', null, 'Post Categories')
+        categoriesLabel.setAttribute("for", "categories")
         let app = document.querySelector('#app')
         let categories = app.dataset.categories.split(',')
         let categoriesList = createElement('div', 'categories-list')
         categories.forEach(category => {
             if (!category) return
             let [id, name] = category.split('-')
-            
+
             let optionElem = createCheckboxInput(`category${id}`, id, name)
             categoriesList.append(optionElem)
         })
-        categoriesFormGrp.append(categoriesLabel, categoriesList)
+        let inputError = createElement('p', 'input-error')
+        categoriesFormGrp.append(categoriesLabel, categoriesList, inputError)
         formElement.append(categoriesFormGrp)
     }
 
@@ -77,6 +80,7 @@ export function login(form, data) {
     loginUser(data).then(([status, data]) => {
         let formError = form.parentElement.querySelector(".form-error")
         if (status == 200) {
+            console.log(data)
             navigateTo("/")
         } else if (status == 400) {
             formError.innerText = ""
@@ -106,10 +110,10 @@ export function register(form, data) {
 }
 
 export function createPost(form, data) {
-    data.user_id = app.dataset.id
     addPostApi(data)
         .then(([status, data]) => {
             if (status === 200) {
+                form.reset()
                 navigateTo("/")
             }
             else if (status === 400) {

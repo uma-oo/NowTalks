@@ -1,7 +1,6 @@
 import { createElement } from "../utils.js"
 
 export function createCheckboxInput(label, categoryId, categoryName) {
-    console.log(label, categoryId, categoryName)
     let labelElem = createElement('label', "category-option", categoryName)
     labelElem.setAttribute("for", label)
 

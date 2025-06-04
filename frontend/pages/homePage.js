@@ -14,8 +14,8 @@ export function renderHomePage(app) {
     let socket 
     isLoggedIn().then(data => {
         if (data.is_logged_in) {
-            app.dataset.nickname = data.nickname
-            app.dataset.id = data.id
+            sessionStorage.setItem("userId", data.id)
+            sessionStorage.setItem("userNickname", data.nickname)
             socket = setUpWebsocket()
             setCategories(app).then(() => {
                 let header = createHeader()
