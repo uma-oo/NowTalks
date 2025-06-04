@@ -9,20 +9,14 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-
+var NUMBER = 0
 
 func (server *ChatServer) AddClient(client *Client) {
-	
-	server.Lock()
-	defer server.Unlock()
+	NUMBER++
+	fmt.Println("number", NUMBER)
 	server.clients[client.userId] = append(server.clients[client.userId], client)
-    for _, value := range server.clients {
-		for _, conn := range value {
-			conn.OnlineUsers <- append(<-conn.OnlineUsers, models.User{Id: conn.userId, Nickname: conn.Username})
-			fmt.Println("conne", conn.Username)
-		}
-	}
-	
+	client.BroadCastOnlineStatus()
+	fmt.Println("server ", len(server.clients))
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {
@@ -104,18 +98,6 @@ func (client *Client) WriteMessages() {
 	}
 }
 
-// other than only sending the message back l khuna li sift l mssg
-// broadcastih l connections dyal nfss l user
-// broadcasti l message l receiver (message mashi errJson channel )
-
-// to be done
-// create another endpoint for the online users (hakka bghit if it can be possible)
-
-// in this case
-// 1-  already writed  in the same connection
-// 2 need to write to other connections of the same user if it's a message and l reciver 7ta huwa
-// we need a function to get the connections != of the connection of the sender (of the same client )
-// DATA RACE DEETECTED IN the Broadcast function
 func (sender *Client) BroadCastTheMessage(message *models.Message) {
 	// braodcast to the connections dyal sender
 	sender.chatServer.Lock()
@@ -145,4 +127,17 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 	}
 }
 
+// let's do it inside another function and make it specific to the client
+func (client *Client) BroadCastOnlineStatus() {
 
+	fmt.Println("heere!!!")
+	online_users := []models.User{}
+	for id := range client.chatServer.clients {
+		if id != client.userId {
+			online_users = append(online_users, models.User{Id: id})
+		}
+	}
+	fmt.Println("online users", online_users)
+
+	client.OnlineUsers <- online_users
+}

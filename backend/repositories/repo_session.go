@@ -51,15 +51,18 @@ func (appRepo *AppRepository) HasValidToken(token string) (bool, *models.Session
 	return false, nil
 }
 
-func (appRep *AppRepository) GetUserSession(field any) (*models.Session, *models.ErrorJson) {
-	session := models.Session{}
+func (appRep *AppRepository) GetUserSession(user_id  int) (*models.Session, *models.ErrorJson) {
+	session := &models.Session{}
 	query := `SELECT * FROM sessions WHERE userID = ?`
-	row := appRep.db.QueryRow(query, field)
+	row := appRep.db.QueryRow(query, user_id)
 	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpDate)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 400, Message: "ERROR!! No session is set for this User"}
+		if err==sql.ErrNoRows {
+			return nil , nil 
+		}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	return &session, nil
+	return session, nil
 }
 
 func (appRep *AppRepository) UpdateSession(session *models.Session, new_session *models.Session) *models.ErrorJson {
