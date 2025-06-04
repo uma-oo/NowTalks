@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS posts (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    total_comments INTEGER DEFAULT 0 CHECK (total_comments >= 0),  
     FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE 
 );
 
@@ -63,8 +62,8 @@ CREATE TABLE IF NOT EXISTS postCategories (
     categoryID INTEGER NOT NULL,
     postID INTEGER NOT NULL,
     PRIMARY KEY (categoryID, postID),
-    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
-    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) ON DELETE CASCADE
+    FOREIGN KEY (postID) REFERENCES posts(postID),
+    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) 
 );
 
 

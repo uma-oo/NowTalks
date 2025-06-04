@@ -33,7 +33,7 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comment, error) {
 	var comments []models.Comment
 	query := `SELECT users.nickname,commentID, postID, createdAt , content 
-	FROM comments INNER JOIN on users.userID = comments.userID
+	FROM comments INNER JOIN users on users.userID = comments.userID
 	WHERE postID = ?
 	ORDER BY createdAt DESC
 	LIMIT 10 OFFSET ? ;`

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -17,7 +18,7 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 	if err := json.NewDecoder(r.Body).Decode(&liked); err != nil {
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
-				EntityId: "ERROR!! Empty EntityID field!",
+				EntityId:   "ERROR!! Empty EntityID field!",
 				EntityType: "ERROR!! Empty EntityType field!",
 			}})
 			return
@@ -28,7 +29,7 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 	liked.UserId = session.UserId
 	entity_type_id := Rhanlder.service.GetTypeIdByName(liked.EntityType)
 	if entity_type_id == 0 {
-		// to be verified if the status code is 500 or 400
+		fmt.Println("hhhhhhhhhhhhhhhh")
 		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
 		WriteJsonErrors(w, errJson)
 		return
