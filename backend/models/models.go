@@ -33,7 +33,7 @@ type Post struct {
 	CreatedAt      time.Time `json:"created_at,omitempty"`
 	TotalComments  int       `json:"total_comments"`
 	TotalLikes     int       `json:"total_likes"`
-	TotalDislikes  int       `json:"total_dislikes"`
+	// TotalDislikes  int       `json:"total_dislikes"`
 }
 
 type Category struct {
@@ -49,7 +49,7 @@ type Comment struct {
 	CreatedAt     time.Time `json:"created_at,omitempty"`
 	Content       string    `json:"content"`
 	TotalLikes    int       `json:"total_likes"`
-	TotalDislikes int       `json:"total_dislikes"`
+	// TotalDislikes int       `json:"total_dislikes"`
 }
 
 type Reaction struct {

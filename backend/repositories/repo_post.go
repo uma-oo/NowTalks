@@ -40,7 +40,7 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 // add the offset and the limit after
 func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
-	query := `SELECT  users.nickname, posts.postID ,posts.createdAt, posts.title, posts.content  FROM posts 
+	query := `SELECT  users.nickname, posts.postID ,posts.createdAt, posts.title, posts.content, posts.total_comments FROM posts 
 	INNER JOIN users 
 	ON posts.userID = users.userID
 	ORDER BY posts.createdAt DESC
@@ -57,7 +57,7 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
 	
 	for rows.Next() {
 		var post models.Post
-		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title, &post.Content); err != nil {
+		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title, &post.Content, &post.TotalComments); err != nil {
 			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		query_fetch_categories := `
