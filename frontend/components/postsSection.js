@@ -13,24 +13,16 @@ export function createPostsSection() {
 
     // post creation elements
     let createPostFormContainer = createElement('div', 'create-post-form-container')
-    let addPostBtn = createButton({ icon: "plus" }, 'button', "add-post-btn")
-    addPostBtn.addEventListener('click', (e) => {
-        toggleCreatePostFormContainer(createPostFormContainer)
-    })
 
     // post filter elements
     let filterContainer = createFilterContainer()
-    let filterBtn = createButton({ icon: "filter" }, 'button', "filter-btn")
-    filterBtn.addEventListener('click', (e) => {
-        toggleFilterContainer(filterContainer)
-    })
 
     let postsContainer = createElement('div', 'posts_container')
     postsContainer.dataset.offset = 0
     fetchPosts(postsContainer)
     const throttledScrollHandler = throttledScrollFetcher(fetchPosts)
     postsContainer.addEventListener('scroll', throttledScrollHandler)
-    postsSection.append(postsContainer, createPostFormContainer, filterContainer, filterBtn, addPostBtn)
+    postsSection.append(postsContainer, createPostFormContainer, filterContainer)
     return postsSection
 }
 

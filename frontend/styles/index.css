@@ -403,6 +403,7 @@ main {
             height: 20px;
         }
     }
+
     p {
         margin-top: 10px;
     }
@@ -411,23 +412,40 @@ main {
 
 
 #comment-form {
-    width: 80%;
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 #comment-form .form-grp {
+
     flex-grow: 1;
 }
 
 #comment-form input {
-    padding: 5px 10px;
+    all: unset;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 1rem;
 }
 
-#comment-form button {
+#comment-form .form-buttons {
+    position: absolute;
+    right: 1.5rem;
+}
+
+#comment-form .form-buttons button {
+    all: unset;
+    display: grid;
+    background-color: var(--primary-color);
+    padding: 0.5rem 1rem;
     width: min-content;
-    height: min-content;
+    border-radius: 8px;
+    /* height: min-content; */
 }
 
 .reaction-container {
@@ -447,7 +465,6 @@ main {
     transform: translate(50%, 50%);
 }
 
-
 /* Create Post and Filter */
 .create-post-form-container {
     background-color: var(--bg-color);
@@ -457,26 +474,47 @@ main {
     top: 0px;
     left: 0px;
     transition: var(--transition);
-    background: var(--background-color);
     overflow-y: auto;
 
     h2 {
         display: flex;
         align-items: start;
         gap: 10px;
-
+        margin-bottom: 1rem;
         img {
             cursor: pointer;
         }
     }
+
+    input,
+    textarea {
+        border: none;
+        outline: none;
+    }
+
+    input {
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    textarea {
+        margin: 1rem;
+        padding: 1rem;
+        border-left: solid var(--primary-color);
+    }
+}
+
+#create-post-form {
+    background-color: white;
+    border-radius: 18px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+
 }
 
 
 
-
-
 .create-post-form-container_expanded {
-    padding: 1rem;
+    padding: 2rem;
     width: 100%;
 }
 

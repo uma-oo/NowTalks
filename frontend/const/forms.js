@@ -192,7 +192,7 @@ export const PostForm = {
     elements: [
         {
             tag: 'input',
-            label: 'Post Title',
+            // label: 'Post Title',
             attributes: {
                 required: 'true',
                 type: 'text',
@@ -206,7 +206,7 @@ export const PostForm = {
         },
         {
             tag: 'textarea',
-            label: 'Post Content:',
+            // label: 'Post Content:',
             attributes: {
                 required: 'true',
                 id: 'content',
@@ -241,7 +241,6 @@ export const CommentForm = {
     elements: [
         {
             tag: 'input',
-            label: 'Comment',
             attributes: {
                 required: 'true',
                 type: 'text',
@@ -258,7 +257,7 @@ export const CommentForm = {
         {
             type: 'submit',
             content: {
-                icon : "share"
+                icon : "send"
             },
             style: 'primary-btn'
         }

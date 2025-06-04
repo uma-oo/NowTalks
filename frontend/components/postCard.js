@@ -58,9 +58,9 @@ export function createPostCard({
 
     let postCommentsSection = createElement('div', "post-comments-section")
     let commentsContainer = createElement('div', "comments-container")
-
     let comments = Comments.map(comment => createComment(comment));
 
+    let seeMore = createElement('p', "see-more", "See more posts...")
 
     let commentForm = createForm(CommentForm, "comment-form")
 
@@ -71,7 +71,7 @@ export function createPostCard({
     postBody.append(postContent)
     postFooter.append(...reactionElements);
     commentsContainer.append(...comments)
-    postCommentsSection.append(commentsContainer, commentForm)
+    postCommentsSection.append(commentsContainer,seeMore ,commentForm)
     container.append(postHeader, postBody, postCommentsSection, postFooter)
     return container
 }
