@@ -54,8 +54,7 @@ func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, *err_)
 	}
 	if err := json.NewEncoder(w).Encode(&comments); err != nil {
-		errJson := models.ErrorJson{Status: 400, Message: "Bad Request!"}
-		WriteJsonErrors(w, errJson)
+		WriteJsonErrors(w, models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)})
 		return
 	}
 }
