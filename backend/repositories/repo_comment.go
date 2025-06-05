@@ -8,18 +8,19 @@ import (
 )
 
 func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
+	fmt.Println("comment", comment)
 	comment_created := &models.Comment{}
 	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) 
 	RETURNING commentID, content, createdAt;`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v 1", err))
 	}
 	defer stmt.Close()
 	if err := stmt.QueryRow(comment.PostId, comment.UserId, comment.Content).Scan(
 		&comment_created.Id, &comment_created.Content,
 		&comment_created.CreatedAt); err != nil {
-		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v 2", err))
 	}
 	username, errJSon := appRep.GetUserNameById(comment.UserId)
 	if errJSon != nil {
@@ -76,7 +77,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content,  &comment.CreatedAt,&comment.TotalLikes); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content, &comment.CreatedAt, &comment.TotalLikes); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)

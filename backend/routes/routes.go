@@ -10,6 +10,9 @@ import (
 	s "real-time-forum/backend/service"
 )
 
+
+
+
 func SetRoutes(
 	Phandler *handler.PostHandler,
 	Chandler *handler.CommentHandler,
@@ -20,6 +23,7 @@ func SetRoutes(
 	loggedin *handler.UserData,
 	categories *handler.CategoriesHandler,
 	chat *handler.ChatServer,
+	messages *handler.MessagesHandler,
 	service *s.AppService,
 ) {
 	http.Handle("/api/comment", m.NewMiddleWare(Chandler, service))
@@ -28,6 +32,7 @@ func SetRoutes(
 	http.Handle("/api/react/", m.NewMiddleWare(Rhanlder, service))
 	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
 	http.Handle("/api/users", m.NewMiddleWare(users, service))
+	http.Handle("/api/messages", m.NewMiddleWare(messages, service))
 	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
 	http.HandleFunc("/api/categories", categories.GetCategories)
 	http.Handle("/ws/", m.NewMiddleWare(chat, service))
