@@ -60,7 +60,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 	WHERE
 		comments.postID = ?
 	ORDER BY
-		comments.createdAt
+		comments.createdAt DESC
 	LIMIT
 		10
 	OFFSET

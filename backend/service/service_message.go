@@ -30,3 +30,11 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 	}
 	return message_created, nil
 }
+
+func (service *AppService) GetMessages(sender_id, receiver_id, offset int) ([]models.Message, *models.ErrorJson) {
+	messages, errJson := service.repo.GetMessages(sender_id, receiver_id, offset)
+	if errJson != nil {
+		return nil, errJson
+	}
+	return messages, nil
+}
