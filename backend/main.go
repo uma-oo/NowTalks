@@ -11,7 +11,7 @@ import (
 func main() {
 	db, err := database.InitDB("./database/forum.db")
 	if err != nil {
-		fmt.Println("err DB 1", err)
+		panic( err)
 	}
 
 	err = db.ReadSQL("./database/db.sql")

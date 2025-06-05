@@ -51,7 +51,6 @@ func (client *Client) ReadMessages() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) || err == io.EOF {
 				break
 			}
-			// continue
 		}
 
 		message.SenderID = client.userId
