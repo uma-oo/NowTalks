@@ -39,9 +39,8 @@ func (client *Client) ReadMessages() {
 		message := &models.Message{}
 		err := client.connection.ReadJSON(&message)
 		if err != nil {
-			if err == io.EOF {
+			if err == io.ErrUnexpectedEOF {
 				client.ErrorJson <- &models.ErrorJson{
-					Status: 400,
 					Message: models.MessageErr{
 						Message:    "ERROR!! Empty Message field",
 						ReceiverID: "ERROR!! Empty Receiver Id field",
@@ -49,7 +48,7 @@ func (client *Client) ReadMessages() {
 				}
 				continue
 			}
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) || err == io.EOF {
 				break
 			}
 			// continue
