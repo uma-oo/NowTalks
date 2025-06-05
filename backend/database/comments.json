@@ -1,142 +1,50 @@
 [
     {
-        "commentID": 1,
-        "postID": 1,
-        "userID": 2,
-        "createdAt": "2025-06-03 16:00:12",
+        "post_id": 1,
         "content": "Totally agree! I started eating more whole foods and feel amazing."
     },
     {
-        "commentID": 2,
-        "postID": 1,
-        "userID": 3,
-        "createdAt": "2025-06-03 16:02:45",
-        "content": "Do you have any tips for avoiding sugar cravings?"
+        "post_id": 2,
+        "content": "I tried one of these routines this morning. Great start to the day!"
     },
     {
-        "commentID": 3,
-        "postID": 2,
-        "userID": 4,
-        "createdAt": "2025-06-03 16:05:20",
-        "content": "Perfect! I've been looking for short workouts to do before school."
+        "post_id": 3,
+        "content": "These tips are super helpful. Planning a budget trip soon!"
     },
     {
-        "commentID": 4,
-        "postID": 2,
-        "userID": 5,
-        "createdAt": "2025-06-03 16:06:10",
-        "content": "Morning workouts always boost my energy. Great post!"
+        "post_id": 4,
+        "content": "I really needed this. My study routine has been all over the place lately."
     },
     {
-        "commentID": 5,
-        "postID": 3,
-        "userID": 3,
-        "createdAt": "2025-06-03 16:08:00",
-        "content": "Can you share your favorite budget airline?"
+        "post_id": 5,
+        "content": "Just started meditating last week. It's already making a difference!"
     },
     {
-        "commentID": 6,
-        "postID": 4,
-        "userID": 2,
-        "createdAt": "2025-06-03 16:10:32",
-        "content": "This is so helpful—I've been struggling with time management."
+        "post_id": 6,
+        "content": "Didn't know screen time affected sleep so much. Eye-opener!"
     },
     {
-        "commentID": 7,
-        "postID": 5,
-        "userID": 4,
-        "createdAt": "2025-06-03 16:11:15",
-        "content": "I've been meaning to start meditating. Thanks for this intro!"
+        "post_id": 7,
+        "content": "This conversation is so important. Thank you for posting it."
     },
     {
-        "commentID": 8,
-        "postID": 6,
-        "userID": 5,
-        "createdAt": "2025-06-03 16:12:50",
-        "content": "I had no idea screen time affected my sleep this much!"
+        "post_id": 8,
+        "content": "AI and green tech are going to change everything. Great list!"
     },
     {
-        "commentID": 9,
-        "postID": 7,
-        "userID": 3,
-        "createdAt": "2025-06-03 16:14:22",
-        "content": "Mental health really deserves more open discussion. Thank you."
+        "post_id": 9,
+        "content": "How did you find your first clients? Any platforms you recommend?"
     },
     {
-        "commentID": 10,
-        "postID": 7,
-        "userID": 2,
-        "createdAt": "2025-06-03 16:15:45",
-        "content": "Well said. Talking helped me through some tough times."
+        "post_id": 10,
+        "content": "Count me in for the clean-up. Let’s make our park shine!"
     },
     {
-        "commentID": 11,
-        "postID": 8,
-        "userID": 4,
-        "createdAt": "2025-06-03 16:17:05",
-        "content": "AI and clean energy are definitely game changers!"
+        "post_id": 11,
+        "content": "Waking up early changed my life. Journaling sounds great too!"
     },
     {
-        "commentID": 12,
-        "postID": 9,
-        "userID": 5,
-        "createdAt": "2025-06-03 16:19:00",
-        "content": "How do you usually find your clients? Platforms or networking?"
-    },
-    {
-        "commentID": 13,
-        "postID": 9,
-        "userID": 3,
-        "createdAt": "2025-06-03 16:19:50",
-        "content": "I'd love tips on pricing as a beginner!"
-    },
-    {
-        "commentID": 14,
-        "postID": 10,
-        "userID": 2,
-        "createdAt": "2025-06-03 16:21:15",
-        "content": "I'll be there! Let's make the park sparkle!"
-    },
-    {
-        "commentID": 15,
-        "postID": 11,
-        "userID": 5,
-        "createdAt": "2025-06-03 16:22:10",
-        "content": "My game-changing habit: drinking a glass of water first thing in the morning."
-    },
-    {
-        "commentID": 16,
-        "postID": 11,
-        "userID": 4,
-        "createdAt": "2025-06-03 16:23:45",
-        "content": "Getting 8 hours of sleep changed everything for me!"
-    },
-    {
-        "commentID": 17,
-        "postID": 12,
-        "userID": 3,
-        "createdAt": "2025-06-04 10:15:33",
-        "content": "I wonder how hybrid roles will evolve in the next few years."
-    },
-    {
-        "commentID": 18,
-        "postID": 12,
-        "userID": 2,
-        "createdAt": "2025-06-04 10:17:00",
-        "content": "Great topic! Hoping for more work-life balance in the future."
-    },
-    {
-        "commentID": 19,
-        "postID": 13,
-        "userID": 1,
-        "createdAt": "2025-06-04 10:20:00",
-        "content": "Just testing comments here for fun!"
-    },
-    {
-        "commentID": 20,
-        "postID": 14,
-        "userID": 5,
-        "createdAt": "2025-06-04 10:21:20",
-        "content": "Classic lorem ipsum. But now I'm wondering if AI wrote this!"
+        "post_id": 12,
+        "content": "Remote work really helped me find balance. Curious what’s next."
     }
 ]

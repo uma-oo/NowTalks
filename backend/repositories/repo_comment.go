@@ -8,6 +8,7 @@ import (
 )
 
 func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
+	fmt.Println("comment", comment)
 	comment_created := &models.Comment{}
 	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) 
 	RETURNING commentID, content, createdAt;`
@@ -76,7 +77,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content,  &comment.CreatedAt,&comment.TotalLikes); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content, &comment.CreatedAt, &comment.TotalLikes); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)

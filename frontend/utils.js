@@ -6,6 +6,7 @@ export async function navigateTo(pathname) {
 }
 
 export function timeAgo(timestamp, locale = 'en') {
+    console.log(timestamp)
     let value;
     const diff = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
     const minutes = Math.floor(diff / 60);

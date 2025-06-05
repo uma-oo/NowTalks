@@ -1,5 +1,3 @@
-import { getCategories } from "../api/posts.js"
-import {  categories } from "../const/data.js"
 import { createCheckboxInput } from "./checkbox.js"
 import { createElement } from "../utils.js"
 
@@ -8,11 +6,6 @@ const interactions = [
     "likedPosts",
     "createdPosts"
 ]
-
-// const filter
-
-
-
 
 export function createFilterContainer() {
     let filterContainer = createElement('div', 'filter-container toggleable')
@@ -27,8 +20,6 @@ export function createFilterContainer() {
     })
 
     let subTitlte2 = createElement('h4', null, "Filter by categories :")
-
-
 
     let app = document.querySelector('#app')
     let categories = app.dataset.categories.split(',')

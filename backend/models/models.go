@@ -16,11 +16,11 @@ type User struct {
 }
 
 type Session struct {
-	Id      int       `json:"id,omitempty"`
-	Token   string    `json:"token"`
-	UserId  int       `json:"user_id"`
+	Id       int       `json:"id,omitempty"`
+	Token    string    `json:"token"`
+	UserId   int       `json:"user_id"`
 	Username string    `json:"username,omitempty"`
-	ExpDate time.Time `json:"expiration_date,omitempty"`
+	ExpDate  time.Time `json:"expiration_date,omitempty"`
 }
 
 type Post struct {
@@ -42,13 +42,13 @@ type Category struct {
 }
 
 type Comment struct {
-	Id            int       `json:"id,omitempty"`
-	PostId        int       `json:"post_id,omitempty"`
-	UserId        int       `json:"user_id,omitempty"`
-	Username      string    `json:"user_name,omitempty"`
-	CreatedAt     time.Time `json:"created_at,omitempty"`
-	Content       string    `json:"content"`
-	TotalLikes    int       `json:"total_likes"`
+	Id         int       `json:"id,omitempty"`
+	PostId     int       `json:"post_id,omitempty"`
+	UserId     int       `json:"user_id,omitempty"`
+	Username   string    `json:"user_name,omitempty"`
+	CreatedAt  time.Time `json:"created_at,omitempty"`
+	Content    string    `json:"content"`
+	TotalLikes int       `json:"total_likes"`
 	// TotalDislikes int       `json:"total_dislikes"`
 }
 
@@ -114,16 +114,13 @@ type Message struct {
 
 type MessageErr struct {
 	Message    string `json:"message"`
-	ReceiverID string    `json:"receiver_id"`
+	ReceiverID string `json:"receiver_id"`
 }
 
 type ReactionErr struct {
-	EntityId string `json:"entity_id"`
+	EntityId   string `json:"entity_id"`
 	EntityType string `json:"entity_type"`
 }
-
-
-
 
 func NewErrorJson(status int, message any) *ErrorJson {
 	return &ErrorJson{

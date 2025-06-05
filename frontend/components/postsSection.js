@@ -1,6 +1,5 @@
 import { getPostsApi } from "../api/posts.js"
 import { navigateTo, createElement } from "../../utils.js"
-import { createButton } from "./button.js"
 import { createPostCard } from "./postCard.js"
 import { createForm } from "./form.js"
 import { PostForm } from "../const/forms.js"
@@ -10,11 +9,8 @@ import { createIcon } from "./icon.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
-
     // post creation elements
     let createPostFormContainer = createElement('div', 'create-post-form-container')
-
-    // post filter elements
     let filterContainer = createFilterContainer()
 
     let postsContainer = createElement('div', 'posts_container')
@@ -37,6 +33,7 @@ function fetchPosts(container) {
         if (data?.status == 401) {
             navigateTo('/login')
         } else if (data) {
+            console.log(data)
             container.append(...createPostCards(data))
             container.dataset.offset = +container.dataset.offset + 10
         }
@@ -61,12 +58,4 @@ export function toggleCreatePostFormContainer() {
     } else {
         container.innerHTML = ""
     }
-}
-
-function toggleFilterContainer(container) {
-    container.classList.toggle("filter-container_expanded")
-    let elementsToHide = container.querySelectorAll(".toggleable")
-    elementsToHide.forEach(elem => {
-        elem.classList.toggle("hide")
-    });
 }
