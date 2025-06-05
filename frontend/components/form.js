@@ -4,6 +4,7 @@ import { createCheckboxInput } from "./checkbox.js";
 import { createUser, loginUser } from "../api/user.js";
 import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
 import { addComment } from "../api/comment.js";
+import { createComment } from "./comment.js";
 
 export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
@@ -75,7 +76,7 @@ export function handleFormSubmit(event) {
             createPost(event.target, formData)
             break;
         case "comment-form":  
-            createComment(event.target, formData )
+            handleCreateComment(event.target, formData )
         default:
             break;
     }
@@ -127,11 +128,15 @@ export function createPost(form, data) {
 }
 
 
-export function createComment(form, data) {
+export function handleCreateComment(form, data) {
     data.post_id = parseInt(form.dataset.postId)
     addComment(data)
     .then(([status, data])=>{
         if (status === 200) {
+            data.createdAt = Date.now()
+            data.user_name = sessionStorage.getItem("userNickname")
+            let commentsContainer = form.parentElement.querySelector(".comments-container")
+            commentsContainer.prepend(createComment(data))
             form.reset()
             form.querySelector('.input-error').textContent = ""
         } else if (status == 400) {

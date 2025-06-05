@@ -1,10 +1,7 @@
 import { timeAgo } from "../utils.js"
 import { createElement } from "../utils.js"
 import { createIcon } from "./icon.js"
-import { getComments } from "../api/comment.js"
 import { createPostCommentsSection } from "./postCommentsSection.js"
-
-
 
 
 export function createPostCard({
@@ -36,7 +33,6 @@ export function createPostCard({
         categoriesList.append(categoryTag)
     });
 
-
     let reactions = [
         { type: "like", icon: "heart", "total": total_likes },
         { type: "comment", icon: "comment", "total": total_comments },
@@ -52,24 +48,28 @@ export function createPostCard({
         return containerElem;
     });
 
-    
-    
+
+
     // postCommentsSection = 
     let postCommentsSection = createPostCommentsSection(id)
-    
+
     postWriter.prepend(createIcon('user'))
     timestamp.prepend(createIcon('calendar'))
     postInfo.append(postWriter, timestamp)
     postHeader.append(postInfo, categoriesList, postTitle)
     postBody.append(postContent)
     postFooter.append(...reactionElements);
-    
     container.append(postHeader, postBody, postCommentsSection, postFooter)
-    
+
     let commentReaction = postFooter.querySelector('.reaction-container[data-reaction="comment"]')
-    commentReaction.addEventListener("click", e =>{
+    commentReaction.addEventListener("click", () => {
+        container.scrollIntoView()
         postCommentsSection.classList.toggle("post-comments-section_expanded")
+
     })
+
+
+
 
     return container
 }
