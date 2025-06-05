@@ -109,6 +109,10 @@ type Client struct {
 	Username string
 }
 
+
+
+
+
 type ChatServer struct {
 	service  *service.AppService
 	clients  ClientList
