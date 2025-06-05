@@ -43,6 +43,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
             INNER JOIN types ON reactions.entityTypeID = types.entityTypeID
         WHERE
             types.entityType = "comment"
+			AND reactions.reaction = 1
         GROUP BY
             entityID
     )
