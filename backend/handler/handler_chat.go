@@ -29,7 +29,7 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 	// kinda of repetitive but i'm really done with everything!!!
 	client.userId, client.Username = session.UserId, session.Username
 	server.AddClient(client)
-	go client.BroadCastOnlineStatus()
+    go server.BroadCastOnlineStatus()
 	go client.ReadMessages()
 	go client.WriteMessages()
 }
