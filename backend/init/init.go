@@ -22,5 +22,9 @@ func InitSetup(database *sql.DB) {
 	chat := handler.NewChatServer(service)
 	reactionHandler := handler.NewReactionHandler(service)
 	users := handler.NewUsersHandler(service)
-	routes.SetRoutes(postHanlder, commentHandler, reactionHandler, userHandler, logout, users, loggedin, categories, chat, service)
+	messages := handler.NewMessagesHandler(service)
+	routes.SetRoutes(postHanlder, commentHandler,
+		reactionHandler, userHandler, logout,
+		users, loggedin, categories, chat, messages,
+		service)
 }

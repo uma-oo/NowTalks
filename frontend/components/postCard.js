@@ -52,19 +52,28 @@ export function createPostCard({
         return containerElem;
     });
 
-
+    
+    
     // postCommentsSection = 
     let postCommentsSection = createPostCommentsSection(id)
-
+    
     postWriter.prepend(createIcon('user'))
     timestamp.prepend(createIcon('calendar'))
     postInfo.append(postWriter, timestamp)
     postHeader.append(postInfo, categoriesList, postTitle)
     postBody.append(postContent)
     postFooter.append(...reactionElements);
-
+    
     container.append(postHeader, postBody, postCommentsSection, postFooter)
+    
+    let commentReaction = postFooter.querySelector('.reaction-container[data-reaction="comment"]')
+    commentReaction.addEventListener("click", e =>{
+        postCommentsSection.classList.toggle("post-comments-section_expanded")
+    })
+
     return container
 }
+
+
 
 

@@ -9,9 +9,9 @@ export function createPostCommentsSection(postId) {
     let postCommentsSection = createElement('div', "post-comments-section")
     let commentsContainer = createElement('div', "comments-container")
     commentsContainer.dataset.offset = 0
-    let seeMore = createElement('p', "see-more", "See more posts...")
+    let seeMore = createElement('p', "see-more", "See more comments ...")
     let commentForm = createForm(CommentForm, "comment-form")
-
+    commentForm.dataset.postId = postId
 
 
     fetchComments(postId, commentsContainer)
@@ -23,14 +23,12 @@ export function createPostCommentsSection(postId) {
 }
 
 function fetchComments(id, commentsContainer) {
-    console.info("Fetching comments for postId", id)
     let offset = commentsContainer.dataset.offset
     getComments(id, offset).then(([status, data])=>{
         if (status === 401 ) {
             navigateTo("/")
         } 
         if (status === 200 && data) {
-            console.log(data)
             data.forEach(commentData => {
                 commentsContainer.append(createComment(commentData))
             });

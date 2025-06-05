@@ -33,7 +33,6 @@ function fetchPosts(container) {
         if (data?.status == 401) {
             navigateTo('/login')
         } else if (data) {
-            console.log(data)
             container.append(...createPostCards(data))
             container.dataset.offset = +container.dataset.offset + 10
         }

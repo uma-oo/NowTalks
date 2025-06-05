@@ -16,10 +16,15 @@ export async function getComments(postId, offset) {
 // "content": "Totally agree! I started eating more whole foods and feel amazing."
 // }
 export async function addComment(commentData) {
-    const response = await fetch('/api/comment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(commentData),
-    });
-    return [response.status, await response.json()];
+    console.log(commentData)
+    try {
+        const response = await fetch('/api/comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(commentData)
+        });
+        return [response.status, await response.json()];
+    } catch (error) {
+        console.error(error)
+    }
 }

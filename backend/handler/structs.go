@@ -35,6 +35,10 @@ type ReactionHanlder struct {
 	service *service.AppService
 }
 
+type MessagesHandler struct {
+	service *service.AppService
+}
+
 type (
 	Logout UserHanlder
 	Users  UserHanlder
@@ -70,6 +74,10 @@ func NewCategoriesHandler(service *service.AppService) *CategoriesHandler {
 
 func NewReactionHandler(service *service.AppService) *ReactionHanlder {
 	return &ReactionHanlder{service: service}
+}
+
+func NewMessagesHandler(service *service.AppService) *MessagesHandler {
+	return &MessagesHandler{service: service}
 }
 
 // NewPostService

@@ -80,3 +80,18 @@ func (appRep *AppRepository) GetUserNameById(user_id int) (string, *models.Error
 	}
 	return username, nil
 }
+
+func (appRepo *AppRepository) UserExists(id int) (bool, *models.ErrorJson) {
+	var exists bool
+	query := ` SELECT EXISTS(SELECT 1 FROM users WHERE userID = ?);`
+	stmt, err := appRepo.db.Prepare(query)
+	if err != nil {
+		return false, models.NewErrorJson(500, fmt.Sprintf("%v 3", err))
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(id).Scan(&exists)
+	if err == sql.ErrNoRows {
+		return false, &models.ErrorJson{Status: 400, Message: "ERROR!! User Not Found"}
+	}
+	return exists, nil
+}

@@ -43,7 +43,7 @@ type Category struct {
 
 type Comment struct {
 	Id         int       `json:"id,omitempty"`
-	PostId     int       `json:"post_id,omitempty"`
+	PostId     int       `json:"post_id"`
 	UserId     int       `json:"user_id,omitempty"`
 	Username   string    `json:"user_name,omitempty"`
 	CreatedAt  time.Time `json:"created_at,omitempty"`
@@ -69,6 +69,7 @@ type PostError struct {
 
 type CommentError struct {
 	Content string `json:"content"`
+	PostId  string `json:"post_id"`
 }
 
 type RegisterError struct {

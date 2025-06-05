@@ -21,3 +21,11 @@ func (s *AppService) GetUsers(offset int) ([]models.User, *models.ErrorJson) {
 	}
 	return users, nil
 }
+
+func (s *AppService) UserExists(id int) (bool, *models.ErrorJson) {
+	exists, errJson := s.repo.UserExists(id)
+	if errJson != nil {
+		return false, errJson
+	}
+	return exists, nil
+}

@@ -3,6 +3,7 @@ import { createButton } from "./button.js";
 import { createCheckboxInput } from "./checkbox.js";
 import { createUser, loginUser } from "../api/user.js";
 import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
+import { addComment } from "../api/comment.js";
 
 export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
@@ -60,17 +61,21 @@ export function handleFormSubmit(event) {
     event.preventDefault()
     let form = new FormData(event.target)
     const formData = Object.fromEntries(form.entries())
+    console.log(formData)
     switch (event.target.id) {
         case "login-form":
             login(event.target, formData)
             break;
         case "register-form":
+            formData.age = parseInt(data.age)
             register(event.target, formData)
             break;
         case "create-post-form":
             formData.categories = form.getAll('categories').map(cat => parseInt(cat))
             createPost(event.target, formData)
             break;
+        case "comment-form":  
+            createComment(event.target, formData )
         default:
             break;
     }
@@ -80,7 +85,6 @@ export function login(form, data) {
     loginUser(data).then(([status, data]) => {
         let formError = form.parentElement.querySelector(".form-error")
         if (status == 200) {
-            console.log(data)
             navigateTo("/")
         } else if (status == 400) {
             formError.innerText = ""
@@ -96,7 +100,6 @@ export function login(form, data) {
 }
 
 export function register(form, data) {
-    data.age = parseInt(data.age)
     createUser(data)
         .then(([status, data]) => {
             if (status === 200) {
@@ -123,3 +126,16 @@ export function createPost(form, data) {
         .catch(error => console.log("error submitting register form: ", error))
 }
 
+
+export function createComment(form, data) {
+    data.post_id = parseInt(form.dataset.postId)
+    addComment(data)
+    .then(([status, data])=>{
+        if (status === 200) {
+            form.reset()
+            form.querySelector('.input-error').textContent = ""
+        } else if (status == 400) {
+            loadFormErrors(form, data.errors)
+        }
+    })
+}

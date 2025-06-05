@@ -14,13 +14,13 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 	RETURNING commentID, content, createdAt;`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v 1", err))
 	}
 	defer stmt.Close()
 	if err := stmt.QueryRow(comment.PostId, comment.UserId, comment.Content).Scan(
 		&comment_created.Id, &comment_created.Content,
 		&comment_created.CreatedAt); err != nil {
-		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v 2", err))
 	}
 	username, errJSon := appRep.GetUserNameById(comment.UserId)
 	if errJSon != nil {
@@ -61,7 +61,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 	WHERE
 		comments.postID = ?
 	ORDER BY
-		comments.createdAt
+		comments.createdAt DESC
 	LIMIT
 		10
 	OFFSET

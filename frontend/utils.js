@@ -6,7 +6,6 @@ export async function navigateTo(pathname) {
 }
 
 export function timeAgo(timestamp, locale = 'en') {
-    console.log(timestamp)
     let value;
     const diff = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
     const minutes = Math.floor(diff / 60);
@@ -83,7 +82,8 @@ export function loadFormErrors(form, data) {
     console.log("Form Errors: ", data)
     for (let [field, error] of Object.entries(data)) {
         let inputError = form.querySelector(`.form-grp[data-for="${field}"]>.input-error`)
-        console.log(inputError)
-        inputError.textContent = error;
+        if (inputError) {
+            inputError.textContent = error;
+        } 
     }
 }

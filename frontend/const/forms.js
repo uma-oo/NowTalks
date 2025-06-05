@@ -244,8 +244,8 @@ export const CommentForm = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'postComment',
-                name: 'postComment',
+                id: 'content',
+                name: 'content',
                 placeholder: "Add a comment...",
             },
             style: {
