@@ -75,7 +75,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Username, &comment.Id, &comment.CreatedAt, &comment.Content, &comment.TotalLikes); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content,  &comment.CreatedAt,&comment.TotalLikes); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)
