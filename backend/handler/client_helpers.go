@@ -27,6 +27,7 @@ func (server *ChatServer) RemoveClient(client *Client) {
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)
+		go server.BroadCastOnlineStatus()
 	}
 }
 
@@ -141,4 +142,3 @@ func (server *ChatServer) BroadCastOnlineStatus() {
 		}
 	}
 }
-
