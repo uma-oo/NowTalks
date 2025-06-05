@@ -34,3 +34,10 @@ func (repo *AppRepository) AddMessage(message *models.Message) (*models.Message,
 	message_created.SenderUsername = sender
 	return message_created, nil
 }
+
+
+
+// sender and receiver and the offset and 
+func (repo *AppRepository) GetMessages() {
+
+}

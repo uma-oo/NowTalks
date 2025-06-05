@@ -48,6 +48,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
     )
 	SELECT
 		users.nickname,
+		comments.commentID,
 		content,
 		comments.createdAt,
 		coalesce(cte_likes.total_likes, 0) as total_likes
@@ -74,7 +75,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Username, &comment.Id, &comment.PostId, &comment.CreatedAt, &comment.Content); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.CreatedAt, &comment.Content, &comment.TotalLikes); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)
