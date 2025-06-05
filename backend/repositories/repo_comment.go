@@ -32,11 +32,38 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 // But hna comments dyal wa7d l post specific
 func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comment, error) {
 	var comments []models.Comment
-	query := `SELECT users.nickname,commentID, postID, createdAt , content 
-	FROM comments INNER JOIN on users.userID = comments.userID
-	WHERE postID = ?
-	ORDER BY createdAt DESC
-	LIMIT 10 OFFSET ? ;`
+	query := `
+	with
+    cte_likes as (
+        SELECT
+            entityID,
+            count(*) as total_likes
+        FROM
+            reactions
+            INNER JOIN types ON reactions.entityTypeID = types.entityTypeID
+        WHERE
+            types.entityType = "comment"
+        GROUP BY
+            entityID
+    )
+	SELECT
+		users.nickname,
+		content,
+		comments.createdAt,
+		coalesce(cte_likes.total_likes, 0) as total_likes
+	FROM
+		comments
+		INNER JOIN users ON comments.userID = users.userID
+		LEFT JOIN cte_likes ON cte_likes.entityID = comments.commentID
+	WHERE
+		comments.postID = ?
+	ORDER BY
+		comments.createdAt
+	LIMIT
+		10
+	OFFSET
+		?;
+	`
 	rows, err := appRep.db.Query(query, postId, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return comments, nil

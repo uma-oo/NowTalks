@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 
 // let's implement the logout
 func (logout *Logout) Logout(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("inside the logout ")
 	// delete from the database before
 	cookie, _ := r.Cookie("session")
 	session, errJson := logout.service.GetSessionByTokenEnsureAuth(cookie.Value)
@@ -30,8 +32,6 @@ func (logout *Logout) Logout(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
-
-
 
 func (logout *Logout) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

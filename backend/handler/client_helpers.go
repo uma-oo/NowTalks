@@ -9,14 +9,14 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var NUMBER = 0
+
 
 func (server *ChatServer) AddClient(client *Client) {
-	NUMBER++
-	fmt.Println("number", NUMBER)
+	server.Lock()
+	defer server.Unlock()
 	server.clients[client.userId] = append(server.clients[client.userId], client)
-	client.BroadCastOnlineStatus()
-	fmt.Println("server ", len(server.clients))
+	// client.BroadCastOnlineStatus()
+	
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {
@@ -129,7 +129,8 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 
 // let's do it inside another function and make it specific to the client
 func (client *Client) BroadCastOnlineStatus() {
-
+    client.chatServer.Lock()
+	defer client.chatServer.Unlock()
 	fmt.Println("heere!!!")
 	online_users := []models.User{}
 	for id := range client.chatServer.clients {

@@ -37,7 +37,6 @@ func (s *AppService) Login(login *models.Login) (*models.User, *models.ErrorJson
 		}
 	}
 	// if only the password
-	fmt.Println("user.Password", user.Password, "login.Password", login.Password)
 	if !utils.CheckPasswordHash(login.Password, user.Password) {
 		return nil, &models.ErrorJson{
 			Status: 401,
