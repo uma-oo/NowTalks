@@ -88,6 +88,11 @@ type Login struct {
 	Password   string `json:"password"`
 }
 
+type LoginERR struct {
+	LoginField string `json:"login"`
+	Password   string `json:"password"`
+}
+
 type UserData struct {
 	IsLoggedIn bool   `json:"is_logged_in"`
 	Id         int    `json:"id,omitempty"`

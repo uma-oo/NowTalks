@@ -17,6 +17,7 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, *models.NewErrorJson(500, "ERROR!! Internal Server Error"))
 		return
 	}
+	// Cookie is guaranteed by auth middleware; safe to ignore error here
 	cookie, _ := r.Cookie("session")
 	session, errJson := server.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	if errJson != nil {

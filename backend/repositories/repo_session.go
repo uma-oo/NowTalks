@@ -9,13 +9,7 @@ import (
 
 func (appRep *AppRepository) CreateUserSession(session *models.Session, user *models.User) *models.ErrorJson {
 	query := `INSERT INTO sessions (userID, sessionToken, expiresAt) VALUES (?,?,?)`
-	stmt, err := appRep.db.Prepare(query)
-	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
-	}
-
-	defer stmt.Close()
-	_, err = stmt.Exec(user.Id, session.Token, session.ExpDate)
+	_, err := appRep.db.Exec(query, user.Id, session.Token, session.ExpDate)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -51,14 +45,14 @@ func (appRepo *AppRepository) HasValidToken(token string) (bool, *models.Session
 	return false, nil
 }
 
-func (appRep *AppRepository) GetUserSession(user_id  int) (*models.Session, *models.ErrorJson) {
+func (appRep *AppRepository) GetUserSessionByUserId(user_id int) (*models.Session, *models.ErrorJson) {
 	session := &models.Session{}
 	query := `SELECT * FROM sessions WHERE userID = ?`
 	row := appRep.db.QueryRow(query, user_id)
 	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpDate)
 	if err != nil {
-		if err==sql.ErrNoRows {
-			return nil , nil 
+		if err == sql.ErrNoRows {
+			return nil, nil
 		}
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
