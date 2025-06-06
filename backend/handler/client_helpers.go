@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var NUMBER = 0
 
 func (server *ChatServer) AddClient(client *Client) {
 	server.Lock()
@@ -44,6 +43,7 @@ func (client *Client) ReadMessages() {
 					Message: models.MessageErr{
 						Message:    "ERROR!! Empty Message field",
 						ReceiverID: "ERROR!! Empty Receiver Id field",
+						Type: "ERROR!! Empty Type field",
 					},
 				}
 				continue

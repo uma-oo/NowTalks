@@ -11,6 +11,12 @@ import (
 func (service *AppService) ValidateMessage(message *models.Message) (*models.Message, *models.ErrorJson) {
 	errMessage := models.NewMessageErr()
 	trimmedMsg := strings.TrimSpace(message.Message)
+	type_message := strings.ToLower(strings.TrimSpace(message.Type))
+
+	if type_message != "message" && type_message != "status" && type_message != "typing" {
+		errMessage.Type = "ERROR!! Wrong type of message"
+	}
+
 	if trimmedMsg == "" {
 		errMessage.Message = "ERROR!! Empty Message Body"
 	}
@@ -20,15 +26,28 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 	if username, _ := service.repo.GetUserNameById(message.ReceiverID); username == "" {
 		errMessage.ReceiverID = "ERROR!! The Receiver Specified Does Not Exist!!"
 	}
-	if errMessage.Message != "" || errMessage.ReceiverID != "" {
+
+	if errMessage.Message != "" || errMessage.ReceiverID != "" || errMessage.Type != ""{
 		return nil, &models.ErrorJson{Status: 400, Message: errMessage}
 	}
+
 	// We can go on and insert the message in the database
-	message_created, err := service.repo.AddMessage(message)
-	if err != nil {
-		return nil, err
+	switch strings.ToLower(message.Type) {
+	case "message":
+		message_created, err := service.repo.AddMessage(message)
+		if err != nil {
+			return nil, err
+		}
+		return message_created, nil
+	case "status":
+	case "typing":
+
 	}
-	return message_created, nil
+
+	// so in this case we only need to update the database (the message exists already)
+	// if message.Type == "read" {
+	// }
+	return nil, nil
 }
 
 func (service *AppService) GetMessages(sender_id, receiver_id, offset int) ([]models.Message, *models.ErrorJson) {
