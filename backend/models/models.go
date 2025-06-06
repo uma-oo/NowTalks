@@ -113,8 +113,15 @@ type Message struct {
 	Message          string    `json:"message"`
 	CreatedAt        time.Time `json:"created_at,omitempty"`
 	Status           string    `json:"status,omitempty"`
-	Type             string    `json:"type"`
 }
+
+
+
+
+
+
+
+
 
 type MessageErr struct {
 	Message    string `json:"message"`

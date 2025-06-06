@@ -40,6 +40,10 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 	WriteDataBack(w, postCreated)
 }
 
+
+
+
+
 func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {

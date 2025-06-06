@@ -17,11 +17,6 @@ import (
 
 func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 	login := &models.Login{}
-
-	if r.Method != http.MethodPost {
-		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "Method not Allowed!"})
-		return
-	}
 	err := json.NewDecoder(r.Body).Decode(&login)
 	if err != nil {
 		if err == io.EOF {

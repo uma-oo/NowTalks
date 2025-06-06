@@ -18,11 +18,7 @@ func (server *ChatServer) AddClient(client *Client) {
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	// client.CloseOnce.Do(func() {
-	// 	close(client.Message)
-	// 	close(client.ErrorJson)
-	// 	close(client.Done)
-	// })
+	
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)

@@ -45,12 +45,8 @@ func (server *ChatServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "/ws/chat":
 		server.ChatServerHandler(w, r)
 		return
-
-	case "/ws/users":
-		w.Write([]byte("hhhhhhhhhhh"))
-		return
 	default:
-		w.Write([]byte("not found !!"))
+		WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "ERROR!! Page Not Found!"})
 		return
 	}
 }

@@ -7,6 +7,10 @@ import (
 	"real-time-forum/backend/utils"
 )
 
+
+
+
+// CHECK THE info of the user 
 func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	var errJson models.ErrorJson
 	var registerErr models.RegisterError
@@ -46,6 +50,11 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 		errJson.Message = registerErr
 		return &errJson
 	}
+
+
+
+
+	
 
 	// hash the password here !! before the database insertion
 	hash, err := utils.HashPassword(user.Password)
