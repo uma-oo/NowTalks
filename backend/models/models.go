@@ -103,8 +103,7 @@ type ErrorJson struct {
 
 //  Message stuff ;)
 
-
-// message types are message / read_status / typing 
+// message types are message / read_status / typing
 type Message struct {
 	SenderID         int       `json:"sender_id,omitempty"`
 	SenderUsername   string    `json:"sender_username,omitempty"`
@@ -113,15 +112,8 @@ type Message struct {
 	Message          string    `json:"message"`
 	CreatedAt        time.Time `json:"created_at,omitempty"`
 	Status           string    `json:"status,omitempty"`
+	Type             string    `json:"type"`
 }
-
-
-
-
-
-
-
-
 
 type MessageErr struct {
 	Message    string `json:"message"`

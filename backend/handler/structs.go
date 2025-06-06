@@ -97,6 +97,7 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 type ClientList map[int][]*Client
 
 type Client struct {
+	session     *models.Session
 	service     *service.AppService
 	connection  *websocket.Conn
 	chatServer  *ChatServer
@@ -108,10 +109,6 @@ type Client struct {
 	userId   int
 	Username string
 }
-
-
-
-
 
 type ChatServer struct {
 	service  *service.AppService
@@ -132,7 +129,7 @@ func NewChatServer(service *service.AppService) *ChatServer {
 	}
 }
 
-func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
+func NewClient(conn *websocket.Conn, server *ChatServer, session *models.Session) *Client {
 	return &Client{
 		service:     server.service,
 		connection:  conn,
@@ -140,5 +137,7 @@ func NewClient(conn *websocket.Conn, server *ChatServer) *Client {
 		Message:     make(chan *models.Message),
 		ErrorJson:   make(chan *models.ErrorJson),
 		OnlineUsers: make(chan []models.User),
+		userId:      session.Id,
+		Username:    session.Username,
 	}
 }

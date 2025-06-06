@@ -25,11 +25,10 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	// we need to dial the user id and the connection
-	client := NewClient(connection, server)
+	client := NewClient(connection, server, session)
 	// kinda of repetitive but i'm really done with everything!!!
-	client.userId, client.Username = session.UserId, session.Username
 	server.AddClient(client)
-    go server.BroadCastOnlineStatus()
+	go server.BroadCastOnlineStatus()
 	go client.ReadMessages()
 	go client.WriteMessages()
 }
