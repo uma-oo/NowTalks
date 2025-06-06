@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"strings"
 
@@ -13,7 +14,7 @@ type Database struct {
 }
 
 func InitDB(nameDB string) (*Database, error) {
-	db, err := sql.Open("sqlite3", nameDB)
+	db, err := sql.Open("sqlite3", fmt.Sprintf("file:%v?_foreign_keys=1", nameDB))
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +35,5 @@ func (db *Database) ReadSQL(filename string) error {
 		}
 
 	}
-
-	// err = db.Triggers()
-	// if err != nil {
-	// 	return err
-	// }
-
 	return nil
 }
