@@ -17,6 +17,7 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, *models.NewErrorJson(500, "ERROR!! Internal Server Error"))
 		return
 	}
+	// Cookie is guaranteed by auth middleware; safe to ignore error here
 	cookie, _ := r.Cookie("session")
 	session, errJson := server.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	if errJson != nil {
@@ -25,11 +26,10 @@ func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	// we need to dial the user id and the connection
-	client := NewClient(connection, server)
+	client := NewClient(connection, server, session)
 	// kinda of repetitive but i'm really done with everything!!!
-	client.userId, client.Username = session.UserId, session.Username
 	server.AddClient(client)
-    go server.BroadCastOnlineStatus()
+	go server.BroadCastOnlineStatus()
 	go client.ReadMessages()
 	go client.WriteMessages()
 }
@@ -45,12 +45,8 @@ func (server *ChatServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "/ws/chat":
 		server.ChatServerHandler(w, r)
 		return
-
-	case "/ws/users":
-		w.Write([]byte("hhhhhhhhhhh"))
-		return
 	default:
-		w.Write([]byte("not found !!"))
+		WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "ERROR!! Page Not Found!"})
 		return
 	}
 }

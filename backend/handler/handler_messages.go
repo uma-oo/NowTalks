@@ -47,6 +47,10 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 
 
 
+
+
+
+
 func (messages *MessagesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {

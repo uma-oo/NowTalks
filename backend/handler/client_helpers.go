@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var NUMBER = 0
 
 func (server *ChatServer) AddClient(client *Client) {
 	server.Lock()
@@ -19,11 +18,7 @@ func (server *ChatServer) AddClient(client *Client) {
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	// client.CloseOnce.Do(func() {
-	// 	close(client.Message)
-	// 	close(client.ErrorJson)
-	// 	close(client.Done)
-	// })
+	
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)
@@ -44,6 +39,7 @@ func (client *Client) ReadMessages() {
 					Message: models.MessageErr{
 						Message:    "ERROR!! Empty Message field",
 						ReceiverID: "ERROR!! Empty Receiver Id field",
+						Type: "ERROR!! Empty Type field",
 					},
 				}
 				continue

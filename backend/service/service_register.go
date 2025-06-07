@@ -7,6 +7,10 @@ import (
 	"real-time-forum/backend/utils"
 )
 
+
+
+
+// CHECK THE info of the user 
 func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	var errJson models.ErrorJson
 	var registerErr models.RegisterError
@@ -16,6 +20,10 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	if has_nickname {
 		registerErr.Nickname = "ERROR! Username already exists"
 	}
+	if !utils.CheckEmailFormat(user.Email) {
+		registerErr.Email = "ERROR! email Format is Incorrect"
+	}
+	
 	if has_email {
 		registerErr.Email = "ERROR! Email already in use"
 	}
@@ -31,9 +39,6 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	if !utils.FirstLastNameVerf(user.LastName) {
 		registerErr.LastName = "ERROR! Sorry your Last Name can't be stored on our system"
 	}
-	if !utils.CheckEmailFormat(user.Email) {
-		registerErr.Email = "ERROR! email Format is Incorrect"
-	}
 	if !utils.PwdFormatVerf(user.Password) {
 		registerErr.Password = "ERROR! Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
 	}
@@ -46,6 +51,11 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 		errJson.Message = registerErr
 		return &errJson
 	}
+
+
+
+
+	
 
 	// hash the password here !! before the database insertion
 	hash, err := utils.HashPassword(user.Password)

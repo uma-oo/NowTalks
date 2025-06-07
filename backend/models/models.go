@@ -88,6 +88,11 @@ type Login struct {
 	Password   string `json:"password"`
 }
 
+type LoginERR struct {
+	LoginField string `json:"login"`
+	Password   string `json:"password"`
+}
+
 type UserData struct {
 	IsLoggedIn bool   `json:"is_logged_in"`
 	Id         int    `json:"id,omitempty"`
@@ -103,6 +108,7 @@ type ErrorJson struct {
 
 //  Message stuff ;)
 
+// message types are message / read_status / typing
 type Message struct {
 	SenderID         int       `json:"sender_id,omitempty"`
 	SenderUsername   string    `json:"sender_username,omitempty"`
@@ -117,6 +123,7 @@ type Message struct {
 type MessageErr struct {
 	Message    string `json:"message"`
 	ReceiverID string `json:"receiver_id"`
+	Type       string `json:"type"`
 }
 
 type ReactionErr struct {
