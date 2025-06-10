@@ -35,14 +35,6 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	return post_created, nil
 }
 
-func (s *AppService) GetPostsByCategory(offset int, category ...string) ([]models.Post, *models.ErrorJson) {
-	posts, errJson := s.repo.GetPostsByCategory(offset, category...)
-	if errJson != nil {
-		return nil, errJson
-	}
-	return posts, nil
-}
-
 func (s *AppService) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
 	posts, err := s.repo.GetPosts(offset)
 	if err != nil {

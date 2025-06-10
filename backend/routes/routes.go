@@ -18,7 +18,6 @@ func SetRoutes(
 	logout *handler.Logout,
 	users *handler.Users,
 	loggedin *handler.UserData,
-	categories *handler.CategoriesHandler,
 	chat *handler.ChatServer,
 	messages *handler.MessagesHandler,
 	service *s.AppService,
@@ -31,7 +30,6 @@ func SetRoutes(
 	http.Handle("/api/users", m.NewMiddleWare(users, service))
 	// http.Handle("/api/messages", m.NewMiddleWare(messages, service))
 	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
-	http.HandleFunc("/api/categories", categories.GetCategories)
 	http.Handle("/ws/", m.NewMiddleWare(chat, service))
 	http.HandleFunc("/", handleSPA)
 }
