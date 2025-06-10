@@ -4,6 +4,7 @@ import { loginForm } from "../const/forms.js"
 import { navigateTo, createElement } from "../utils.js"
 import { isLoggedIn } from "../api/user.js"
 
+
 export function renderLoginPage(app) {
     isLoggedIn().then(data => {
         if (!data.is_logged_in) {
@@ -11,7 +12,7 @@ export function renderLoginPage(app) {
             let header = createElement("div", null)
             let formTititls = createElement("h1", null, "Sign In")
             let formSubTitle = createElement("h2", null, "Welcome Back — Continue your conversations")
-            let formError = createElement("div", "form-error") 
+            let formError = createElement("div", "form-error")
             let loginFormElement = createForm(loginForm, "login-form")
             let goToRegister = createElement('p', null, "Don't have an account?")
             let registerLink = creatLink("Register", "./register", "")

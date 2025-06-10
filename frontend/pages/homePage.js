@@ -11,12 +11,11 @@ import { setUpWebsocket } from "../websocket.js";
 
 
 export function renderHomePage(app) {
-    let socket
     isLoggedIn().then(data => {
         if (data.is_logged_in) {
             sessionStorage.setItem("userId", data.id)
             sessionStorage.setItem("userNickname", data.nickname)
-            socket = setUpWebsocket()
+            setUpWebsocket()
             let header = createHeader()
             let main = createElement('main', "home-main")
             let aside = createElement('aside', "chats-container")

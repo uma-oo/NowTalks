@@ -109,16 +109,17 @@ type Message struct {
 	SenderUsername   string    `json:"sender_username,omitempty"`
 	ReceiverID       int       `json:"receiver_id"`
 	ReceiverUsername string    `json:"receiver_username"`
-	Message          string    `json:"message"`
-	CreatedAt        time.Time `json:"created_at,omitempty"`
+	Message          string    `json:"content"`
+	CreatedAt        time.Time `json:"created_at"`
 	Status           string    `json:"status,omitempty"`
-	Type             string    `json:"type"`
+	Type             string    `json:"type,omitempty"`
 }
 
 type MessageErr struct {
-	Message    string `json:"message"`
+	Message    string `json:"content"`
 	ReceiverID string `json:"receiver_id"`
 	Type       string `json:"type"`
+	CreatedAt  string `json:"created_at"`
 }
 
 type ReactionErr struct {

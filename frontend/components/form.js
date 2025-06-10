@@ -4,6 +4,7 @@ import { createUser, loginUser } from "../api/user.js";
 import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
 import { addComment } from "../api/comment.js";
 import { createComment } from "./comment.js";
+import { sendMessage } from "../websocket.js";
 
 export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
@@ -32,7 +33,7 @@ export function createForm(formRepresentaion, id) {
         formButtons.append(createButton(button.content, button.type, button.style))
     })
 
-  
+
 
     formElement.append(formButtons)
     formElement.addEventListener('submit', (e) => { handleFormSubmit(e) })
@@ -55,8 +56,14 @@ export function handleFormSubmit(event) {
         case "create-post-form":
             createPost(event.target, formData)
             break;
-        case "comment-form":  
-            handleCreateComment(event.target, formData )
+        case "comment-form":
+            handleCreateComment(event.target, formData)
+            break;
+        case "message-form":
+            console.log("heereeee");
+
+            sendMessage(formData.chatMessage)
+            break;
         default:
             break;
     }
@@ -102,6 +109,8 @@ export function createPost(form, data) {
             }
             else if (status === 400) {
                 loadFormErrors(form, data.errors)
+            } else if (status===401) {
+                navigateTo("/login")
             }
         })
         .catch(error => console.log("error submitting register form: ", error))
@@ -111,21 +120,21 @@ export function createPost(form, data) {
 export function handleCreateComment(form, data) {
     data.post_id = parseInt(form.dataset.postId)
     addComment(data)
-    .then(([status, data])=>{
-        if (status === 200) {
-            data.createdAt = Date.now()
-            data.user_name = sessionStorage.getItem("userNickname")
-            let commentsContainer = form.parentElement.querySelector(".comments-container")
-            let commentsCount = getGrandParent(commentsContainer).querySelector(".comment_count")
+        .then(([status, data]) => {
+            if (status === 200) {
+                data.createdAt = Date.now()
+                data.user_name = sessionStorage.getItem("userNickname")
+                let commentsContainer = form.parentElement.querySelector(".comments-container")
+                let commentsCount = getGrandParent(commentsContainer).querySelector(".comment_count")
 
-            commentsCount.textContent = +commentsCount.textContent + 1
-            commentsContainer.prepend(createComment(data))
-            form.reset()
-            form.querySelector('.input-error').textContent = ""
-        } else if (status == 400) {
-            loadFormErrors(form, data.errors)
-        }
-    })
+                commentsCount.textContent = +commentsCount.textContent + 1
+                commentsContainer.prepend(createComment(data))
+                form.reset()
+                form.querySelector('.input-error').textContent = ""
+            } else if (status == 400) {
+                loadFormErrors(form, data.errors)
+            }
+        })
 }
 
 function getGrandParent(elem) {

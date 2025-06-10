@@ -34,16 +34,7 @@ export function createPostCard({
     ]
 
     let reactionElements = reactions.map(({ type, icon, total }) => {
-        let text
-        if (type == "comment") {
-            if (total == 0) {
-                text = "Add Comment"
-            } else {
-                text = "See comments"
-            }
-
-        }
-        let containerElem = createElement('div', 'reaction-container', text);
+        let containerElem = createElement('div', 'reaction-container');
         containerElem.dataset.reaction = type;
         let iconElem = createIcon(icon);
         let countElem = createElement('span', `${type}_count`, total);

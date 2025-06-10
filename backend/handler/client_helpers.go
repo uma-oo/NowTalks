@@ -9,19 +9,17 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-
 func (server *ChatServer) AddClient(client *Client) {
-	fmt.Printf("client.userId: %v\n", client.userId)
 	server.Lock()
 	server.clients[client.userId] = append(server.clients[client.userId], client)
 	defer server.Unlock()
-	fmt.Printf("server.clients: %v\n", server.clients)
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	
+	delete(server.clients, client.userId)
+
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)
@@ -42,7 +40,8 @@ func (client *Client) ReadMessages() {
 					Message: models.MessageErr{
 						Message:    "ERROR!! Empty Message field",
 						ReceiverID: "ERROR!! Empty Receiver Id field",
-						Type: "ERROR!! Empty Type field",
+						Type:       "ERROR!! Empty Type field",
+						CreatedAt: "ERROR!! Empty CreatedAt field",
 					},
 				}
 				continue
@@ -53,7 +52,7 @@ func (client *Client) ReadMessages() {
 		}
 
 		message.SenderID = client.userId
-
+		fmt.Println("MESSAGE INSIDE THE READ", message.ReceiverID)
 		message_validated, errJson := client.chatServer.service.ValidateMessage(message)
 		if errJson != nil {
 			client.ErrorJson <- errJson

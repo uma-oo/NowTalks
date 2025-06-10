@@ -27,14 +27,18 @@ function fetchUsers(chatList) {
             navigateTo("login")
         }
         if (status == 200) {
-            let chats = data.map(({id, nickname}) => {
+            let chats = data?.map(({id, nickname}) => {
                 let userCard = createChatUserCard(nickname)
                 userCard.dataset.id = id
                 let userCardClone = userCard.cloneNode(true)
                 userCard.addEventListener("click", e => openChatWindow(userCard, userCardClone))
                 return userCard
             });
-            chatList.append(...chats)
+            if (chats) {
+                chatList.append(...chats)
+            } else {
+                chatList.append("No users")
+            }
         }
     })
 

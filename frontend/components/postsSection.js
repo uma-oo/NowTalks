@@ -21,7 +21,6 @@ export function createPostsSection() {
 
 function fetchPosts(container) {
     let offset = container.dataset.offset
-   
     getPostsApi(offset).then(data => {
         if (data?.status == 401) {
             navigateTo('/login')

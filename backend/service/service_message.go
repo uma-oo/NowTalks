@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"strings"
 
 	"real-time-forum/backend/models"
@@ -9,6 +10,7 @@ import (
 // let's check wash message huwa hadak
 // no need to check the sender Id kayn middleware
 func (service *AppService) ValidateMessage(message *models.Message) (*models.Message, *models.ErrorJson) {
+	fmt.Println("message ", message.ReceiverID)
 	errMessage := models.NewMessageErr()
 	trimmedMsg := strings.TrimSpace(message.Message)
 	type_message := strings.ToLower(strings.TrimSpace(message.Type))
@@ -24,10 +26,15 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 		errMessage.Message = "ERROR!! Message Body Too Large!"
 	}
 	if username, _ := service.repo.GetUserNameById(message.ReceiverID); username == "" {
+		fmt.Println("username", username)
 		errMessage.ReceiverID = "ERROR!! The Receiver Specified Does Not Exist!!"
 	}
 
-	if errMessage.Message != "" || errMessage.ReceiverID != "" || errMessage.Type != ""{
+	if message.CreatedAt.IsZero() {
+		errMessage.CreatedAt = "ERROR!! The date is not set up!"
+	}
+
+	if errMessage.Message != "" || errMessage.ReceiverID != "" || errMessage.Type != "" || errMessage.CreatedAt!="" {
 		return nil, &models.ErrorJson{Status: 400, Message: errMessage}
 	}
 
@@ -40,6 +47,7 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 		}
 		return message_created, nil
 	case "status":
+
 	case "typing":
 
 	}

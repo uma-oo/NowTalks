@@ -26,10 +26,10 @@ func (appRep *AppRepository) CreateUser(user *models.User) error {
 
 // TO GET THE USERS
 
-func (appRep *AppRepository) GetUsers(offset int) ([]models.User, *models.ErrorJson) {
+func (appRep *AppRepository) GetUsers(offset,user_id int) ([]models.User, *models.ErrorJson) {
 	var users []models.User
-	query := `SELECT userID , nickname FROM users LIMIT 10 OFFSET ?`
-	rows, err := appRep.db.Query(query, offset)
+	query := `SELECT userID , nickname FROM users WHERE userID != ? LIMIT 10 OFFSET  ?`
+	rows, err := appRep.db.Query(query,user_id ,offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}

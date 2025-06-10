@@ -14,8 +14,8 @@ func (s *AppService) GetUser(login *models.Login) (*models.User, *models.ErrorJs
 	return user, nil
 }
 
-func (s *AppService) GetUsers(offset int) ([]models.User, *models.ErrorJson) {
-	users, err := s.repo.GetUsers(offset)
+func (s *AppService) GetUsers(offset, user_id int) ([]models.User, *models.ErrorJson) {
+	users, err := s.repo.GetUsers(offset,user_id)
 	if err != nil {
 		return nil, err
 	}

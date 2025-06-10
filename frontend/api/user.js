@@ -1,3 +1,4 @@
+import { closeConnection } from "../websocket.js";
 
 export async function getUsers(offset) {
     try {
@@ -44,6 +45,7 @@ export async function logoutUser() {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         })
+        closeConnection()
     } catch (error) {
         console.error(`Error trying to logout: ${error}`)
     }
