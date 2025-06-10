@@ -24,18 +24,16 @@ type Session struct {
 }
 
 type Post struct {
-	Id             int       `json:"id,omitempty"`
-	UserId         int       `json:"user_id,omitempty"`
-	Username       string    `json:"user_name,omitempty"`
-	Title          string    `json:"title"`
-	Content        string    `json:"content"`
-	CreatedAt      time.Time `json:"created_at,omitempty"`
-	TotalComments  int       `json:"total_comments"`
-	TotalLikes     int       `json:"total_likes"`
+	Id            int       `json:"id,omitempty"`
+	UserId        int       `json:"user_id,omitempty"`
+	Username      string    `json:"user_name,omitempty"`
+	Title         string    `json:"title"`
+	Content       string    `json:"content"`
+	CreatedAt     time.Time `json:"created_at,omitempty"`
+	TotalComments int       `json:"total_comments"`
+	TotalLikes    int       `json:"total_likes"`
 	// TotalDislikes  int       `json:"total_dislikes"`
 }
-
-
 
 type Comment struct {
 	Id         int       `json:"id,omitempty"`
@@ -58,8 +56,8 @@ type Reaction struct {
 }
 
 type PostError struct {
-	Title      string `json:"title"`
-	Content    string `json:"content"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }
 
 type CommentError struct {

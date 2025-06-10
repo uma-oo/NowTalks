@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"io"
 
 	"real-time-forum/backend/models"
@@ -41,7 +40,7 @@ func (client *Client) ReadMessages() {
 						Message:    "ERROR!! Empty Message field",
 						ReceiverID: "ERROR!! Empty Receiver Id field",
 						Type:       "ERROR!! Empty Type field",
-						CreatedAt: "ERROR!! Empty CreatedAt field",
+						CreatedAt:  "ERROR!! Empty CreatedAt field",
 					},
 				}
 				continue
@@ -52,7 +51,7 @@ func (client *Client) ReadMessages() {
 		}
 
 		message.SenderID = client.userId
-		fmt.Println("MESSAGE INSIDE THE READ", message.ReceiverID)
+
 		message_validated, errJson := client.chatServer.service.ValidateMessage(message)
 		if errJson != nil {
 			client.ErrorJson <- errJson

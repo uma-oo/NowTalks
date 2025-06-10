@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -29,7 +28,6 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 	liked.UserId = session.UserId
 	entity_type_id := Rhanlder.service.GetTypeIdByName(liked.EntityType)
 	if entity_type_id == 0 {
-		fmt.Println("hhhhhhhhhhhhhhhh")
 		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
 		WriteJsonErrors(w, errJson)
 		return

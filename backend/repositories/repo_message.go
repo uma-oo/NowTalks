@@ -76,5 +76,6 @@ func (repo *AppRepository) GetMessages( sender_id,receiver_id, offset int) ([]mo
 		}
 		messages = append(messages, message)
 	}
+	fmt.Println("messages", messages)
 	return messages, nil
 }

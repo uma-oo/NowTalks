@@ -30,12 +30,12 @@ function receiveMessage(event) {
 export function sendMessage(messageContent) {
 
     let receiver_id = parseInt(document.querySelector(".chat-window_expanded [data-id]").dataset.id)
-    console.log(receiver_id);
+
     const msg = {
-        type: "message",
         content: messageContent,
-        created_at: Date.now(),
-        receiver_id: receiver_id
+        type: "message",
+        receiver_id: receiver_id,
+        created_at: new Date(Date.now()),
     };
 
     // Send the msg object as a JSON-formatted string.
