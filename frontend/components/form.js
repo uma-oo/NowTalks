@@ -1,6 +1,5 @@
 import { addPostApi } from "../api/posts.js";
 import { createButton } from "./button.js";
-import { createCheckboxInput } from "./checkbox.js";
 import { createUser, loginUser } from "../api/user.js";
 import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
 import { addComment } from "../api/comment.js";
@@ -54,7 +53,6 @@ export function handleFormSubmit(event) {
             register(event.target, formData)
             break;
         case "create-post-form":
-            formData.categories = form.getAll('categories').map(cat => parseInt(cat))
             createPost(event.target, formData)
             break;
         case "comment-form":  

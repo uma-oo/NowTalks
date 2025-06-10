@@ -22,6 +22,9 @@ export function createPostCommentsSection(postId) {
     return postCommentsSection
 }
 
+
+
+
 function fetchComments(id, commentsContainer) {
     let offset = commentsContainer.dataset.offset
     getComments(id, offset).then(([status, data])=>{

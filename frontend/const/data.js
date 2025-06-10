@@ -49,14 +49,7 @@ export let Posts = [
     }
 ]
 
-export let categories = [
-    { "category_id": 1, "category_name": "Discussions" },
-    { "category_id": 2, "category_name": "Questions" },
-    { "category_id": 3, "category_name": "Ideas" },
-    { "category_id": 4, "category_name": "Articles" },
-    { "category_id": 5, "category_name": "Events" },
-    { "category_id": 6, "category_name": "Issues" }
-]
+
 
 export const Comments = [
     {

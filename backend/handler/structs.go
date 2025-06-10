@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"sync"
 
@@ -25,10 +24,6 @@ type UserHanlder struct {
 }
 
 type UserData struct {
-	service *service.AppService
-}
-
-type CategoriesHandler struct {
 	service *service.AppService
 }
 
@@ -69,9 +64,7 @@ func NewUserDataHanlder(service *service.AppService) *UserData {
 	return &UserData{service: service}
 }
 
-func NewCategoriesHandler(service *service.AppService) *CategoriesHandler {
-	return &CategoriesHandler{service: service}
-}
+
 
 func NewReactionHandler(service *service.AppService) *ReactionHanlder {
 	return &ReactionHanlder{service: service}
@@ -105,8 +98,6 @@ type Client struct {
 	Message     chan *models.Message
 	ErrorJson   chan *models.ErrorJson
 	OnlineUsers chan []models.User
-	// Done       chan struct{}
-	// CloseOnce  sync.Once
 	userId   int
 	Username string
 }
@@ -131,15 +122,15 @@ func NewChatServer(service *service.AppService) *ChatServer {
 }
 
 func NewClient(conn *websocket.Conn, server *ChatServer, session *models.Session) *Client {
-	fmt.Printf("session.Id: %v\n", session.Id)
 	return &Client{
+		session:     session,
 		service:     server.service,
 		connection:  conn,
 		chatServer:  server,
 		Message:     make(chan *models.Message),
 		ErrorJson:   make(chan *models.ErrorJson),
 		OnlineUsers: make(chan []models.User),
-		userId:      session.Id,
+		userId:      session.UserId,
 		Username:    session.Username,
 	}
 }

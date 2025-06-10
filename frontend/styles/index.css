@@ -547,11 +547,6 @@ main {
     width: 100%;
 }
 
-.create-post-form-container .categories-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
 
 .filter-container {
     position: absolute;
