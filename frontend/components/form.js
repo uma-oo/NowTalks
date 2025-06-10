@@ -33,25 +33,7 @@ export function createForm(formRepresentaion, id) {
         formButtons.append(createButton(button.content, button.type, button.style))
     })
 
-    if (id == 'create-post-form') {
-        let categoriesFormGrp = createElement('div', 'form-grp')
-        categoriesFormGrp.dataset.for = "categories"
-        let categoriesLabel = createElement('label', null, 'Post Categories')
-        categoriesLabel.setAttribute("for", "categories")
-        let app = document.querySelector('#app')
-        let categories = app.dataset.categories.split(',')
-        let categoriesList = createElement('div', 'categories-list')
-        categories.forEach(category => {
-            if (!category) return
-            let [id, name] = category.split('-')
-
-            let optionElem = createCheckboxInput(`category${id}`, id, name)
-            categoriesList.append(optionElem)
-        })
-        let inputError = createElement('p', 'input-error')
-        categoriesFormGrp.append(categoriesLabel, categoriesList, inputError)
-        formElement.append(categoriesFormGrp)
-    }
+  
 
     formElement.append(formButtons)
     formElement.addEventListener('submit', (e) => { handleFormSubmit(e) })
@@ -136,6 +118,9 @@ export function handleCreateComment(form, data) {
             data.createdAt = Date.now()
             data.user_name = sessionStorage.getItem("userNickname")
             let commentsContainer = form.parentElement.querySelector(".comments-container")
+            let commentsCount = getGrandParent(commentsContainer).querySelector(".comment_count")
+
+            commentsCount.textContent = +commentsCount.textContent + 1
             commentsContainer.prepend(createComment(data))
             form.reset()
             form.querySelector('.input-error').textContent = ""
@@ -143,4 +128,8 @@ export function handleCreateComment(form, data) {
             loadFormErrors(form, data.errors)
         }
     })
+}
+
+function getGrandParent(elem) {
+    return elem.parentElement.parentElement
 }

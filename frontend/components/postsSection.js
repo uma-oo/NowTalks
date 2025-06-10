@@ -4,32 +4,25 @@ import { createPostCard } from "./postCard.js"
 import { createForm } from "./form.js"
 import { PostForm } from "../const/forms.js"
 import { throttledScrollFetcher } from "../utils.js"
-import { createFilterContainer } from "./filter.js"
 import { createIcon } from "./icon.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
     // post creation elements
     let createPostFormContainer = createElement('div', 'create-post-form-container')
-    let filterContainer = createFilterContainer()
-
     let postsContainer = createElement('div', 'posts_container')
     postsContainer.dataset.offset = 0
     fetchPosts(postsContainer)
     const throttledScrollHandler = throttledScrollFetcher(fetchPosts)
     postsContainer.addEventListener('scroll', throttledScrollHandler)
-    postsSection.append(postsContainer, createPostFormContainer, filterContainer)
+    postsSection.append(postsContainer, createPostFormContainer)
     return postsSection
 }
 
 function fetchPosts(container) {
     let offset = container.dataset.offset
-    let filterData = {
-        categories: container.dataset.categories,
-        likedPosts: container.dataset.likedPosts,
-        createdPosts: container.dataset.createdPosts
-    }
-    getPostsApi(filterData, offset).then(data => {
+   
+    getPostsApi(offset).then(data => {
         if (data?.status == 401) {
             navigateTo('/login')
         } else if (data) {

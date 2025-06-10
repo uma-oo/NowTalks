@@ -26,7 +26,7 @@ function fetchComments(id, commentsContainer) {
     let offset = commentsContainer.dataset.offset
     getComments(id, offset).then(([status, data])=>{
         if (status === 401 ) {
-            navigateTo("/")
+            navigateTo("/login")
         } 
         if (status === 200 && data) {
             data.forEach(commentData => {

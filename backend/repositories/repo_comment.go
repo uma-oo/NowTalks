@@ -8,19 +8,18 @@ import (
 )
 
 func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
-	fmt.Println("comment", comment)
 	comment_created := &models.Comment{}
 	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) 
 	RETURNING commentID, content, createdAt;`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, models.NewErrorJson(500, fmt.Sprintf("%v 1", err))
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
 	defer stmt.Close()
 	if err := stmt.QueryRow(comment.PostId, comment.UserId, comment.Content).Scan(
 		&comment_created.Id, &comment_created.Content,
 		&comment_created.CreatedAt); err != nil {
-		return nil, models.NewErrorJson(500, fmt.Sprintf("%v 2", err))
+		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
 	username, errJSon := appRep.GetUserNameById(comment.UserId)
 	if errJSon != nil {

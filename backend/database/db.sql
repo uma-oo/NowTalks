@@ -43,11 +43,6 @@ CREATE TABLE IF NOT EXISTS comments (
 
 
 
-
-
-
-
-
 CREATE TABLE IF NOT EXISTS types (
   entityTypeID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   entityType  TEXT NOT NULL UNIQUE
@@ -91,7 +86,7 @@ CREATE  TABLE IF NOT EXISTS notifications(
   notificationID INTEGER PRIMARY KEY AUTOINCREMENT,
   readStatus   BOOLEAN NOT NULL DEFAULT 0 CHECK (readStatus IN (0, 1)), 
   receiverNotificationID INTEGER NOT NULL,
-  messageID  INTEGER NOT NULL
+  messageID  INTEGER NOT NULL,
   FOREIGN KEY (messageID) REFERENCES messages(messageID) ON DELETE CASCADE,
   FOREIGN key (receiverNotificationID)  REFERENCES users(userID) ON DELETE CASCADE
 );

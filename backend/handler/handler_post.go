@@ -22,7 +22,6 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.PostError{
 				Title:      "ERROR!! Empty Title field!",
 				Content:    "ERROR!! Empty Content fiedl!",
-				Categories: "ERROR!! Incorrect Format of category ID or There is No category affected!",
 			}})
 			return
 		}

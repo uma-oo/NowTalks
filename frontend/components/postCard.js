@@ -9,7 +9,6 @@ export function createPostCard({
     user_name,
     title,
     content,
-    categories,
     created_at,
     total_comments,
     total_likes
@@ -21,20 +20,13 @@ export function createPostCard({
     let postInfo = createElement('div', 'post-info')
     let postWriter = createElement('span', null, `${user_name}`)
     let timestamp = createElement('span', null, timeAgo(created_at))
-    let categoriesList = createElement('div', 'categories')
     let postTitle = createElement('p', 'post-title', title)
 
     let postBody = createElement('div', 'post-body')
     let postContent = createElement('p', 'post-content', content)
     let postFooter = createElement('div', 'post-footer')
 
-    if (categories) {
 
-        categories.forEach(category => {
-            let categoryTag = createElement('span', 'tag', `${category}`)
-            categoriesList.append(categoryTag)
-        });
-    }
 
     let reactions = [
         { type: "like", icon: "heart", "total": total_likes },
@@ -42,11 +34,19 @@ export function createPostCard({
     ]
 
     let reactionElements = reactions.map(({ type, icon, total }) => {
-        let text = type === "like" ? `Like` : total === 0 ? "Add comment" : "See comments"
+        let text
+        if (type == "comment") {
+            if (total == 0) {
+                text = "Add Comment"
+            } else {
+                text = "See comments"
+            }
+
+        }
         let containerElem = createElement('div', 'reaction-container', text);
         containerElem.dataset.reaction = type;
         let iconElem = createIcon(icon);
-        let countElem = createElement('span', null, '0');
+        let countElem = createElement('span', `${type}_count`, total);
         containerElem.prepend(iconElem, countElem);
         return containerElem;
     });
@@ -59,7 +59,7 @@ export function createPostCard({
     postWriter.prepend(createIcon('user'))
     timestamp.prepend(createIcon('calendar'))
     postInfo.append(postWriter, timestamp)
-    postHeader.append(postInfo, categoriesList, postTitle)
+    postHeader.append(postInfo, postTitle)
     postBody.append(postContent)
     postFooter.append(...reactionElements);
     container.append(postHeader, postBody, postCommentsSection, postFooter)
