@@ -28,10 +28,13 @@ export function createPostCard({
     let postContent = createElement('p', 'post-content', content)
     let postFooter = createElement('div', 'post-footer')
 
-    categories.forEach(category => {
-        let categoryTag = createElement('span', 'tag', `${category}`)
-        categoriesList.append(categoryTag)
-    });
+    if (categories) {
+
+        categories.forEach(category => {
+            let categoryTag = createElement('span', 'tag', `${category}`)
+            categoriesList.append(categoryTag)
+        });
+    }
 
     let reactions = [
         { type: "like", icon: "heart", "total": total_likes },

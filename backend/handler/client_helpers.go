@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"io"
 
 	"real-time-forum/backend/models"
@@ -10,9 +11,11 @@ import (
 
 
 func (server *ChatServer) AddClient(client *Client) {
+	fmt.Printf("client.userId: %v\n", client.userId)
 	server.Lock()
 	server.clients[client.userId] = append(server.clients[client.userId], client)
 	defer server.Unlock()
+	fmt.Printf("server.clients: %v\n", server.clients)
 }
 
 func (server *ChatServer) RemoveClient(client *Client) {

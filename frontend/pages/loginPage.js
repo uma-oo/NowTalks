@@ -1,26 +1,24 @@
 import { createForm } from "../components/form.js"
 import { creatLink } from "../components/links.js"
 import { loginForm } from "../const/forms.js"
-import { navigateTo } from "../../utils.js"
+import { navigateTo, createElement } from "../utils.js"
 import { isLoggedIn } from "../api/user.js"
 
 export function renderLoginPage(app) {
     isLoggedIn().then(data => {
         if (!data.is_logged_in) {
             app.innerHTML = ""
-            let header = document.createElement('h1')
-            let formError = document.createElement('div')
-            formError.className = "form-error"
-            header.innerHTML = "Welcome Back </br> Login to your account."
+            let header = createElement("div", null)
+            let formTititls = createElement("h1", null, "Sign In")
+            let formSubTitle = createElement("h2", null, "Welcome Back — Continue your conversations")
+            let formError = createElement("div", "form-error") 
             let loginFormElement = createForm(loginForm, "login-form")
-            let goToRegister = document.createElement('p')
-            goToRegister.textContent = "Don't have an account? "
-            let registerLink = creatLink("Register", "", "")
+            let goToRegister = createElement('p', null, "Don't have an account?")
+            let registerLink = creatLink("Register", "./register", "")
             goToRegister.append(registerLink)
-            registerLink.addEventListener("click", (e) => {
-                e.preventDefault()
-                navigateTo('./register')
-            })
+
+            header.append(formTititls, formSubTitle)
+
             app.append(header, formError, loginFormElement, goToRegister)
         }
         else {
@@ -29,5 +27,4 @@ export function renderLoginPage(app) {
             navigateTo("/")
         }
     })
-
 }

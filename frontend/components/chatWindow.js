@@ -35,11 +35,82 @@ let messages = [
         content: "For sure man, send me the details later.",
         user: "you",
         timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
+    },
+    {
+        content: "For sure man, send me the details later.",
+        user: "you",
+        timestamp : "2025-05-06T15:00:16Z"
     }
 ]
 
 
 export function openChatWindow(chatUserCard, chatUserCardClone) {
+    
     let chatWindow = document.querySelector('.chat-window')
     chatWindow.classList.add("chat-window_expanded")
     if (chatUserCard.dataset.open) {
@@ -52,7 +123,7 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     chatUserCard.dataset.open = "true"
     chatWindow.innerHTML = ""
     let chatWindowHeader  = createElement('div', 'chat-window-header')
-    let goBackBtn = createButton({icon: "arrowleft"})
+    let goBackBtn = createButton({icon: "arrow-square-left"})
 
     let chatWindowBody = createElement('div', 'chat-window-body')
     

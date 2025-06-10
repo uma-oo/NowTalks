@@ -284,7 +284,7 @@ export const MessageForm = {
         {
             type: 'submit',
             content: {
-                icon : "share"
+                icon : "send"
             },
             style: 'primary-btn'
         }

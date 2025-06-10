@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -130,6 +131,7 @@ func NewChatServer(service *service.AppService) *ChatServer {
 }
 
 func NewClient(conn *websocket.Conn, server *ChatServer, session *models.Session) *Client {
+	fmt.Printf("session.Id: %v\n", session.Id)
 	return &Client{
 		service:     server.service,
 		connection:  conn,

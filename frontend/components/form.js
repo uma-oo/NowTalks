@@ -68,7 +68,7 @@ export function handleFormSubmit(event) {
             login(event.target, formData)
             break;
         case "register-form":
-            formData.age = parseInt(data.age)
+            formData.age = parseInt(formData.age)
             register(event.target, formData)
             break;
         case "create-post-form":
