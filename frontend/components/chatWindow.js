@@ -1,4 +1,4 @@
-import { fetchMessages } from "../api/messages.js";
+import { fetchMessages } from "../components/messagesSection.js";
 import { MessageForm } from "../const/forms.js";
 import { createElement } from "../utils.js";
 import { createButton } from "./button.js";
@@ -26,7 +26,7 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let goBackBtn = createButton({icon: "arrow-square-left"})
 
     let chatWindowBody = createElement('div', 'chat-window-body')
-    let status , messages  = await fetchMessages(0)
+    let _ , messages  = fetchMessages(0)
     console.log(messages);
     
     let messageContainers = messages?.map(message => createChatMessageContainer(message))
