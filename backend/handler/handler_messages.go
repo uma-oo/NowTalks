@@ -45,17 +45,26 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+func (messages *MessagesHandler) UpdateMessage(w http.ResponseWriter, r *http.Request) {
+	// cookie, _ := r.Cookie("session")
+	// session, _ := messages.service.GetSessionByTokenEnsureAuth(cookie.Value)
 
+	// messages.service.UpdateMessage()
 
-
+	// w.WriteHeader(http.StatusNoContent)
+}
 
 
 
 func (messages *MessagesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if r.Method != http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
+		messages.GetMessages(w, r)
+	case http.MethodPatch:
+		fmt.Println("trying to change the status")
+	default:
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!!"})
 		return
 	}
-	messages.GetMessages(w, r)
 }

@@ -23,7 +23,8 @@ export function closeConnection() {
 
 
 function receiveMessage(event) {
-    console.log(event.data);
+    
+    console.log(event.data.type);
 }
 
 

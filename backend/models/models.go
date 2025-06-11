@@ -99,9 +99,11 @@ type ErrorJson struct {
 	Message any `json:"errors"`
 }
 
-//  Message stuff ;)
+//	Message stuff ;)
+//
 // message types are message / read_status / typing
 type Message struct {
+	MessageID        int       `json:"message_id,omitempty"`
 	SenderID         int       `json:"sender_id,omitempty"`
 	SenderUsername   string    `json:"sender_username,omitempty"`
 	ReceiverID       int       `json:"receiver_id,omitempty"`
