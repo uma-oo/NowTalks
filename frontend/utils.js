@@ -13,6 +13,7 @@ export function timeAgo(timestamp, locale = 'en') {
     const days = Math.floor(hours / 24);
     const months = Math.floor(days / 30);
     const years = Math.floor(months / 12);
+
     const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
     if (years > 0) {
         value = rtf.format(-  years, "year");
@@ -25,6 +26,7 @@ export function timeAgo(timestamp, locale = 'en') {
     } else if (minutes > 0) {
         value = rtf.format(-  minutes, "minute");
     } else {
+
         value = rtf.format(-  diff, "second");
     }
     return value;

@@ -754,7 +754,7 @@ aside .create-post-btn {
 .chat-window .chat-window-header {
     left: 2rem;
     right: 2rem;
-    border: solid red;
+    /* border: solid red; */
     display: flex;
     align-items: center;
     position: absolute;
