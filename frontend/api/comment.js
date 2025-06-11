@@ -16,7 +16,6 @@ export async function getComments(postId, offset) {
 // "content": "Totally agree! I started eating more whole foods and feel amazing."
 // }
 export async function addComment(commentData) {
-    console.log(commentData)
     try {
         const response = await fetch('/api/comment', {
             method: 'POST',

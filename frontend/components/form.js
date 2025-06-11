@@ -44,7 +44,6 @@ export function handleFormSubmit(event) {
     event.preventDefault()
     let form = new FormData(event.target)
     const formData = Object.fromEntries(form.entries())
-    console.log(formData)
     switch (event.target.id) {
         case "login-form":
             login(event.target, formData)
@@ -60,8 +59,6 @@ export function handleFormSubmit(event) {
             handleCreateComment(event.target, formData)
             break;
         case "message-form":
-            console.log("heereeee");
-
             sendMessage(formData.chatMessage)
             break;
         default:
