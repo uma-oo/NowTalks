@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	models "real-time-forum/backend/models"
+
 )
 
 // DB wash create user hya register hnayaa wlla hadak service aykllf ???  ;(
@@ -19,7 +20,7 @@ func (appRep *AppRepository) CreateUser(user *models.User) *models.ErrorJson {
 		return &models.ErrorJson{Status: 500 , Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
-	if _, err = stmt.Exec(strings.ToLower(user.Nickname) , user.Age, user.Gender, user.FirstName, user.LastName, user.Email, user.Password); err != nil {
+	if _, err = stmt.Exec(strings.ToLower(user.Nickname) ,user.Age,strings.ToLower((user.Gender)), user.FirstName, user.LastName, user.Email, user.Password); err != nil {
 		return &models.ErrorJson{Status: 500 , Message: fmt.Sprintf("%v", err)}
 	}
 	return nil
