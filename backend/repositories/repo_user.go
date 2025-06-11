@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	models "real-time-forum/backend/models"
 )
@@ -18,7 +19,7 @@ func (appRep *AppRepository) CreateUser(user *models.User) error {
 		return err
 	}
 	defer stmt.Close()
-	if _, err = stmt.Exec(user.Nickname, user.Age, user.Gender, user.FirstName, user.LastName, user.Email, user.Password); err != nil {
+	if _, err = stmt.Exec(strings.ToLower(user.Nickname) , user.Age, user.Gender, user.FirstName, user.LastName, user.Email, user.Password); err != nil {
 		return nil
 	}
 	return nil

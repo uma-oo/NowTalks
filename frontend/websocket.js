@@ -29,7 +29,7 @@ function receiveMessage(event) {
     let data = JSON.parse(event.data)
     switch (data.type) {
         case "message":
-            createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"))
+            createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"), "bottom")
             break;
         default:
             console.log("object");
@@ -40,7 +40,7 @@ function receiveMessage(event) {
 export function sendMessage(messageContent) {
 
     let receiver_id = parseInt(document.querySelector(".chat-window_expanded [data-id]").dataset.id)
-
+    
     const msg = {
         content: messageContent,
         type: "message",

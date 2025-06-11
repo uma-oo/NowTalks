@@ -59,6 +59,7 @@ export function handleFormSubmit(event) {
             handleCreateComment(event.target, formData)
             break;
         case "message-form":
+            event.target.reset()
             sendMessage(formData.chatMessage)
             break;
         default:
