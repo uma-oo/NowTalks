@@ -42,7 +42,8 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]mo
 		s.nickname AS sender,
 		r.nickname AS receiver,
 		messages.message,
-		messages.createdAt
+		messages.createdAt,
+		messages.messageID
 	FROM
 		messages INNER JOIN users s
 		ON messages.senderID = s.userID 
@@ -51,18 +52,17 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]mo
 	WHERE
 		senderID IN (?, ?)
 		AND receiverID IN (?, ?)
-	ORDER BY  messages.createdAt
+		-- AND messages.messageID < ?
+	ORDER BY  messages.createdAt  DESC
 	LIMIT
 		10
-	OFFSET
-	?
 `
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
-	rows, err := stmt.Query(sender_id, receiver_id, sender_id, receiver_id, offset)
+	rows, err := stmt.Query(sender_id, receiver_id, sender_id, receiver_id)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -71,7 +71,7 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]mo
 		var message models.Message
 		if err := rows.Scan(&message.SenderUsername,
 			&message.ReceiverUsername, &message.Message,
-			&message.CreatedAt); err != nil {
+			&message.CreatedAt, &message.MessageID); err != nil {
 			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		messages = append(messages, message)

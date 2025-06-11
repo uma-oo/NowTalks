@@ -2,7 +2,6 @@ import { fetchMessages } from "../components/messagesSection.js";
 import { MessageForm } from "../const/forms.js";
 import { createElement } from "../utils.js";
 import { createButton } from "./button.js";
-import { createChatMessageContainer } from "./chatMessageContainer.js";
 import { createForm } from "./form.js";
 
 
@@ -26,7 +25,9 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindowHeader = createElement('div', 'chat-window-header')
     let goBackBtn = createButton({ icon: "arrow-square-left" })
     let chatWindowBody = createElement('div', 'chat-window-body')
-    fetchMessages(30, chatUserCard.dataset.id, chatWindowBody)
+    chatWindowBody.dataset.last = 0
+
+    fetchMessages(26, chatUserCard.dataset.id, chatWindowBody)
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
 

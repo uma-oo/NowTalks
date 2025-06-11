@@ -13,6 +13,7 @@ type User struct {
 	Password      string `json:"password,omitempty"`
 	VerifPassword string `json:"password2,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
+	Notfications  string `json:"notifications,omitempty"`
 }
 
 type Session struct {
@@ -93,16 +94,16 @@ type UserData struct {
 }
 
 // we can make the message interface and then accpet all of them but for now let's work so
-
 type ErrorJson struct {
 	Status  int `json:"status"`
 	Message any `json:"errors"`
 }
 
-//  Message stuff ;)
-
+//	Message stuff ;)
+//
 // message types are message / read_status / typing
 type Message struct {
+	MessageID        int       `json:"message_id,omitempty"`
 	SenderID         int       `json:"sender_id,omitempty"`
 	SenderUsername   string    `json:"sender_username,omitempty"`
 	ReceiverID       int       `json:"receiver_id,omitempty"`
