@@ -105,7 +105,7 @@ type ErrorJson struct {
 type Message struct {
 	SenderID         int       `json:"sender_id,omitempty"`
 	SenderUsername   string    `json:"sender_username,omitempty"`
-	ReceiverID       int       `json:"receiver_id"`
+	ReceiverID       int       `json:"receiver_id,omitempty"`
 	ReceiverUsername string    `json:"receiver_username"`
 	Message          string    `json:"content"`
 	CreatedAt        time.Time `json:"created_at"`
