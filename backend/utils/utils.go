@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"strings"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -13,4 +15,8 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func CheckGender(gender string) bool {
+	return strings.ToLower(gender) == "male" || strings.ToLower(gender) == "female"
 }

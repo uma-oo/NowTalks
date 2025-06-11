@@ -12,15 +12,15 @@ import (
 // hadshi taaafh
 // y9dr ay wa7d ydiiruuu
 
-func (appRep *AppRepository) CreateUser(user *models.User) error {
+func (appRep *AppRepository) CreateUser(user *models.User) *models.ErrorJson {
 	query := `INSERT INTO users (nickname, age, gender, firstName, lastName, email, password) VALUES (?,?,?,?,?,?,?)`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return err
+		return &models.ErrorJson{Status: 500 , Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
 	if _, err = stmt.Exec(strings.ToLower(user.Nickname) , user.Age, user.Gender, user.FirstName, user.LastName, user.Email, user.Password); err != nil {
-		return nil
+		return &models.ErrorJson{Status: 500 , Message: fmt.Sprintf("%v", err)}
 	}
 	return nil
 }

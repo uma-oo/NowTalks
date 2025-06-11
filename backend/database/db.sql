@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     userID INTEGER PRIMARY KEY AUTOINCREMENT,
     nickname VARCHAR(30) NOT NULL UNIQUE,
     age INTEGER NOT NULL,
-    gender TEXT NOT NULL DEFAULT 'Male' CHECK (gender IN ('Male','Female')),
+    gender TEXT NOT NULL DEFAULT 'male' CHECK (gender IN ('male','female')),
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,

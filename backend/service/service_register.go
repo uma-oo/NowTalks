@@ -7,12 +7,8 @@ import (
 	"real-time-forum/backend/utils"
 )
 
-
-
-
-// CHECK THE info of the user 
+// CHECK THE info of the user
 func (s *AppService) Register(user *models.User) *models.ErrorJson {
-	var errJson models.ErrorJson
 	var registerErr models.RegisterError
 	// check for the nickname and email
 	_, has_nickname, _ := s.repo.GetItem("users", "nickname", user.Nickname)
@@ -23,7 +19,7 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	if !utils.CheckEmailFormat(user.Email) {
 		registerErr.Email = "ERROR! email Format is Incorrect"
 	}
-	
+
 	if has_email {
 		registerErr.Email = "ERROR! Email already in use"
 	}
@@ -45,32 +41,27 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	if !utils.PwdVerification(user.Password, user.VerifPassword) {
 		registerErr.VerifPassword = "ERROR! Passwords are not matched!"
 	}
+	if !utils.CheckGender(user.Gender) {
+		registerErr.Gender ="ERROR!! Please be sure to enter Male or Female"
+	}
 	// check if struct 3amra wlla la
 	if registerErr != (models.RegisterError{}) {
-		errJson.Status = 400
-		errJson.Message = registerErr
-		return &errJson
+		return &models.ErrorJson{Status: 400, Message: registerErr}
 	}
 
-
-
-
-	
 
 	// hash the password here !! before the database insertion
 	hash, err := utils.HashPassword(user.Password)
 	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v just to verify 1", err)}
 	} else {
 		user.Password = hash
 	}
-    
-	err = s.repo.CreateUser(user)
-	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+
+	errJson := s.repo.CreateUser(user)
+	if errJson != nil {
+		return errJson
 	}
 
 	return nil
 }
-
-
