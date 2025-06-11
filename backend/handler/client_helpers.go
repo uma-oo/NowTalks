@@ -85,8 +85,6 @@ func (client *Client) WriteMessages() {
 			if err != nil {
 				return
 			}
-			// case <-client.Done:
-			// 	return
 		}
 	}
 }
