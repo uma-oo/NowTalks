@@ -31,8 +31,11 @@ function receiveMessage(event) {
         case "message":
             createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"))
             break;
-        default:
-            console.log("object");
+        case "read":
+            break;
+        case "typing":
+            break;
+      
     }
 }
 
