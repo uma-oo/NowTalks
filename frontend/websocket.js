@@ -1,3 +1,6 @@
+import { createChatMessageContainer } from "./components/chatMessageContainer.js"
+
+
 let socket
 
 
@@ -23,7 +26,14 @@ export function closeConnection() {
 
 
 function receiveMessage(event) {
-    console.log(event.data);
+    let data = JSON.parse(event.data)
+    switch (data.type) {
+        case "message":
+            createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"))
+            break;
+        default:
+            console.log("object");
+    }
 }
 
 

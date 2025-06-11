@@ -1,20 +1,19 @@
 import { createElement, timeAgo } from "../utils.js";
 
+
 export function createChatMessageContainer({
     sender_username,
-    receiver_username,
     content,
     created_at
-}) {
-
+}, messagesBody) {
+    console.log(sender_username, content);
     let chatMessageContainer = createElement('div', `chat-message-container ${sessionStorage.getItem("userNickname") === sender_username ? "align-self-end" : ""}`)
     let messageBubble = createElement('div', 'message-bubble')
-    let sender = createElement('p', 'message-sender', user)
+    let sender = createElement('p', 'message-sender', sender_username)
     let messageContent = createElement('p', 'message-content', content)
     let timeStamp = createElement('span', null, timeAgo(created_at))
 
     messageBubble.append(sender, messageContent, timeStamp)
-    chatMessageContainer.append(messageBubble )
-
-    return chatMessageContainer
+    chatMessageContainer.append(messageBubble)
+    messagesBody.append(chatMessageContainer)
 }

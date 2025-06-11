@@ -51,7 +51,7 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]mo
 	WHERE
 		senderID IN (?, ?)
 		AND receiverID IN (?, ?)
-	ORDER BY  messages.createdAt  DESC
+	ORDER BY  messages.createdAt
 	LIMIT
 		10
 	OFFSET
@@ -76,7 +76,7 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]mo
 		}
 		messages = append(messages, message)
 	}
-	fmt.Println("messages", messages)
+
 	return messages, nil
 
 }

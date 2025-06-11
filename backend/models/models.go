@@ -110,7 +110,7 @@ type Message struct {
 	Message          string    `json:"content"`
 	CreatedAt        time.Time `json:"created_at"`
 	Status           string    `json:"status,omitempty"`
-	Type             string    `json:"type,omitempty"`
+	Type             string    `json:"type"`
 }
 
 type MessageErr struct {

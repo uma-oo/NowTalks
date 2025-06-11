@@ -5,7 +5,6 @@ import { createForm } from "./form.js";
 import { createComment } from "./comment.js";
 
 export function createPostCommentsSection(postId) {
-
     let postCommentsSection = createElement('div', "post-comments-section")
     let commentsContainer = createElement('div', "comments-container")
     commentsContainer.dataset.offset = 0

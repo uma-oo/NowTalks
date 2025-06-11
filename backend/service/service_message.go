@@ -42,6 +42,7 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 		if err != nil {
 			return nil, err
 		}
+		message_created.Type = type_message
 		return message_created, nil
 	case "status":
 
