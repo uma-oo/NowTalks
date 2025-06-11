@@ -26,16 +26,33 @@ func (appRep *AppRepository) CreateUser(user *models.User) error {
 
 // TO GET THE USERS
 
-func (appRep *AppRepository) GetUsers(offset,user_id int) ([]models.User, *models.ErrorJson) {
+func (appRep *AppRepository) GetUsers(offset, user_id int) ([]models.User, *models.ErrorJson) {
 	var users []models.User
-	query := `SELECT userID , nickname FROM users WHERE userID != ? LIMIT 10 OFFSET  ?`
-	rows, err := appRep.db.Query(query,user_id ,offset)
+	query := `with cte_messages as (
+        select
+            m.senderID,
+            count(*) as notifications  
+        from
+            messages m
+            RIGHT JOIN users u ON m.senderID = u.userID
+        WHERE
+            m.readStatus = 0
+        GROUP BY
+            m.senderID
+    )
+	SELECT 
+    	users.userID, users.nickname, COALESCE(cte_messages.notifications, 0)
+	FROM users
+    LEFT JOIN cte_messages on users.userID = cte_messages.senderID
+    WHERE users.userID != ?
+    LIMIT 10 OFFSET ?`
+	rows, err := appRep.db.Query(query, user_id, offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.Id, &user.Nickname); err != nil {
+		if err := rows.Scan(&user.Id, &user.Nickname, &user.Notfications); err != nil {
 			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v ", err)}
 		}
 		users = append(users, user)
