@@ -34,8 +34,8 @@ func (repo *AppRepository) AddMessage(message *models.Message) (*models.Message,
 }
 
 // the one logged in trying to see the messages will not be got from the query
-// sender and receiver and the offset and limit also
-func (repo *AppRepository) GetMessages( sender_id,receiver_id, offset int) ([]models.Message, *models.ErrorJson) {
+// sender and receiver and the offset and limit als
+func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]models.Message, *models.ErrorJson) {
 	var messages []models.Message
 	query := `
 	SELECT
@@ -49,20 +49,20 @@ func (repo *AppRepository) GetMessages( sender_id,receiver_id, offset int) ([]mo
 		JOIN users r ON 
 		messages.receiverID = r.userID
 	WHERE
-		senderID = ?
-		AND receiverID = ?
+		senderID IN (?, ?)
+		AND receiverID IN (?, ?)
 	ORDER BY  messages.createdAt  DESC
 	LIMIT
 		10
 	OFFSET
 	?
-  `
+`
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
-	rows, err := stmt.Query(sender_id, receiver_id, offset)
+	rows, err := stmt.Query(sender_id, receiver_id, sender_id, receiver_id, offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -77,4 +77,5 @@ func (repo *AppRepository) GetMessages( sender_id,receiver_id, offset int) ([]mo
 		messages = append(messages, message)
 	}
 	return messages, nil
+
 }
