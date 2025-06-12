@@ -77,6 +77,7 @@ func (Rhandler *ReactionHanlder) DislikeEnity(w http.ResponseWriter, r *http.Req
 }
 
 func (RHanlder *ReactionHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not allowed!!"})
 		return

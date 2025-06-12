@@ -17,6 +17,7 @@ export async function getComments(postId, offset) {
 
 
 export async function addComment(commentData) {
+
     try {
         const response = await fetch('/api/comment', {
             method: 'POST',

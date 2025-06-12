@@ -1,8 +1,9 @@
 import { navigateTo } from "../utils.js"
 
 async function addReaction(reactionData) {
+    console.log(reactionData);
     try {
-        let response = await fetch("/api/reaction/like", {
+        let response = await fetch("/api/react/like", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(reactionData)
@@ -20,6 +21,7 @@ export function ToggleLike(reactionData, likedElement) {
 
     addReaction(reactionData).then(
         ([status, response]) => {
+            console.log(response);
             if (status == 401) {
                 navigateTo("login")
             }
