@@ -14,13 +14,13 @@ func (appRep *AppRepository) AddPostCategories(post *models.Post, categories []a
 		WHERE categories.categoryID = postCategories.categoryID);`
 		stmt, err := appRep.db.Prepare(query)
 		if err != nil {
-			return nil, models.NewErrorJson(500, fmt.Sprintf("%v 1", err))
+			return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 		}
 		defer stmt.Close()
 		var category string
 		err = stmt.QueryRow(id, post.Id).Scan(&category)
 		if err != nil {
-			return nil, models.NewErrorJson(500, fmt.Sprintf("%v 2", err))
+			return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 		}
 		post.PostCategories = append(post.PostCategories, category)
 	}
