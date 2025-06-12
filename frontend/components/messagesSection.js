@@ -20,7 +20,6 @@ export function fetchMessages(offset, receiver_id, messagesContainer) {
             console.log(data);
         }
         if (status === 200 && data) {
-            console.log("messages:", data)
             data.forEach(message => {
                 createChatMessageContainer(message, messagesContainer)
             });

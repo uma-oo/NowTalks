@@ -26,3 +26,19 @@ export async function getPostsApi(offset) {
 }
 
 
+
+export async function getCategories() {
+    try {
+        let response = await fetch(`/api/categories`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        })
+        return [response.status, await response.json()]
+    } catch (error) {
+        console.error("ERROR while trying to get posts categories: ", error)
+    }
+}
+
+
+
+

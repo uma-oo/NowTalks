@@ -10,7 +10,6 @@ export function createChatMessageContainer(
     messagesBody,
     position = "top") {
 
-    console.log(sender_username, content);
     let chatMessageContainer = createElement('div', `chat-message-container ${sessionStorage.getItem("userNickname") === sender_username ? "align-self-end" : ""}`)
     let messageBubble = createElement('div', 'message-bubble')
     let sender = createElement('p', 'message-sender', sender_username)

@@ -49,15 +49,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 
 
-INSERT OR IGNORE INTO  categories (category) VALUES
-  ('Discussions'),
-  ('Questions'),
-  ('Ideas'),
-  ('Articles'),
-  ('Events'), 
-  ('Issues')
-  -- where NOT EXISTS (select * from categories )
-  ;
+
 
 
 CREATE TABLE IF NOT EXISTS postCategories (
@@ -81,10 +73,23 @@ CREATE TABLE IF NOT EXISTS types (
 
 
 
+
+INSERT  OR IGNORE INTO categories (category) VALUES
+  ('Discussions'),
+  ('Questions'),
+  ('Ideas'),
+  ('Articles'),
+  ('Events'), 
+  ('Issues');
+
+
+
+
+
 INSERT OR IGNORE INTO types (entityType) VALUES 
   ('post'),
-  ('comment')
-  ;
+  ('comment');
+
 
 
 
@@ -113,11 +118,3 @@ CREATE TABLE IF NOT EXISTS messages (
   CHECK (senderID != receiverID)
 );
 
-CREATE  TABLE IF NOT EXISTS notifications(
-  notificationID INTEGER PRIMARY KEY AUTOINCREMENT,
-  readStatus   BOOLEAN NOT NULL DEFAULT 0 CHECK (readStatus IN (0, 1)), 
-  receiverNotificationID INTEGER NOT NULL,
-  messageID  INTEGER NOT NULL,
-  FOREIGN KEY (messageID) REFERENCES messages(messageID) ON DELETE CASCADE,
-  FOREIGN key (receiverNotificationID)  REFERENCES users(userID) ON DELETE CASCADE
-);

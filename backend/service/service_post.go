@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"real-time-forum/backend/models"
+	"real-time-forum/backend/utils"
 )
 
 // ayoub u afkaru lghariba
@@ -19,15 +20,17 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	if post.Title == "" {
 		message.Title = "ERROR: Empty Title Content!!"
 	}
-
-	if message.Content != "" || message.Title != "" {
+	if len(post.PostCategories) == 0 || !utils.CheckPOSTCategories(post.PostCategories) {
+		message.Categories = "ERROR: Incorrect Format of category ID or There is No category affected!"
+	}
+	if message.Content != "" || message.Title != "" || message.Categories != "" {
 		errorJson.Status = 400
 		errorJson.Message = message
 		return nil, errorJson
 	}
 	post_created, err := s.repo.CreatePost(post)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hnaaa", err)}
 	}
 	return post_created, nil
 }
