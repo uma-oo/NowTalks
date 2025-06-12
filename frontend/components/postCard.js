@@ -1,3 +1,4 @@
+import { ToggleLike } from "../api/reaction.js"
 import { timeAgo } from "../utils.js"
 import { createElement } from "../utils.js"
 import { createIcon } from "./icon.js"
@@ -67,6 +68,14 @@ export function createPostCard({
 
     })
 
+    let likeReaction = postFooter.querySelector('.reaction-container[data-reaction="like"]')
+    likeReaction.addEventListener("click", ()=> {
+        let reactionData = {
+            entity_id : id, 
+            type : "post"
+        }
+        ToggleLike(reactionData, likeReaction.querySelector(".icon"))
+    })
 
 
 

@@ -9,64 +9,54 @@ import (
 
 //  The post reactions part
 
-func (appRepo *AppRepository) AddReaction(reaction *models.Reaction, type_reaction int) *models.ErrorJson {
+func (appRepo *AppRepository) AddReaction(reaction *models.Reaction, type_reaction int) (*models.Reaction, *models.ErrorJson) {
+	reaction_created := &models.Reaction{}
 	query := `INSERT INTO reactions 
-	(entityTypeID, entityID,reaction,userID) VALUES (?,?,?,?)`
-	stmt, err := appRepo.db.Prepare(query)
+	(entityTypeID, entityID,reaction,userID) VALUES (?,?,?,?) RETURNING reaction`
+
+	err := appRepo.db.QueryRow(query, reaction.EntityTypeId, reaction.EntityId, type_reaction, reaction.UserId).Scan(&reaction_created.Reaction)
 	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	defer stmt.Close()
-	_, err = stmt.Exec(reaction.EntityTypeId, reaction.EntityId, type_reaction, reaction.UserId)
-	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
-	}
-	return nil
+	return reaction_created, nil
 }
 
-func (appRepo *AppRepository) UpdateReactionLike(reaction *models.Reaction) *models.ErrorJson {
+func (appRepo *AppRepository) UpdateReactionLike(reaction *models.Reaction) (*models.Reaction, *models.ErrorJson) {
+	reaction_created := &models.Reaction{}
 	query := `UPDATE reactions SET reaction = CASE reaction
               WHEN 0 THEN 1
 			  WHEN -1 THEN 1
               ELSE 0
               END
-	          WHERE reactionID = ? ;`
-	stmt, err := appRepo.db.Prepare(query)
+	          WHERE reactionID = ? 
+			  RETURNING reaction;`
+
+	err := appRepo.db.QueryRow(query, reaction.Id).Scan(&reaction_created.Reaction)
 	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v h", err)}
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(reaction.Id)
-	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hh", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 
-	return nil
+	return reaction_created, nil
 }
 
-func (appRepo *AppRepository) UpdateReactionDislike(reaction *models.Reaction) *models.ErrorJson {
+func (appRepo *AppRepository) UpdateReactionDislike(reaction *models.Reaction) (*models.Reaction, *models.ErrorJson) {
+	reaction_created := &models.Reaction{}
 	query := `UPDATE reactions SET reaction = CASE reaction
               WHEN 0 THEN -1
 			  WHEN 1 THEN -1
               ELSE 0
               END
-	          WHERE reactionID = ? ;`
-	stmt, err := appRepo.db.Prepare(query)
+	          WHERE reactionID = ? 
+			  RETURNING reaction
+			  ;`
+
+	err := appRepo.db.QueryRow(query, reaction.Id).Scan(&reaction_created.Reaction)
 	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v h", err)}
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(reaction.Id)
-	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hh", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hh", err)}
 	}
 
-	return nil
+	return reaction_created, nil
 }
-
-
-
-
 
 func (appRepo *AppRepository) HanldeReaction(reaction *models.Reaction) (*models.Reaction, *models.ErrorJson) {
 	reaction_existed := &models.Reaction{}
@@ -112,7 +102,7 @@ func (appRepo *AppRepository) CheckEntityID(reaction *models.Reaction, type_enti
 		}
 
 	}
-     // exists will return 0 if there is no row thar matches dakshi li 3ndna 
+	// exists will return 0 if there is no row thar matches dakshi li 3ndna
 	if entity == 0 {
 		return &models.ErrorJson{Status: 400, Message: &models.ReactionErr{
 			EntityId: "ERROR!! Wrong EntityID field!",

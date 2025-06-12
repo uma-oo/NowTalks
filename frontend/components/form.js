@@ -135,8 +135,7 @@ export function createPost(form, data) {
         .catch(error => console.log("error submitting register form: ", error))
 }
 
-
-export function handleCreateComment(form, data) {
+function handleCreateComment(form, data) {
     data.post_id = parseInt(form.dataset.postId)
     addComment(data)
         .then(([status, data]) => {
@@ -144,7 +143,7 @@ export function handleCreateComment(form, data) {
                 data.createdAt = Date.now()
                 data.user_name = sessionStorage.getItem("userNickname")
                 let commentsContainer = form.parentElement.querySelector(".comments-container")
-                let commentsCount = getGrandParent(commentsContainer).querySelector('.reaction-container[data-reaction="comment"] > span')
+                let commentsCount = commentsContainer.parentElement.parentElement.querySelector('.reaction-container[data-reaction="comment"] > span')
                 commentsCount.textContent = +commentsCount.textContent + 1
                 commentsContainer.prepend(createComment(data))
                 form.reset()
@@ -157,7 +156,9 @@ export function handleCreateComment(form, data) {
 
 
 
+export function  createReaction(data){
+     
 
-function getGrandParent(elem) {
-    return elem.parentElement.parentElement
+
 }
+

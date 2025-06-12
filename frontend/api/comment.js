@@ -11,10 +11,11 @@ export async function getComments(postId, offset) {
     }
 }
 
-// {
-// "post_id": 1,
-// "content": "Totally agree! I started eating more whole foods and feel amazing."
-// }
+
+
+
+
+
 export async function addComment(commentData) {
     try {
         const response = await fetch('/api/comment', {
