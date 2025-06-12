@@ -41,7 +41,7 @@ func (appRep *AppRepository) GetUsers(offset, user_id int) ([]models.User, *mode
             LEFT JOIN users u ON m.senderID = u.userID
         WHERE
             m.readStatus = 0
-            and receiverID = ?
+			AND (m.receiverID = ? OR m.senderID = ?)
         GROUP BY
             m.senderID
         ORDER BY latest
@@ -51,9 +51,10 @@ SELECT
 FROM users
     LEFT JOIN cte_messages m on users.userID = m.senderID
     WHERE users.userID != ?
-    ORDER BY m.latest DESC
+    ORDER BY m.latest DESC,
+    users.nickname ASC
 LIMIT 10 OFFSET ?`
-	rows, err := appRep.db.Query(query, user_id,user_id,offset)
+	rows, err := appRep.db.Query(query, user_id, user_id, user_id,offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}

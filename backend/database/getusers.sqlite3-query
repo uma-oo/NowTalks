@@ -1,0 +1,37 @@
+-- database: ./forum.db
+
+with 
+cte_latest_interaction as (
+SELECT
+        CASE 
+            WHEN senderID = ? THEN receiverID 
+            ELSE senderID 
+        END AS userID,
+        MAX(createdAt) AS lastInteraction,
+        message
+    FROM messages
+    WHERE senderID = ? OR receiverID = ?
+    GROUP BY userID
+
+),
+cte_ordered_users as (
+SELECT i.message, coalesce(i.lastInteraction, 0)  , u.userID, u.nickname from users u 
+    left JOIN cte_latest_interaction i 
+    ON i.userID = u.userID
+    ORDER BY i.lastInteraction DESC,
+    u.nickname
+)
+select 
+    m.message,
+    m.senderID,
+    count(*) as notifications  
+from
+    cte_ordered_users u
+    left JOIN messages m ON m.senderID = u.userID
+WHERE
+    m.readStatus = 0
+    AND receiverID = ?
+GROUP BY
+    m.senderID
+
+

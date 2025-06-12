@@ -54,7 +54,6 @@ export function createForm(formRepresentaion, id) {
         formElement.append(categoriesFormGrp)
     }
 
-
     formElement.append(formButtons)
     formElement.addEventListener('submit', (e) => { handleFormSubmit(e) })
     return formElement
@@ -63,6 +62,7 @@ export function createForm(formRepresentaion, id) {
 export function handleFormSubmit(event) {
     event.preventDefault()
     let form = new FormData(event.target)
+    console.log(form)
     const formData = Object.fromEntries(form.entries())
     switch (event.target.id) {
         case "login-form":
@@ -73,6 +73,7 @@ export function handleFormSubmit(event) {
             register(event.target, formData)
             break;
         case "create-post-form":
+            console.log(formData)
             formData.categories = form.getAll('categories').map(cat => parseInt(cat))
             createPost(event.target, formData)
             break;

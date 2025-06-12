@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 
 	"real-time-forum/backend/models"
 )
@@ -35,9 +34,9 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
-	
+
 	// before setting the session we need the actual id of the user
-	userData, errJson := Uhandler.service.GetUser(&models.Login{LoginField: strings.ToLower(user.Nickname)})
+	userData, errJson := Uhandler.service.GetUser(&models.Login{LoginField: user.Nickname})
 	if errJson != nil {
 		fmt.Println("herrrrrre", errJson)
 		WriteJsonErrors(w, *errJson)
