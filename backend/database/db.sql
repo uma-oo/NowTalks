@@ -49,13 +49,15 @@ CREATE TABLE IF NOT EXISTS categories (
 
 
 
-INSERT INTO categories (category) VALUES
+INSERT OR IGNORE INTO  categories (category) VALUES
   ('Discussions'),
   ('Questions'),
   ('Ideas'),
   ('Articles'),
   ('Events'), 
-  ('Issues');
+  ('Issues')
+  -- where NOT EXISTS (select * from categories )
+  ;
 
 
 CREATE TABLE IF NOT EXISTS postCategories (
@@ -79,9 +81,11 @@ CREATE TABLE IF NOT EXISTS types (
 
 
 
-INSERT INTO types (entityType) VALUES 
+INSERT OR IGNORE INTO types (entityType) VALUES 
   ('post'),
-  ('comment');
+  ('comment')
+  ;
+
 
 
 CREATE TABLE IF NOT EXISTS reactions(
@@ -108,8 +112,6 @@ CREATE TABLE IF NOT EXISTS messages (
   FOREIGN KEY (receiverID) REFERENCES users (userID) ON UPDATE CASCADE ON DELETE CASCADE,
   CHECK (senderID != receiverID)
 );
-
-
 
 CREATE  TABLE IF NOT EXISTS notifications(
   notificationID INTEGER PRIMARY KEY AUTOINCREMENT,

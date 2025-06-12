@@ -32,23 +32,28 @@ func (appRep *AppRepository) GetUsers(offset, user_id int) ([]models.User, *mode
 	var users []models.User
 	query := `with cte_messages as (
         select
+            max(m.createdAt) as latest,
+            m.message,
             m.senderID,
             count(*) as notifications  
         from
             messages m
-            RIGHT JOIN users u ON m.senderID = u.userID
+            LEFT JOIN users u ON m.senderID = u.userID
         WHERE
             m.readStatus = 0
+            and receiverID = ?
         GROUP BY
             m.senderID
-    )
-	SELECT 
-    	users.userID, users.nickname, COALESCE(cte_messages.notifications, 0)
-	FROM users
-    LEFT JOIN cte_messages on users.userID = cte_messages.senderID
+        ORDER BY latest
+)
+SELECT
+    users.userID, users.nickname, COALESCE(m.notifications, 0)
+FROM users
+    LEFT JOIN cte_messages m on users.userID = m.senderID
     WHERE users.userID != ?
-    LIMIT 10 OFFSET ?`
-	rows, err := appRep.db.Query(query, user_id, offset)
+    ORDER BY m.latest DESC
+LIMIT 10 OFFSET ?`
+	rows, err := appRep.db.Query(query, user_id,user_id,offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}

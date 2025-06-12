@@ -40,7 +40,7 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindowBody = createElement('div', 'chat-window-body')
     chatWindowBody.dataset.last = 0
 
-    fetchMessages(26, chatUserCard.dataset.id, chatWindowBody)
+    fetchMessages(0, chatUserCard.dataset.id, chatWindowBody)
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
 
