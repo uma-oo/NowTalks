@@ -45,7 +45,7 @@ func PwdFormatVerf(password string) bool {
 
 // Sorry your name can't be stored on our system
 func IsValidNickname(nickname string) bool {
-	return regexp.MustCompile(`^[A-Za-z0-9]+(?:[ _-][a-z0-9]+)*$`).MatchString(nickname)
+	return regexp.MustCompile(`^[a-z0-9]+(?:[ _-][a-z0-9]+)*$`).MatchString(nickname)
 }
 
 // not sure
