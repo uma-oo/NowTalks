@@ -18,6 +18,7 @@ func SetRoutes(
 	logout *handler.Logout,
 	users *handler.Users,
 	loggedin *handler.UserData,
+	categories *handler.CategoriesHandler,
 	chat *handler.ChatServer,
 	messages *handler.MessagesHandler,
 	service *s.AppService,

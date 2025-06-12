@@ -1,21 +1,19 @@
 package service
 
 import (
-	"fmt"
-
 	"real-time-forum/backend/models"
 )
 
 func (s *AppService) GetUser(login *models.Login) (*models.User, *models.ErrorJson) {
 	user, err := s.repo.GetUser(login)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+		return nil, &models.ErrorJson{Status: err.Status, Message: err.Message}
 	}
 	return user, nil
 }
 
 func (s *AppService) GetUsers(offset, user_id int) ([]models.User, *models.ErrorJson) {
-	users, err := s.repo.GetUsers(offset,user_id)
+	users, err := s.repo.GetUsers(offset, user_id)
 	if err != nil {
 		return nil, err
 	}

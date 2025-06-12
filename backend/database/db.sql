@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     userID INTEGER PRIMARY KEY AUTOINCREMENT,
     nickname VARCHAR(30) NOT NULL UNIQUE,
     age INTEGER NOT NULL,
-    gender TEXT NOT NULL DEFAULT 'Male' CHECK (gender IN ('Male','Female')),
+    gender TEXT NOT NULL DEFAULT 'male' CHECK (gender IN ('male','female')),
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -38,6 +38,35 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
     FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE
 );
+
+
+
+
+CREATE TABLE IF NOT EXISTS categories (
+    categoryID INTEGER PRIMARY KEY,
+    category TEXT NOT NULL UNIQUE
+);
+
+
+
+INSERT INTO categories (category) VALUES
+  ('Discussions'),
+  ('Questions'),
+  ('Ideas'),
+  ('Articles'),
+  ('Events'), 
+  ('Issues');
+
+
+CREATE TABLE IF NOT EXISTS postCategories (
+    categoryID INTEGER NOT NULL,
+    postID INTEGER NOT NULL,
+    PRIMARY KEY (categoryID, postID),
+    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
+    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) 
+);
+
+
 
 
 

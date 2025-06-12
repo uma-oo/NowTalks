@@ -11,18 +11,22 @@ import (
 
 func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *models.ErrorJson) {
 	post_created := models.NewPost()
-	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING postID, title , content ,createdAt`
+	query := `INSERT INTO posts(userID,  title, content) VALUES (?, ?, ?) RETURNING postID, title , content ,createdAt, total_comments`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hhh", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
 	err = stmt.QueryRow(post.UserId, post.Title, post.Content).Scan(&post_created.Id, &post_created.Title,
-		&post_created.Content, &post_created.CreatedAt)
+		&post_created.Content, &post_created.CreatedAt, &post_created.TotalComments)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v dddd  ", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 
+	post_created, errJson := appRep.AddPostCategories(post_created, post.PostCategories)
+	if errJson != nil {
+		return nil, errJson
+	}
 	username, errJson := appRep.GetUserNameById(post.UserId)
 	if errJson != nil {
 		return nil, errJson
@@ -83,13 +87,35 @@ ORDER BY
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-
+	
 	for rows.Next() {
 		var post models.Post
 		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title, &post.Content, &post.TotalLikes, &post.TotalComments); err != nil {
 			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
+		query_fetch_categories := `
+		SELECT  categories.category
+		FROM categories INNER JOIN postCategories ON 
+		categories.categoryID = postCategories.categoryID
+		INNER JOIN posts ON postCategories.postID = posts.postID 
+		WHERE posts.postID = ? 
+		`
+		rows_, errQuery := appRep.db.Query(query_fetch_categories, post.Id)
+		if errQuery != nil {
+			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v   5", err)}
+		}
+		categories := []any{}
+		for rows_.Next() {
+			var category string
+			errScan := rows_.Scan(&category)
+			if errScan != nil {
+				return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+			}
+			categories = append(categories, category)
 
+		}
+		post.PostCategories = append(post.PostCategories, categories...)
+	
 		posts = append(posts, post)
 
 	}

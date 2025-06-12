@@ -18,12 +18,12 @@ func InitSetup(database *sql.DB) {
 	userHandler := handler.NewUserHandler(service)
 	logout := handler.NewLogoutHandler(service)
 	loggedin := handler.NewUserDataHanlder(service)
-
+	categories := handler.NewCategoriesHandler(service)
 	chat := handler.NewChatServer(service)
 	reactionHandler := handler.NewReactionHandler(service)
 	users := handler.NewUsersHandler(service)
 	messages := handler.NewMessagesHandler(service)
 	routes.SetRoutes(postHanlder, commentHandler,
 		reactionHandler, userHandler, logout,
-		users, loggedin, chat, messages,service)
+		users, loggedin,categories ,chat, messages, service)
 }
