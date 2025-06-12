@@ -81,7 +81,6 @@ export function setOpions(selectElement, options) {
 }
 
 export function loadFormErrors(form, data) {
-    console.log("Form Errors: ", data)
     for (let [field, error] of Object.entries(data)) {
         let inputError = form.querySelector(`.form-grp[data-for="${field}"]>.input-error`)
         if (inputError) {

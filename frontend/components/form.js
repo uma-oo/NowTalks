@@ -5,6 +5,7 @@ import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } f
 import { addComment } from "../api/comment.js";
 import { createComment } from "./comment.js";
 import { sendMessage } from "../websocket.js";
+import { createCheckboxInput } from "./checkbox.js";
 
 export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
@@ -33,6 +34,25 @@ export function createForm(formRepresentaion, id) {
         formButtons.append(createButton(button.content, button.type, button.style))
     })
 
+    if (id == 'create-post-form') {
+        let categoriesFormGrp = createElement('div', 'form-grp')
+        categoriesFormGrp.dataset.for = "categories"
+        let categoriesLabel = createElement('label', null, 'Post Categories')
+        categoriesLabel.setAttribute("for", "categories")
+        let app = document.querySelector('#app')
+        let categories = app.dataset.categories.split(',')
+        let categoriesList = createElement('div', 'categories-list')
+        categories.forEach(category => {
+            if (!category) return
+            let [id, name] = category.split('-')
+
+            let optionElem = createCheckboxInput(`category${id}`, id, name)
+            categoriesList.append(optionElem)
+        })
+        let inputError = createElement('p', 'input-error')
+        categoriesFormGrp.append(categoriesLabel, categoriesList, inputError)
+        formElement.append(categoriesFormGrp)
+    }
 
 
     formElement.append(formButtons)
@@ -53,6 +73,7 @@ export function handleFormSubmit(event) {
             register(event.target, formData)
             break;
         case "create-post-form":
+            formData.categories = form.getAll('categories').map(cat => parseInt(cat))
             createPost(event.target, formData)
             break;
         case "comment-form":
@@ -107,7 +128,7 @@ export function createPost(form, data) {
             }
             else if (status === 400) {
                 loadFormErrors(form, data.errors)
-            } else if (status===401) {
+            } else if (status === 401) {
                 navigateTo("/login")
             }
         })

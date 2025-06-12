@@ -22,6 +22,7 @@ export function createPostsSection() {
 function fetchPosts(container) {
     let offset = container.dataset.offset
     getPostsApi(offset).then(data => {
+      
         if (data?.status == 401) {
             navigateTo('/login')
         } else if (data) {
@@ -40,10 +41,10 @@ export function toggleCreatePostFormContainer() {
     let container = document.querySelector('.create-post-form-container')
     container.classList.toggle("create-post-form-container_expanded")
     if (!container.querySelector("#create-post-form")) {
-        let title = createElement('h2', null , "Share your thoughts:")
+        let title = createElement('h2', null, "Share your thoughts:")
         let goBack = createIcon("arrow-square-left")
 
-        goBack.addEventListener('click', ()=> toggleCreatePostFormContainer())
+        goBack.addEventListener('click', () => toggleCreatePostFormContainer())
         title.prepend(goBack)
         container.append(title, createForm(PostForm, "create-post-form"))
     } else {

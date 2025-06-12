@@ -1,11 +1,13 @@
 import { createChatMessageContainer } from "./components/chatMessageContainer.js"
 
 
-let socket
+let socket = null 
 
 
 export function setUpWebsocket() {
-    socket = new WebSocket("ws://localhost:8080/ws/chat");
+    if (!socket) {
+        socket = new WebSocket("ws://localhost:8080/ws/chat");
+    }
     socket.onopen = function (e) {
         console.log("[open] Connection established");
         console.log("Sending to server");

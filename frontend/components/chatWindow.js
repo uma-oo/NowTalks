@@ -43,7 +43,6 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
 }
 
 export function closeChatWindow(chatUserCard, chatWindow) {
-    console.log(chatWindow)
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
     chatWindow.innerHTML = ""
