@@ -27,6 +27,12 @@ type UserData struct {
 	service *service.AppService
 }
 
+
+type CategoriesHandler struct {
+	service *service.AppService
+}
+
+
 type ReactionHanlder struct {
 	service *service.AppService
 }
@@ -59,6 +65,12 @@ func NewPostHandler(service *service.AppService) *PostHandler {
 func NewUserHandler(service *service.AppService) *UserHanlder {
 	return &UserHanlder{service: service}
 }
+
+
+func NewCategoriesHandler(service *service.AppService) *CategoriesHandler {
+	return &CategoriesHandler{service: service}
+}
+
 
 func NewUserDataHanlder(service *service.AppService) *UserData {
 	return &UserData{service: service}

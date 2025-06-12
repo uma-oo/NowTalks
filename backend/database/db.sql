@@ -42,6 +42,35 @@ CREATE TABLE IF NOT EXISTS comments (
 
 
 
+CREATE TABLE IF NOT EXISTS categories (
+    categoryID INTEGER PRIMARY KEY,
+    category TEXT NOT NULL UNIQUE
+);
+
+
+
+INSERT INTO categories (category) VALUES
+  ('Discussions'),
+  ('Questions'),
+  ('Ideas'),
+  ('Articles'),
+  ('Events'), 
+  ('Issues');
+
+
+CREATE TABLE IF NOT EXISTS postCategories (
+    categoryID INTEGER NOT NULL,
+    postID INTEGER NOT NULL,
+    PRIMARY KEY (categoryID, postID),
+    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
+    FOREIGN KEY (categoryID) REFERENCES categories(categoryID) 
+);
+
+
+
+
+
+
 
 CREATE TABLE IF NOT EXISTS types (
   entityTypeID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
