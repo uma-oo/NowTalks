@@ -140,12 +140,12 @@ export function handleCreateComment(form, data) {
     data.post_id = parseInt(form.dataset.postId)
     addComment(data)
         .then(([status, data]) => {
+            console.log(data);
             if (status === 200) {
                 data.createdAt = Date.now()
                 data.user_name = sessionStorage.getItem("userNickname")
                 let commentsContainer = form.parentElement.querySelector(".comments-container")
-                let commentsCount = getGrandParent(commentsContainer).querySelector(".comment_count")
-
+                let commentsCount = getGrandParent(commentsContainer).querySelector("span")
                 commentsCount.textContent = +commentsCount.textContent + 1
                 commentsContainer.prepend(createComment(data))
                 form.reset()
@@ -155,6 +155,9 @@ export function handleCreateComment(form, data) {
             }
         })
 }
+
+
+
 
 function getGrandParent(elem) {
     return elem.parentElement.parentElement

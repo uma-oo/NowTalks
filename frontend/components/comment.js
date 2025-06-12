@@ -13,7 +13,7 @@ export function createComment({
     let commentCreatedAt = createElement('span', null, timeAgo(created_at))
     let commentText = createElement('p', null, content)
     let heartIcon = createIcon("heart")
-
+    
     commentWriter.prepend(createIcon("user"))
     commentCreatedAt.prepend(createIcon("calendar"))
     commentContent.append(commentWriter, commentCreatedAt, commentText)
