@@ -27,12 +27,17 @@ export function ToggleLike(reactionData, likedElement) {
             }
             if (status == 200 && response) {
                 let reaction = parseInt(response.reaction)
+                let count = likedElement.querySelector("span")
+                let heart = likedElement.querySelector("svg")
                 switch (reaction) {
                     case 1:
-                        likedElement.style.fill = "red"
+                        count.textContent = + count.textContent + 1
+                        heart.style.fill = "red"
                         break;
-                    default:
-                        likedElement.style.fill = "white"
+                    case 0 :
+                        count.textContent = + count.textContent - 1
+                        heart.style.fill = "white"
+                        break;
                 }
 
             }
@@ -41,5 +46,3 @@ export function ToggleLike(reactionData, likedElement) {
 
 
 }
-
-

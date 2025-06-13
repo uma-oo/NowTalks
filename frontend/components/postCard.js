@@ -42,7 +42,7 @@ export function createPostCard({
     let reactionElements = reactions.map(({ type, icon, total }) => {
         let containerElem = createElement('div', 'reaction-container');
         containerElem.dataset.reaction = type;
-        let iconElem = createIcon(icon);
+        let iconElem = createIcon(icon, type);
         let countElem = createElement('span', null, total?total:'0');
         containerElem.prepend(iconElem, countElem);
         return containerElem;
@@ -72,9 +72,9 @@ export function createPostCard({
     likeReaction.addEventListener("click", ()=> {
         let reactionData = {
             entity_id : id, 
-            type : "post"
+            entity_type : "post"
         }
-        ToggleLike(reactionData, likeReaction.querySelector(".icon"))
+        ToggleLike(reactionData, likeReaction)
     })
 
 
