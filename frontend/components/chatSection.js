@@ -20,13 +20,14 @@ export function createChatSection() {
 }
 
 
-function fetchUsers(chatList) {
+export function fetchUsers(chatList) {
     let offset = chatList.dataset.offset
     getUsers(offset).then(([status, data]) => {
         if (status == 401) {
             navigateTo("login")
         }
         if (status == 200) {
+            console.log(data, chatList);
             let chats = data?.map(({id, nickname}) => {
                 let userCard = createChatUserCard(nickname)
                 userCard.dataset.id = id

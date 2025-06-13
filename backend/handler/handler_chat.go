@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -9,7 +8,6 @@ import (
 )
 
 func (server *ChatServer) ChatServerHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("hnaaaaaaaaaaaa")
 	connection, err := server.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		if isHandshakeError(err) {

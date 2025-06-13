@@ -1,7 +1,8 @@
+import { fetchUsers } from "./components/chatSection.js";
 import { renderApp } from "./index.js";
 
 export async function navigateTo(pathname) {
-    history.replaceState({},"",pathname)
+    history.replaceState({}, "", pathname)
     renderApp()
 }
 
@@ -34,15 +35,15 @@ export function timeAgo(timestamp, locale = 'en') {
 
 export function throttledScrollFetcher(func) {
     return throttle((e) => {
-            const container = e.target
-            const scrollTop = container.scrollTop
-            const scrollHeight = container.scrollHeight
-            const clientHeight = container.clientHeight
-    
-            if (scrollTop + clientHeight >= scrollHeight * 0.8) {
-                func(container)
-            }
-        }, 300)
+        const container = e.target
+        const scrollTop = container.scrollTop
+        const scrollHeight = container.scrollHeight
+        const clientHeight = container.clientHeight
+
+        if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+            func(container)
+        }
+    }, 300)
 }
 
 export function throttle(func, delay) {
@@ -58,7 +59,7 @@ export function throttle(func, delay) {
     }
 }
 
-export function createElement(tag, className, text='') {
+export function createElement(tag, className, text = '') {
     let element = document.createElement(tag)
     if (className) element.className = className
     if (text) element.textContent = text
@@ -66,13 +67,13 @@ export function createElement(tag, className, text='') {
 }
 
 export function setAttributes(elem, attributes) {
-    for ( let [key,val] of Object.entries(attributes)) {
-        elem.setAttribute(key,val)
+    for (let [key, val] of Object.entries(attributes)) {
+        elem.setAttribute(key, val)
     }
 }
 
 export function setOpions(selectElement, options) {
-    options.forEach(option=> {
+    options.forEach(option => {
         let optionElement = document.createElement('option')
         optionElement.setAttribute('value', option)
         optionElement.textContent = option
@@ -85,6 +86,19 @@ export function loadFormErrors(form, data) {
         let inputError = form.querySelector(`.form-grp[data-for="${field}"]>.input-error`)
         if (inputError) {
             inputError.textContent = error;
-        } 
+        }
     }
+}
+
+
+
+
+
+export function ReorderUsers() {
+    let chatList = document.querySelector(".chat-list")
+    if (chatList) {
+        console.log("hna", chatList);
+        chatList.innerHTML = ''
+    }
+    fetchUsers(document.querySelector(".chat-list"))
 }
