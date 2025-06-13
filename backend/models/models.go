@@ -13,10 +13,9 @@ type User struct {
 	Password      string `json:"password,omitempty"`
 	VerifPassword string `json:"password2,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
-
 	Notfications    string `json:"notifications,omitempty"`
-	LastMessage     string `json:"lastMessage"`
-	LastInteraction string `json:"lastInteraction"`
+	LastMessage     string `json:"lastMessage,omitempty"`
+	LastInteraction string `json:"lastInteraction,omitempty"`
 }
 
 type Session struct {

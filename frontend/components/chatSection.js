@@ -1,5 +1,4 @@
 import { getUsers } from "../api/user.js"
-import { users } from "../const/data.js"
 import { createElement, navigateTo } from "../utils.js"
 import { createChatUserCard } from "./chatUserCard.js"
 import { openChatWindow } from "./chatWindow.js"
@@ -20,7 +19,7 @@ export function createChatSection() {
 }
 
 
-function fetchUsers(chatList) {
+export function fetchUsers(chatList) {
     let offset = chatList.dataset.offset
     getUsers(offset).then(([status, data]) => {
         if (status == 401) {
@@ -32,7 +31,7 @@ function fetchUsers(chatList) {
                 let userCard = createChatUserCard(userData)
                 userCard.dataset.id = userData.id
                 let userCardClone = userCard.cloneNode(true)
-                userCard.addEventListener("click", e => {
+                userCard.addEventListener("click", _ => {
                 
                     openChatWindow(userCard, userCardClone)
                 })

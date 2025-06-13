@@ -1,7 +1,9 @@
 import { createChatMessageContainer } from "./components/chatMessageContainer.js"
+import { fetchUsers } from "./components/chatSection.js";
+import { ReorderUsers } from "./utils.js";
 
 
-let socket = null 
+let socket = null
 
 
 export function setUpWebsocket() {
@@ -27,17 +29,27 @@ export function closeConnection() {
 
 
 
+
+
+
+
+
+
+
+
 function receiveMessage(event) {
+    
     let data = JSON.parse(event.data)
     switch (data.type) {
         case "message":
             createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"), "bottom")
+            ReorderUsers()
             break;
         case "read":
             break;
         case "typing":
             break;
-      
+
     }
 }
 
@@ -45,7 +57,7 @@ function receiveMessage(event) {
 export function sendMessage(messageContent) {
 
     let receiver_id = parseInt(document.querySelector(".chat-window_expanded [data-id]").dataset.id)
-    
+
     const msg = {
         content: messageContent,
         type: "message",

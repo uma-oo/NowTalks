@@ -27,11 +27,9 @@ type UserData struct {
 	service *service.AppService
 }
 
-
 type CategoriesHandler struct {
 	service *service.AppService
 }
-
 
 type ReactionHanlder struct {
 	service *service.AppService
@@ -66,17 +64,13 @@ func NewUserHandler(service *service.AppService) *UserHanlder {
 	return &UserHanlder{service: service}
 }
 
-
 func NewCategoriesHandler(service *service.AppService) *CategoriesHandler {
 	return &CategoriesHandler{service: service}
 }
 
-
 func NewUserDataHanlder(service *service.AppService) *UserData {
 	return &UserData{service: service}
 }
-
-
 
 func NewReactionHandler(service *service.AppService) *ReactionHanlder {
 	return &ReactionHanlder{service: service}
@@ -102,16 +96,21 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 // section for the chat implemenatation
 type ClientList map[int][]*Client
 
+type OnlineUsers struct {
+	Type string  `json:"type"`
+	Data []models.User  `json:"data"`
+}
+
 type Client struct {
-	session     *models.Session
-	service     *service.AppService
-	connection  *websocket.Conn
-	chatServer  *ChatServer
-	Message     chan *models.Message
-	ErrorJson   chan *models.ErrorJson
-	OnlineUsers chan []models.User
-	userId   int
-	Username string
+	session    *models.Session
+	service    *service.AppService
+	connection *websocket.Conn
+	chatServer *ChatServer
+	Message    chan *models.Message
+	ErrorJson  chan *models.ErrorJson
+	Online     chan *OnlineUsers
+	userId     int
+	Username   string
 }
 
 type ChatServer struct {
@@ -135,14 +134,14 @@ func NewChatServer(service *service.AppService) *ChatServer {
 
 func NewClient(conn *websocket.Conn, server *ChatServer, session *models.Session) *Client {
 	return &Client{
-		session:     session,
-		service:     server.service,
-		connection:  conn,
-		chatServer:  server,
-		Message:     make(chan *models.Message),
-		ErrorJson:   make(chan *models.ErrorJson),
-		OnlineUsers: make(chan []models.User),
-		userId:      session.UserId,
-		Username:    session.Username,
+		session:    session,
+		service:    server.service,
+		connection: conn,
+		chatServer: server,
+		Message:    make(chan *models.Message),
+		ErrorJson:  make(chan *models.ErrorJson),
+		Online:     make(chan *OnlineUsers),
+		userId:     session.UserId,
+		Username:   session.Username,
 	}
 }

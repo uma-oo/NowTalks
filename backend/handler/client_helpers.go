@@ -80,7 +80,7 @@ func (client *Client) WriteMessages() {
 			if err != nil {
 				return
 			}
-		case online_users := <-client.OnlineUsers:
+		case online_users := <-client.Online:
 			err := client.connection.WriteJSON(online_users)
 			if err != nil {
 				return
@@ -131,7 +131,10 @@ func (server *ChatServer) BroadCastOnlineStatus() {
 
 	for _, connections := range server.clients {
 		for _, conn := range connections {
-			conn.OnlineUsers <- online_users
+			conn.Online <- &OnlineUsers{
+				Type: "online",
+				Data: online_users,
+			}
 		}
 	}
 }
