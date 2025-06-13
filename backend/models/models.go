@@ -37,7 +37,7 @@ type Post struct {
 	PostCategories []any     `json:"categories"`
 	TotalComments  int       `json:"total_comments"`
 	TotalLikes     int       `json:"total_likes"`
-	// TotalDislikes  int       `json:"total_dislikes"`
+	Liked          int       `json:"liked"`
 }
 
 type Category struct {
@@ -60,9 +60,9 @@ type Reaction struct {
 	Id           int    `json:"id,omitempty"`
 	EntityTypeId int    `json:"entity_type_id,omitempty"`
 	EntityType   string `json:"entity_type,omitempty"`
-	EntityId     int    `json:"entity_id"`
-	Reaction     int    `json:"reaction,omitempty"`
-	UserId       int    `json:"user_id"`
+	EntityId     int    `json:"entity_id,omitempty"`
+	Reaction     int    `json:"reaction"`
+	UserId       int    `json:"user_id,omitempty"`
 }
 
 type PostError struct {

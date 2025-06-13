@@ -33,10 +33,13 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	liked.EntityTypeId = entity_type_id
-	if errJson := Rhanlder.service.HanldeReaction(&liked, 1); errJson != nil {
+	reaction, errJson := Rhanlder.service.HanldeReaction(&liked, 1)
+	if errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
+
+	WriteDataBack(w, reaction)
 }
 
 func (Rhandler *ReactionHanlder) DislikeEnity(w http.ResponseWriter, r *http.Request) {
@@ -65,13 +68,16 @@ func (Rhandler *ReactionHanlder) DislikeEnity(w http.ResponseWriter, r *http.Req
 		return
 	}
 	disliked.EntityTypeId = entity_type_id
-	if errJson := Rhandler.service.HanldeReaction(&disliked, -1); errJson != nil {
+	reaction, errJson := Rhandler.service.HanldeReaction(&disliked, -1)
+	if errJson != nil {
 		WriteJsonErrors(w, *errJson)
 		return
 	}
+	WriteDataBack(w, reaction)
 }
 
 func (RHanlder *ReactionHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not allowed!!"})
 		return

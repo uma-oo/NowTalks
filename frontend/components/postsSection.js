@@ -34,6 +34,7 @@ function fetchPosts(container) {
 
 function createPostCards(data) {
     if (data == null) return "No Posts Available"
+    console.log(data);
     return data.map(postData => createPostCard(postData))
 }
 

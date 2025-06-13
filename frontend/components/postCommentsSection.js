@@ -17,7 +17,6 @@ export function createPostCommentsSection(postId) {
 
     // commentsContainer.append(...comments)
     postCommentsSection.append(commentsContainer, seeMore, commentForm)
-
     return postCommentsSection
 }
 

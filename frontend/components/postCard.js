@@ -1,3 +1,4 @@
+import { ToggleLike } from "../api/reaction.js"
 import { timeAgo } from "../utils.js"
 import { createElement } from "../utils.js"
 import { createIcon } from "./icon.js"
@@ -12,7 +13,8 @@ export function createPostCard({
     categories,
     created_at,
     total_comments,
-    total_likes
+    total_likes,
+    liked
 }) {
     let container = createElement('div', 'post-container')
     container.dataset.id = id
@@ -39,11 +41,13 @@ export function createPostCard({
     ]
 
     let reactionElements = reactions.map(({ type, icon, total }) => {
-        let text = type === "like" ? `Like` : total === 0 ? "Add comment" : "See comments"
-        let containerElem = createElement('div', 'reaction-container', text);
+        let containerElem = createElement('div', 'reaction-container');
         containerElem.dataset.reaction = type;
-        let iconElem = createIcon(icon);
-        let countElem = createElement('span', null, '0');
+        let iconElem = createIcon(icon, type);
+        if (liked != 0 && type == "like") {
+            iconElem.style.fill = "red";
+        }
+        let countElem = createElement('span', null, total ? total : '0');
         containerElem.prepend(iconElem, countElem);
         return containerElem;
     });
@@ -68,6 +72,14 @@ export function createPostCard({
 
     })
 
+    let likeReaction = postFooter.querySelector('.reaction-container[data-reaction="like"]')
+    likeReaction.addEventListener("click", () => {
+        let reactionData = {
+            entity_id: id,
+            entity_type: "post"
+        }
+        ToggleLike(reactionData, likeReaction)
+    })
 
 
 
