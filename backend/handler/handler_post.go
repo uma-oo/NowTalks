@@ -41,13 +41,15 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
+	cookie, _ := r.Cookie("session")
+	session, _ := Phandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset"))
 		return
 	}
 
-	posts, err_get := Phandler.service.GetPosts(offset)
+	posts, err_get := Phandler.service.GetPosts(session.UserId, offset)
 	if err_get != nil {
 		WriteJsonErrors(w, *err_get)
 		return

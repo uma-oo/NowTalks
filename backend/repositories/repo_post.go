@@ -37,7 +37,7 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 
 // all the posts
 // add the offset and the limit after
-func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
+func (appRep *AppRepository) GetPosts(user_id, offset int) ([]models.Post, *models.ErrorJson) {
 	var posts []models.Post
 	query := `
 	with
@@ -63,34 +63,39 @@ func (appRep *AppRepository) GetPosts(offset int) ([]models.Post, *models.ErrorJ
         GROUP BY
             postID
     )
-SELECT
-    users.nickname,
-    posts.postID,
-    posts.createdAt,
-    posts.title,
-    posts.content,
-    coalesce(cte_likes.total_likes, 0) as total_likes,
-    coalesce(cte_comments.total_comments, 0) as total_comments
-FROM
-    posts
-    INNER JOIN users ON posts.userID = users.userID
-    LEFT JOIN cte_likes ON posts.postID = cte_likes.entityID
-    LEFT JOIN cte_comments ON cte_comments.postID = posts.postID
-ORDER BY
-    posts.createdAt DESC
-	LIMIT 10 offset ?;
+	SELECT
+		DISTINCT
+		users.nickname,
+		posts.postID,
+		posts.createdAt,
+		posts.title,
+		posts.content,
+		coalesce(cte_likes.total_likes, 0) as total_likes,
+		coalesce(cte_comments.total_comments, 0) as total_comments,
+		coalesce(reactions.userID,0) as liked
+	FROM
+		posts
+		INNER JOIN users ON posts.userID = users.userID
+		LEFT JOIN cte_likes ON posts.postID = cte_likes.entityID
+		LEFT JOIN cte_comments ON cte_comments.postID = posts.postID
+		LEFT JOIN reactions ON reactions.entityID = posts.postID 
+		AND reactions.userID = ? AND reactions.reaction = 1
+	ORDER BY
+		posts.createdAt DESC
+		LIMIT 10 offset ?;
 	`
-	rows, err := appRep.db.Query(query, offset)
+	rows, err := appRep.db.Query(query, user_id, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
 	}
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	
+
 	for rows.Next() {
 		var post models.Post
-		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title, &post.Content, &post.TotalLikes, &post.TotalComments); err != nil {
+		if err := rows.Scan(&post.Username, &post.Id, &post.CreatedAt, &post.Title,
+			&post.Content, &post.TotalLikes, &post.TotalComments, &post.Liked); err != nil {
 			return posts, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 		}
 		query_fetch_categories := `
@@ -115,7 +120,7 @@ ORDER BY
 
 		}
 		post.PostCategories = append(post.PostCategories, categories...)
-	
+
 		posts = append(posts, post)
 
 	}

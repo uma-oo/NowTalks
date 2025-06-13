@@ -35,8 +35,8 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	return post_created, nil
 }
 
-func (s *AppService) GetPosts(offset int) ([]models.Post, *models.ErrorJson) {
-	posts, err := s.repo.GetPosts(offset)
+func (s *AppService) GetPosts(user_id, offset int) ([]models.Post, *models.ErrorJson) {
+	posts, err := s.repo.GetPosts(user_id, offset)
 	if err != nil {
 		return nil, err
 	}

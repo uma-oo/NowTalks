@@ -13,7 +13,8 @@ export function createPostCard({
     categories,
     created_at,
     total_comments,
-    total_likes
+    total_likes,
+    liked
 }) {
     let container = createElement('div', 'post-container')
     container.dataset.id = id
@@ -43,6 +44,9 @@ export function createPostCard({
         let containerElem = createElement('div', 'reaction-container');
         containerElem.dataset.reaction = type;
         let iconElem = createIcon(icon, type);
+        if (liked!=0 && type=="like") {
+            iconElem.style.fill = "red";
+        }
         let countElem = createElement('span', null, total?total:'0');
         containerElem.prepend(iconElem, countElem);
         return containerElem;
