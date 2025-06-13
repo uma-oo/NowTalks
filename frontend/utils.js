@@ -119,7 +119,7 @@ export function loadFormErrors(form, data) {
 }
 
 
-
+// we need to edit the data also f
 
 
 export function ReorderUsers(dataSent) {
@@ -129,9 +129,16 @@ export function ReorderUsers(dataSent) {
         (data) => {
             userId = data.id
             if (dataSent.receiver_id != userId && document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
-                chatList.prepend(document.querySelector(`.chat-user-card[data-id="${dataSent.receiver_id}"]`))
+                let userCard = document.querySelector(`.chat-user-card[data-id="${dataSent.receiver_id}"]`)
+                let latest_message = userCard.querySelector(".latest_message")
+                latest_message.textContent = dataSent.content
+
+                chatList.prepend(userCard)
             } else {
-                chatList.prepend(document.querySelector(`.chat-user-card[data-id="${dataSent.sender_id}"]`))
+                let userCard = document.querySelector(`.chat-user-card[data-id="${dataSent.sender_id}"]`)
+                let latest_message = userCard.querySelector(".latest_message")
+                latest_message.textContent = dataSent.content
+                chatList.prepend(userCard)
             }
         }
     ).catch(
