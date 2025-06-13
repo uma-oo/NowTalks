@@ -79,7 +79,7 @@ func (appRep *AppRepository) GetPosts(user_id, offset int) ([]models.Post, *mode
 		LEFT JOIN cte_likes ON posts.postID = cte_likes.entityID
 		LEFT JOIN cte_comments ON cte_comments.postID = posts.postID
 		LEFT JOIN reactions ON reactions.entityID = posts.postID 
-		AND reactions.userID = ? AND reactions.reaction = 1
+		AND reactions.userID = ? AND reactions.reaction = 1 AND reactions.entityTypeID = 1
 	ORDER BY
 		posts.createdAt DESC
 		LIMIT 10 offset ?;

@@ -14,8 +14,6 @@ export function setUpWebsocket() {
         console.log("[open] Connection established");
         console.log("Sending to server");
     };
-
-
     socket.onmessage = (event) => receiveMessage(event)
     // socket.send =
     // socket.onmessage()

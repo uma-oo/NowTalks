@@ -59,7 +59,7 @@ func (appRep *AppRepository) GetComments(user_id, postId, offset int) ([]models.
 		INNER JOIN users ON comments.userID = users.userID
 		LEFT JOIN cte_likes ON cte_likes.entityID = comments.commentID
         LEFT JOIN reactions ON comments.commentID = reactions.entityID 
-        AND reactions.userID = ?  AND reactions.reaction =1
+        AND reactions.userID = ?  AND reactions.reaction =1 AND reactions.entityTypeID = 2
 	WHERE
 		comments.postID = ?
 	ORDER BY
