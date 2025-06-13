@@ -6,7 +6,7 @@ import { addComment } from "../api/comment.js";
 import { createComment } from "./comment.js";
 import { sendMessage } from "../websocket.js";
 import { createCheckboxInput } from "./checkbox.js";
-import { fetchUsers } from "./chatSection.js";
+
 
 export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')

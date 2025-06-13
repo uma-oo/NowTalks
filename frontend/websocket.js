@@ -1,5 +1,4 @@
 import { createChatMessageContainer } from "./components/chatMessageContainer.js"
-import { fetchUsers } from "./components/chatSection.js";
 import { ReorderUsers } from "./utils.js";
 
 
@@ -24,15 +23,6 @@ export function setUpWebsocket() {
 export function closeConnection() {
     socket.close()
 }
-
-
-
-
-
-
-
-
-
 
 
 function receiveMessage(event) {
