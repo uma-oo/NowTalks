@@ -74,15 +74,11 @@ export function createPostCard({
 
     let likeReaction = postFooter.querySelector('.reaction-container[data-reaction="like"]')
     likeReaction.addEventListener("click", () => {
-        let reactionData = {
+        ToggleLike({
             entity_id: id,
             entity_type: "post"
-        }
-        ToggleLike(reactionData, likeReaction)
+        }, likeReaction.querySelector("svg"), likeReaction.querySelector("span"))
     })
-
-
-
     return container
 }
 

@@ -17,26 +17,24 @@ async function addReaction(reactionData) {
 
 
 
-export function ToggleLike(reactionData, likedElement) {
+export function ToggleLike(reactionData, svg, count) {
 
     addReaction(reactionData).then(
         ([status, response]) => {
-            console.log(response);
             if (status == 401) {
                 navigateTo("login")
             }
             if (status == 200 && response) {
                 let reaction = parseInt(response.reaction)
-                let count = likedElement.querySelector("span")
-                let heart = likedElement.querySelector("svg")
+                console.log("response of the toggle", response);
                 switch (reaction) {
                     case 1:
                         count.textContent = + count.textContent + 1
-                        heart.style.fill = "red"
+                        svg.style.fill = "red"
                         break;
                     case 0 :
                         count.textContent = + count.textContent - 1
-                        heart.style.fill = "white"
+                        svg.style.fill = "white"
                         break;
                 }
 
