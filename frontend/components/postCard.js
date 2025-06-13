@@ -44,10 +44,10 @@ export function createPostCard({
         let containerElem = createElement('div', 'reaction-container');
         containerElem.dataset.reaction = type;
         let iconElem = createIcon(icon, type);
-        if (liked!=0 && type=="like") {
+        if (liked != 0 && type == "like") {
             iconElem.style.fill = "red";
         }
-        let countElem = createElement('span', null, total?total:'0');
+        let countElem = createElement('span', null, total ? total : '0');
         containerElem.prepend(iconElem, countElem);
         return containerElem;
     });
@@ -73,10 +73,10 @@ export function createPostCard({
     })
 
     let likeReaction = postFooter.querySelector('.reaction-container[data-reaction="like"]')
-    likeReaction.addEventListener("click", ()=> {
+    likeReaction.addEventListener("click", () => {
         let reactionData = {
-            entity_id : id, 
-            entity_type : "post"
+            entity_id: id,
+            entity_type: "post"
         }
         ToggleLike(reactionData, likeReaction)
     })
