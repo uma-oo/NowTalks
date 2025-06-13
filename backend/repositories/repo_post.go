@@ -47,9 +47,8 @@ func (appRep *AppRepository) GetPosts(user_id, offset int) ([]models.Post, *mode
             count(*) as total_likes
         from
             reactions
-            INNER JOIN types ON reactions.entityTypeID = types.entityTypeID
         WHERE
-            types.entityType = "post"
+            reactions.entityTypeID = 1
             AND reactions.reaction = 1
         group by
             entityID

@@ -1,7 +1,6 @@
 import { navigateTo } from "../utils.js"
 
 async function addReaction(reactionData) {
-    console.log(reactionData);
     try {
         let response = await fetch("/api/react/like", {
             method: "POST",
@@ -26,7 +25,6 @@ export function ToggleLike(reactionData, svg, count) {
             }
             if (status == 200 && response) {
                 let reaction = parseInt(response.reaction)
-                console.log("response of the toggle", response);
                 switch (reaction) {
                     case 1:
                         count.textContent = + count.textContent + 1

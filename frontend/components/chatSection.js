@@ -26,7 +26,6 @@ export function fetchUsers(chatList) {
             navigateTo("login")
         }
         if (status == 200) {
-            console.log(data)
             let chats = data?.map(userData => {
                 let userCard = createChatUserCard(userData)
                 userCard.dataset.id = userData.id

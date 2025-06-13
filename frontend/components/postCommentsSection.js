@@ -12,9 +12,12 @@ export function createPostCommentsSection(postId) {
     let commentForm = createForm(CommentForm, "comment-form")
     commentForm.dataset.postId = postId
 
-
+    //  offset of the id from to start fetching 
     fetchComments(postId, commentsContainer)
-
+    seeMore.addEventListener("click", () => {
+        commentsContainer.dataset.offset += 10
+        fetchComments(postId, commentsContainer)
+    })
     // commentsContainer.append(...comments)
     postCommentsSection.append(commentsContainer, seeMore, commentForm)
     return postCommentsSection

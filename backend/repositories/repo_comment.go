@@ -40,9 +40,8 @@ func (appRep *AppRepository) GetComments(user_id, postId, offset int) ([]models.
             count(*) as total_likes
         FROM
             reactions
-            INNER JOIN types ON reactions.entityTypeID = types.entityTypeID
         WHERE
-            types.entityType = "comment"
+            reactions.entityTypeID = 2
 			AND reactions.reaction = 1
         GROUP BY
             entityID

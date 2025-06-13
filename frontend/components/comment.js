@@ -22,7 +22,6 @@ export function createComment({
     let count = createElement('span', null, total_likes ? total_likes : '0')
     
     if (liked != 0) {
-        console.log("hnaaaaaaaaaaaaaaaaaaaaa", liked, total_likes);
         heartIcon.style.fill = "red"
     }
     heartIcon.addEventListener("click", () => {
