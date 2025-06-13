@@ -30,7 +30,7 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 }
 
 // But hna comments dyal wa7d l post specific
-func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comment, error) {
+func (appRep *AppRepository) GetComments(user_id, postId, offset int) ([]models.Comment, error) {
 	var comments []models.Comment
 	query := `
 	with
@@ -52,11 +52,14 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 		comments.commentID,
 		content,
 		comments.createdAt,
-		coalesce(cte_likes.total_likes, 0) as total_likes
+		coalesce(cte_likes.total_likes, 0) as total_likes,
+        coalesce(reactions.userID,0) as liked
 	FROM
 		comments
 		INNER JOIN users ON comments.userID = users.userID
 		LEFT JOIN cte_likes ON cte_likes.entityID = comments.commentID
+        LEFT JOIN reactions ON comments.commentID = reactions.entityID 
+        AND reactions.userID = ?  AND reactions.reaction =1
 	WHERE
 		comments.postID = ?
 	ORDER BY
@@ -66,7 +69,7 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 	OFFSET
 		?;
 	`
-	rows, err := appRep.db.Query(query, postId, offset)
+	rows, err := appRep.db.Query(query, user_id, postId, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return comments, nil
 	}
@@ -76,7 +79,8 @@ func (appRep *AppRepository) GetComments(postId int, offset int) ([]models.Comme
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content, &comment.CreatedAt, &comment.TotalLikes); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content,
+			&comment.CreatedAt, &comment.TotalLikes, &comment.Liked); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)

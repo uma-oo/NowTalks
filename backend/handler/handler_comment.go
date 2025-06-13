@@ -40,8 +40,8 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {
-	// get the comments of a specific ID
-	// FOR NOW let's just get them from the query
+	cookie, _ := r.Cookie("session")
+	session, _ := CHanlder.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	postId, err := strconv.Atoi(r.URL.Query().Get("post"))
 	if err != nil || errConvoff != nil {
@@ -49,7 +49,7 @@ func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, errJson)
 		return
 	}
-	comments, err_ := CHanlder.service.GetComments(postId, offset)
+	comments, err_ := CHanlder.service.GetComments(session.UserId, postId, offset)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 	}

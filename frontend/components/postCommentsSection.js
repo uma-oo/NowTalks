@@ -25,15 +25,15 @@ export function createPostCommentsSection(postId) {
 
 function fetchComments(id, commentsContainer) {
     let offset = commentsContainer.dataset.offset
-    getComments(id, offset).then(([status, data])=>{
-        if (status === 401 ) {
+    getComments(id, offset).then(([status, data]) => {
+        if (status === 401) {
             navigateTo("/login")
-        } 
+        }
         if (status === 200 && data) {
             data.forEach(commentData => {
                 commentsContainer.append(createComment(commentData))
             });
-        } 
+        }
     })
 
 }

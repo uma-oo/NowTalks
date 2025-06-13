@@ -53,6 +53,7 @@ type Comment struct {
 	CreatedAt  time.Time `json:"created_at,omitempty"`
 	Content    string    `json:"content"`
 	TotalLikes int       `json:"total_likes"`
+	Liked      int       `json:"liked"`
 	// TotalDislikes int       `json:"total_dislikes"`
 }
 
