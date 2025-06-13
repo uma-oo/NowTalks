@@ -22,6 +22,6 @@ export function createChatMessageContainer(
     if (position == "top") {
         messagesBody.prepend(chatMessageContainer)
     }  else if (position === "bottom") {
-        messagesBody.append(chatMessageContainer)
+        messagesBody?.append(chatMessageContainer)
     }
 }

@@ -1,4 +1,6 @@
-import { fetchUsers } from "./components/chatSection.js";
+
+import { isLoggedIn } from "./api/user.js";
+
 import { renderApp } from "./index.js";
 
 export async function navigateTo(pathname) {
@@ -34,28 +36,28 @@ export function timeAgo(timestamp, locale = 'en') {
 }
 
 export function formatTimestamp(date) {
-  const now = new Date();
-  const d = new Date(date);
-  const diffTime = now - d;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const now = new Date();
+    const d = new Date(date);
+    const diffTime = now - d;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
 
-  if (diffDays === 0 && d.getDate() === now.getDate()) {
-    // Today
-    return d.toLocaleTimeString([], options);
-  } else if (diffDays === 1 || (
-      now.getDate() - d.getDate() === 1 &&
-      now.getMonth() === d.getMonth() &&
-      now.getFullYear() === d.getFullYear()
-  )) {
-    return "Yesterday";
-  } else if (diffDays < 7 && d.getDay() !== now.getDay()) {
-    // Within the same week
-    return d.toLocaleDateString(undefined, { weekday: 'long' });
-  } else {
-    return d.toLocaleDateString();
-  }
+    if (diffDays === 0 && d.getDate() === now.getDate()) {
+        // Today
+        return d.toLocaleTimeString([], options);
+    } else if (diffDays === 1 || (
+        now.getDate() - d.getDate() === 1 &&
+        now.getMonth() === d.getMonth() &&
+        now.getFullYear() === d.getFullYear()
+    )) {
+        return "Yesterday";
+    } else if (diffDays < 7 && d.getDay() !== now.getDay()) {
+        // Within the same week
+        return d.toLocaleDateString(undefined, { weekday: 'long' });
+    } else {
+        return d.toLocaleDateString();
+    }
 }
 
 
@@ -120,10 +122,23 @@ export function loadFormErrors(form, data) {
 
 
 
-export function ReorderUsers() {
+export function ReorderUsers(dataSent) {
+    let userId
     let chatList = document.querySelector(".chat-list")
-    if (chatList) {
-        chatList.innerHTML = ''
-    }
-    fetchUsers(document.querySelector(".chat-list"))
+    isLoggedIn().then(
+        (data) => {
+            userId = data.id
+            console.log("userId", userId);
+            if (dataSent.receiver_id != userId && document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
+                chatList.prepend(document.querySelector(`.chat-user-card[data-id="${dataSent.receiver_id}"]`))
+            } else {
+                chatList.prepend(document.querySelector(`.chat-user-card[data-id="${dataSent.sender_id}"]`))
+            }
+        }
+    ).catch(
+        (err) => {
+            console.log(err);
+        }
+    )
+
 }

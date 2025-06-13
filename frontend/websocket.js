@@ -38,12 +38,12 @@ export function closeConnection() {
 
 
 function receiveMessage(event) {
-    
+
     let data = JSON.parse(event.data)
     switch (data.type) {
         case "message":
             createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"), "bottom")
-            ReorderUsers()
+            ReorderUsers(data)
             break;
         case "read":
             break;
