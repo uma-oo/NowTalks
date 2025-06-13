@@ -13,12 +13,25 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     if (chatUserCard.dataset.open) {
         return
     }
-
     const opendChat = document.querySelector('.chat-list > [data-open = "true"]');
-
     if (opendChat) {
         opendChat.dataset.open = "";
     }
+
+    // const observer = new IntersectionObserver(
+    //     entries => {
+    //         entires.forEach(entry => {
+    //             entry.target.innerText = `${Math.round(entry.intersectionRatio * 100)}%`
+    //         })
+    //     },
+    //     { threshold: [0, 0.25, 0.5, 0.75, 1] }
+    // )
+
+    // observer.observe(document.getElementById("test"))
+
+
+
+
 
     chatUserCard.dataset.open = "true"
     chatWindow.innerHTML = ""
@@ -27,7 +40,7 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindowBody = createElement('div', 'chat-window-body')
     chatWindowBody.dataset.last = 0
 
-    fetchMessages(26, chatUserCard.dataset.id, chatWindowBody)
+    fetchMessages(0, chatUserCard.dataset.id, chatWindowBody)
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
 

@@ -29,31 +29,53 @@ func (appRep *AppRepository) CreateUser(user *models.User) *models.ErrorJson {
 
 func (appRep *AppRepository) GetUsers(offset, user_id int) ([]models.User, *models.ErrorJson) {
 	var users []models.User
-	query := `with cte_messages as (
-        select
-            m.senderID,
-            count(*) as notifications  
-        from
-            messages m
-            RIGHT JOIN users u ON m.senderID = u.userID
-        WHERE
-            m.readStatus = 0
-        GROUP BY
-            m.senderID
-    )
-	SELECT 
-    	users.userID, users.nickname, COALESCE(cte_messages.notifications, 0)
-	FROM users
-    LEFT JOIN cte_messages on users.userID = cte_messages.senderID
-    WHERE users.userID != ?
-    LIMIT 10 OFFSET ?`
-	rows, err := appRep.db.Query(query, user_id, offset)
+	query := `with 
+cte_latest_interaction as (
+SELECT
+        CASE 
+            WHEN senderID = ? THEN receiverID 
+            ELSE senderID 
+        END AS userID,
+        MAX(createdAt) AS lastInteraction,
+        message
+    FROM messages
+    WHERE senderID = ? OR receiverID = ?
+    GROUP BY userID
+
+),
+cte_ordered_users as (
+SELECT i.message, coalesce(i.lastInteraction, 0) as lastInteraction  , u.userID, u.nickname 
+from users u 
+    Left JOIN cte_latest_interaction i 
+    ON i.userID = u.userID
+    WHERE u.userID != ?
+),
+cte_notifications as (
+    select 
+    senderID,
+    count(*) as notifications 
+from
+    messages 
+WHERE
+    readStatus = 0
+    And receiverID = ?
+GROUP BY
+    senderID
+)
+SELECT 
+    u.userID, u.nickname , coalesce(u.message, ""), u.lastInteraction, coalesce(n.notifications,0)
+FROM cte_ordered_users u
+    LEFT JOIN cte_notifications n ON u.userID = n.senderID
+    ORDER BY u.lastInteraction DESC,
+    u.nickname
+; `
+	rows, err := appRep.db.Query(query, user_id, user_id, user_id, user_id, user_id)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.Id, &user.Nickname, &user.Notfications); err != nil {
+		if err := rows.Scan(&user.Id, &user.Nickname,&user.LastMessage, &user.LastInteraction, &user.Notfications); err != nil {
 			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v ", err)}
 		}
 		users = append(users, user)
