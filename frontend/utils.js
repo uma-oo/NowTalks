@@ -32,6 +32,32 @@ export function timeAgo(timestamp, locale = 'en') {
     return value;
 }
 
+export function formatTimestamp(date) {
+  const now = new Date();
+  const d = new Date(date);
+  const diffTime = now - d;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+
+  if (diffDays === 0 && d.getDate() === now.getDate()) {
+    // Today
+    return d.toLocaleTimeString([], options);
+  } else if (diffDays === 1 || (
+      now.getDate() - d.getDate() === 1 &&
+      now.getMonth() === d.getMonth() &&
+      now.getFullYear() === d.getFullYear()
+  )) {
+    return "Yesterday";
+  } else if (diffDays < 7 && d.getDay() !== now.getDay()) {
+    // Within the same week
+    return d.toLocaleDateString(undefined, { weekday: 'long' });
+  } else {
+    return d.toLocaleDateString();
+  }
+}
+
+
 export function throttledScrollFetcher(func) {
     return throttle((e) => {
             const container = e.target

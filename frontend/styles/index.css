@@ -685,44 +685,58 @@ aside .create-post-btn {
 }
 
 .chat-list {
-    overflow-y: scroll !important;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display:grid;
+    grid-template-columns:1fr max-content;   /* body | footer  */
+    row-gap:10px;                            /* keeps your old flex gap */
+    overflow-y:scroll !important;            /* keep the scroll you had */
 }
 
 .chat-user-card {
     padding: 10px 0px;
-    display: flex;
+    display:contents;
     align-items: center;
     gap: 10px;
-    /* border: solid red ; */
     cursor: pointer;
     border-left: solid var(--bg-color);
-}
-
-.chat-user-card[data-open="true"] {
-    background-color: var(--primary-color);
-}
-
-
-.chat-user-card i {
-    font-size: var(--font-size-lg);
-}
-
-.chat-user-card:has(.online) i {
-    border: solid green;
-    border-radius: var(--border-radius-circle);
-}
-
-.chat-user-card:has(.offline) {
-
-    /* opacity: 0.5; */
-
-    i {
-        border-radius: var(--border-radius-circle);
-        border: solid #3E5879;
+    span {
+        opacity: .6;
+        font-size: var(--font-size-sm);
     }
+}
+
+.chat-user-card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    .user_name, .user_status {
+        width:50%;
+    }
+    .latest_message {
+        width: 110%;
+    }
+}
+
+.chat-user-card-body .user_name {
+    font-weight: 600;
+}
+
+.chat-user-card .latest_message {
+    font-size: var(--font-size-sm);
+}
+
+.chat-user-card-footer {
+    span {
+        width: max-content;
+    }
+    width: max-content;
+}
+
+.chat-user-card-footer .notification_container{
+    img {
+        width: 18px;
+        /* background: red; */
+    }
+    align-self: self-end;
 }
 
 .chat-window {

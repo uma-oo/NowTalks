@@ -27,9 +27,10 @@ function fetchUsers(chatList) {
             navigateTo("login")
         }
         if (status == 200) {
-            let chats = data?.map(({id, nickname}) => {
-                let userCard = createChatUserCard(nickname)
-                userCard.dataset.id = id
+            console.log(data)
+            let chats = data?.map(userData => {
+                let userCard = createChatUserCard(userData)
+                userCard.dataset.id = userData.id
                 let userCardClone = userCard.cloneNode(true)
                 userCard.addEventListener("click", e => {
                 
