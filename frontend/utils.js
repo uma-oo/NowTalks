@@ -97,7 +97,6 @@ export function loadFormErrors(form, data) {
 export function ReorderUsers() {
     let chatList = document.querySelector(".chat-list")
     if (chatList) {
-        console.log("hna", chatList);
         chatList.innerHTML = ''
     }
     fetchUsers(document.querySelector(".chat-list"))

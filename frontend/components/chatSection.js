@@ -1,5 +1,4 @@
 import { getUsers } from "../api/user.js"
-import { users } from "../const/data.js"
 import { createElement, navigateTo } from "../utils.js"
 import { createChatUserCard } from "./chatUserCard.js"
 import { openChatWindow } from "./chatWindow.js"
@@ -27,12 +26,11 @@ export function fetchUsers(chatList) {
             navigateTo("login")
         }
         if (status == 200) {
-            console.log(data, chatList);
             let chats = data?.map(({id, nickname}) => {
                 let userCard = createChatUserCard(nickname)
                 userCard.dataset.id = id
                 let userCardClone = userCard.cloneNode(true)
-                userCard.addEventListener("click", e => {
+                userCard.addEventListener("click", _ => {
                 
                     openChatWindow(userCard, userCardClone)
                 })
