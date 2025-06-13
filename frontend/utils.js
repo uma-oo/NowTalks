@@ -129,16 +129,9 @@ export function ReorderUsers(dataSent) {
         (data) => {
             userId = data.id
             if (dataSent.receiver_id != userId && document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
-                let userCard = document.querySelector(`.chat-user-card[data-id="${dataSent.receiver_id}"]`)
-                let latest_message = userCard.querySelector(".latest_message")
-                latest_message.textContent = dataSent.content
-
-                chatList.prepend(userCard)
+                chatList.prepend(editUserCard(dataSent.receiver_id, dataSent))
             } else {
-                let userCard = document.querySelector(`.chat-user-card[data-id="${dataSent.sender_id}"]`)
-                let latest_message = userCard.querySelector(".latest_message")
-                latest_message.textContent = dataSent.content
-                chatList.prepend(userCard)
+                chatList.prepend(editUserCard(dataSent.sender_id, dataSent))
             }
         }
     ).catch(
@@ -147,4 +140,12 @@ export function ReorderUsers(dataSent) {
         }
     )
 
+}
+
+
+function editUserCard(userId, dataSent) {
+    let userCard = document.querySelector(`.chat-user-card[data-id="${userId}"]`)
+    let latest_message = userCard.querySelector(".latest_message")
+    latest_message.textContent = dataSent.content
+    return userCard
 }
