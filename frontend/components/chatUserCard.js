@@ -18,7 +18,7 @@ export function createChatUserCard({
 
     let user_nickname = createElement('p',"user_name",nickname)
     let user_status = createElement('span',"user_status","offline")
-    let last_message = createElement('p',"latest_message", lastMessage)
+    let last_message = createElement('p',"latest_message", lastMessage.length>8?lastMessage.slice(0,8)+"...":lastMessage)
     let last_interaction = createElement('span',"latest_interaction", formatTimestamp(lastInteraction))
     let notifications_container =  createElement('div', "notification_container")
     let notifications_count = createElement('span', null, notifications)
