@@ -13,7 +13,10 @@ type User struct {
 	Password      string `json:"password,omitempty"`
 	VerifPassword string `json:"password2,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
-	Notfications  string `json:"notifications,omitempty"`
+
+	Notfications    string `json:"notifications,omitempty"`
+	LastMessage     string `json:"lastMessage"`
+	LastInteraction string `json:"lastInteraction"`
 }
 
 type Session struct {
@@ -37,12 +40,10 @@ type Post struct {
 	// TotalDislikes  int       `json:"total_dislikes"`
 }
 
-
 type Category struct {
 	CategoryId   int    `json:"category_id"`
 	CategoryName string `json:"category_name"`
 }
-
 
 type Comment struct {
 	Id         int       `json:"id,omitempty"`
@@ -65,8 +66,8 @@ type Reaction struct {
 }
 
 type PostError struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	Title      string `json:"title"`
+	Content    string `json:"content"`
 	Categories string `json:"categories"`
 }
 
