@@ -918,7 +918,7 @@ aside .create-post-btn {
 }
 
 
-@media only screen and (max-width: 1000px) {
+/* @media only screen and (max-width: 1000px) {
 
     #app {
         width: 100%;
@@ -953,7 +953,7 @@ aside .create-post-btn {
         display: block;
         width: 300px;
     }
-}
+} */
 
 
 

@@ -118,26 +118,18 @@ export function loadFormErrors(form, data) {
     }
 }
 
-
-
 // we need to edit the data also f
-
-
 export function ReorderUsers(dataSent) {
     let userId
     let chatList = document.querySelector(".chat-list")
     isLoggedIn().then(
         (data) => { 
             userId = data.id
-            if (dataSent.receiver_id != userId && document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
+            if (dataSent.receiver_id != userId || document.querySelector(`.chat-user-card[data-open="true"]`)?.dataset.id == dataSent.receiver_id) {
                 chatList.prepend(editUserCard(dataSent.receiver_id, dataSent))
             } else {
                 chatList.prepend(editUserCard(dataSent.sender_id, dataSent))
             }
-        }
-    ).catch(
-        (err) => {
-            console.log(err);
         }
     )
 }

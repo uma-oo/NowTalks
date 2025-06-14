@@ -9,6 +9,7 @@ import { createForm } from "./form.js";
 
 export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindow = document.querySelector('.chat-window')
+    chatWindow.dataset.id = chatUserCard.dataset.id
     chatWindow.classList.add("chat-window_expanded")
     if (chatUserCard.dataset.open) {
         return
@@ -40,7 +41,7 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindowBody = createElement('div', 'chat-window-body')
     chatWindowBody.dataset.last = 0
 
-    fetchMessages(0, chatUserCard.dataset.id, chatWindowBody)
+    fetchMessages(0, chatUserCard.dataset.id, chatWindow)
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
 

@@ -32,7 +32,6 @@ export function fetchUsers(chatList) {
                 userCard.dataset.id = userData.id
                 let userCardClone = userCard.cloneNode(true)
                 userCard.addEventListener("click", _ => {
-                
                     openChatWindow(userCard, userCardClone)
                 })
                 return userCard

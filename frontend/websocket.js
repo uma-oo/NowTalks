@@ -14,8 +14,7 @@ export function setUpWebsocket() {
         console.log("Sending to server");
     };
     socket.onmessage = (event) => receiveMessage(event)
-    // socket.send =
-    // socket.onmessage()
+
 }
 
 
@@ -26,11 +25,14 @@ export function closeConnection() {
 
 
 function receiveMessage(event) {
-
     let data = JSON.parse(event.data)
+    console.log("hnaaaaaaaaaaaaaaaaaaaaaa", data);
     switch (data.type) {
         case "message":
-            createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"), "bottom")
+            let openChatWindow = document.querySelector(`.chat-window_expanded[data-id="${data.sender_id}"]`) || 
+            document.querySelector(`.chat-window_expanded[data-id="${data.receiver_id}"]`)
+
+            if (openChatWindow) createChatMessageContainer(data, openChatWindow, "bottom")
             ReorderUsers(data)
             break;
         case "read":
