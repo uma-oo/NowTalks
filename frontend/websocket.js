@@ -29,6 +29,7 @@ function receiveMessage(event) {
     let data = JSON.parse(event.data)
     switch (data.type) {
         case "message":
+            console.log("hhhhhhhhhh");
             createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"), "bottom")
             ReorderUsers(data)
             break;

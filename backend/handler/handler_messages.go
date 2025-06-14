@@ -23,6 +23,11 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect Format of the receiver_id"))
 		return
 	}
+	type_ := r.URL.Query().Get("type")
+	if type_ != "old" && type_ != "new" {
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! type is not specified"})
+		return
+	}
 	exists, errJson := messages.service.UserExists(receiver_id)
 	if errJson != nil {
 		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
@@ -33,7 +38,7 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! receiver_id Incorrect"})
 		return
 	}
-	mesages, errJson := messages.service.GetMessages(session.UserId, receiver_id, offset)
+	mesages, errJson := messages.service.GetMessages(session.UserId, receiver_id, offset, type_)
 	if errJson != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(errJson.Status, errJson.Message))
 		return
@@ -45,14 +50,15 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 	}
 }
 
-func (messages *MessagesHandler) UpdateMessage(w http.ResponseWriter, r *http.Request) {
-	// cookie, _ := r.Cookie("session")
-	// session, _ := messages.service.GetSessionByTokenEnsureAuth(cookie.Value)
 
-	// messages.service.UpdateMessage()
 
-	// w.WriteHeader(http.StatusNoContent)
+
+func (messages *MessagesHandler) UpdataReadStatus(w http.ResponseWriter, r *http.Request) {
+	
 }
+
+
+
 
 
 
@@ -62,7 +68,7 @@ func (messages *MessagesHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	case http.MethodGet:
 		messages.GetMessages(w, r)
 	case http.MethodPatch:
-		fmt.Println("trying to change the status")
+		messages.UpdataReadStatus(w,r)
 	default:
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!!"})
 		return

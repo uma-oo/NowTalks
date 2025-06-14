@@ -35,34 +35,54 @@ func (repo *AppRepository) AddMessage(message *models.Message) (*models.Message,
 
 // the one logged in trying to see the messages will not be got from the query
 // sender and receiver and the offset and limit als
-func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]models.Message, *models.ErrorJson) {
+func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int, type_ string) ([]models.Message, *models.ErrorJson) {
 	var messages []models.Message
-	query := `
-	SELECT
-		s.nickname AS sender,
-		r.nickname AS receiver,
-		messages.message,
-		messages.createdAt,
-		messages.messageID
-	FROM
-		messages INNER JOIN users s
-		ON messages.senderID = s.userID 
-		JOIN users r ON 
-		messages.receiverID = r.userID
-	WHERE
-		senderID IN (?, ?)
-		AND receiverID IN (?, ?)
-		-- AND messages.messageID < ?
-	ORDER BY  messages.createdAt  DESC
-	LIMIT
-		10
-`
-	stmt, err := repo.db.Prepare(query)
-	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+	var query string
+	switch type_ {
+	case "new":
+		query = `
+			SELECT
+				s.nickname AS sender,
+				r.nickname AS receiver,
+				messages.message,
+				messages.createdAt,
+				messages.messageID
+			FROM
+				messages INNER JOIN users s
+				ON messages.senderID = s.userID 
+				JOIN users r ON 
+				messages.receiverID = r.userID
+			WHERE
+				senderID IN (?, ?)
+				AND receiverID IN (?, ?)
+				AND messages.messageID > ?
+			ORDER BY  messages.createdAt  DESC
+			LIMIT
+				10;`
+	case "old":
+		query = `
+			SELECT
+				s.nickname AS sender,
+				r.nickname AS receiver,
+				messages.message,
+				messages.createdAt,
+				messages.messageID
+			FROM
+				messages INNER JOIN users s
+				ON messages.senderID = s.userID 
+				JOIN users r ON 
+				messages.receiverID = r.userID
+			WHERE
+				senderID IN (?, ?)
+				AND receiverID IN (?, ?)
+				AND messages.messageID < ?
+			ORDER BY  messages.createdAt  DESC
+			LIMIT
+				10;`
+
 	}
-	defer stmt.Close()
-	rows, err := stmt.Query(sender_id, receiver_id, sender_id, receiver_id)
+
+	rows, err := repo.db.Query(query, sender_id, receiver_id, sender_id, receiver_id, offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -78,5 +98,17 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int) ([]mo
 	}
 
 	return messages, nil
+}
 
+func (repo *AppRepository) EditReadStatus(sender_id, receiver_id int) *models.ErrorJson {
+	query := `
+	UPDATE messages
+	SET readStatus = 1  
+	WHERE senderID IN (?, ?) AND receiverID IN (?,?)
+	`
+	_, err := repo.db.Exec(query, sender_id, receiver_id, sender_id, receiver_id)
+	if err != nil {
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+	}
+	return nil
 }

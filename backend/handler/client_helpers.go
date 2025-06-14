@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"io"
 
 	"real-time-forum/backend/models"
@@ -90,15 +89,12 @@ func (client *Client) WriteMessages() {
 	}
 }
 
-
-
 func (sender *Client) BroadCastTheMessage(message *models.Message) {
 	// braodcast to the connections dyal sender
 	sender.chatServer.Lock()
 	defer sender.chatServer.Unlock()
 	for _, conn := range sender.chatServer.clients[sender.userId] {
 		if conn.connection != sender.connection {
-	
 			conn.Message <- message
 		}
 	}

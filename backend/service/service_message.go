@@ -56,8 +56,18 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 	return nil, nil
 }
 
-func (service *AppService) GetMessages(sender_id, receiver_id, offset int) ([]models.Message, *models.ErrorJson) {
-	messages, errJson := service.repo.GetMessages(sender_id, receiver_id, offset)
+
+// from the unread to the read status 
+func (service *AppService) EditReadStatus(sender_id , receiver int) {
+	
+
+}
+
+
+
+
+func (service *AppService) GetMessages(sender_id, receiver_id, offset int, type_ string) ([]models.Message, *models.ErrorJson) {
+	messages, errJson := service.repo.GetMessages(sender_id, receiver_id, offset , type_)
 	if errJson != nil {
 		return nil, errJson
 	}
