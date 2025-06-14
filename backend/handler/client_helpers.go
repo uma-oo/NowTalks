@@ -77,7 +77,6 @@ func (client *Client) WriteMessages() {
 				return
 			}
 		case message := <-client.Message:
-			fmt.Println("message", message, client.Username)
 			err := client.connection.WriteJSON(message)
 			if err != nil {
 				return
