@@ -685,16 +685,14 @@ aside .create-post-btn {
 }
 
 .chat-list {
+    padding: 1rem 0;
     display: grid;
-    grid-template-columns: 1fr max-content;
-    /* body | footer  */
-    row-gap: 10px;
-    /* keeps your old flex gap */
-    overflow-y: scroll !important;
-    /* keep the scroll you had */
+    grid-template-columns: minmax(0,1fr) min-content;
+    row-gap: 15px;
 }
 
 .chat-user-card {
+    min-width: 0;
     padding: 10px 0px;
     display: contents;
     align-items: center;
@@ -708,44 +706,101 @@ aside .create-post-btn {
     }
 }
 
+.chat-user-card[data-open="true"] {
+    .chat-user-card-footer {
+        border-right: solid 5px var(--primary-color);
+    }
+}
+
+
 .chat-user-card-body {
     flex-grow: 1;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
 
     .user_name,
     .user_status {
-        width: 50%;
+        width: max-content;
     }
 
     .latest_message {
-        width: 110%;
+        width: 100%;
     }
+
 }
+
+.chat-user-card[data-status="offline"] .user_status::before {
+    content: "";
+    display: inline-block;
+    margin-right: 3px;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: var(--border-radius-circle);
+}
+.chat-user-card[data-status="online"] .user_status::before {
+    content: "";
+    display: inline-block;
+    margin-right: 3px;
+    width: 8px;
+    height: 8px;
+    background-color: green;
+    border-radius: var(--border-radius-circle);
+}
+
 
 .chat-user-card-body .user_name {
     font-weight: 600;
 }
 
 .chat-user-card .latest_message {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: var(--font-size-sm);
 }
 
 .chat-user-card-footer {
+    padding: 10px;
+    width: 100%;
+
     span {
         width: max-content;
     }
-
-    width: max-content;
 }
 
 .chat-user-card-footer .notification_container {
+    position: relative;
+    width: max-content;
+    margin-left: auto;
+    padding-right: 15px;
+
+    /* align-self: self-end; */
     img {
-        width: 18px;
+        width: 24px;
         /* background: red; */
     }
 
-    align-self: self-end;
+    span {
+        opacity: 1;
+        font-size: 12px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        padding: 2px !important;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: var(--border-radius-circle);
+    }
 }
 
 
@@ -954,8 +1009,6 @@ aside .create-post-btn {
         width: 300px;
     }
 } */
-
-
 
 @media only screen and (max-width: 600px) {
     .home-main {

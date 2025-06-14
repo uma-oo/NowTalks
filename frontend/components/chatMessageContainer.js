@@ -1,4 +1,4 @@
-import { createElement, timeAgo } from "../utils.js";
+import { createElement, formatTimestamp, timeAgo } from "../utils.js";
 
 
 export function createChatMessageContainer(
@@ -18,17 +18,15 @@ export function createChatMessageContainer(
     let messageBubble = createElement('div', 'message-bubble')
     let sender = createElement('p', 'message-sender', sender_username)
     let messageContent = createElement('p', 'message-content', content)
-    let timeStamp = createElement('span', null, timeAgo(created_at))
+    let timeStamp = createElement('span', null, formatTimestamp(created_at))
 
     messageBubble.append(sender, messageContent, timeStamp)
     chatMessageContainer.append(messageBubble)
     
     if (position == "top") {
         chatWindowBody.insertBefore(chatMessageContainer, topTargetObserver.nextSibling);
-        // chatWindowBody?.prepend(chatMessageContainer)
     }  else if (position === "bottom") {
         chatWindowBody.insertBefore(chatMessageContainer, bottomTargetObserver);
-
-        // chatWindowBody?.append(chatMessageContainer)
+        if (chatMessageContainer.classList.contains("align-self-end")) chatMessageContainer.scrollIntoView()
     }
 }

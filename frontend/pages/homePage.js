@@ -16,23 +16,25 @@ export function renderHomePage(app) {
         if (data.is_logged_in) {
             sessionStorage.setItem("userId", data.id)
             sessionStorage.setItem("userNickname", data.nickname)
-            setUpWebsocket()
-            setCategories(app).then(() => {
+            setCategories(app).then(async () => {
                 let header = createHeader()
                 let main = createElement('main', "home-main")
                 let aside = createElement('aside', "chats-container")
                 let createPostBtn = createButton({ text: "Create Post", icon: "edit" }, 'button', 'create-post-btn')
                 let chatWindowSection = createElement('div', "chat-window")
 
-                createPostBtn.addEventListener("click", ()=>{
+                createPostBtn.addEventListener("click", () => {
                     if (!document.querySelector(".create-post-form-container_expanded")) {
                         toggleCreatePostFormContainer()
                     }
                 })
 
-                aside.append(createPostBtn, createChatSection())
+                aside.append(createPostBtn, await createChatSection())
                 main.append(createPostsSection(), chatWindowSection)
                 app.append(header, aside, main)
+                // setTimeout(() => {
+                    setUpWebsocket()
+                // }, 3000);
             })
         } else { navigateTo("/login") }
     })

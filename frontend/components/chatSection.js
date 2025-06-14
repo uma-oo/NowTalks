@@ -4,7 +4,7 @@ import { createChatUserCard } from "./chatUserCard.js"
 import { openChatWindow } from "./chatWindow.js"
 import { createIcon } from "./icon.js"
 
-export function createChatSection() {
+export async function createChatSection() {
     let chatSection = createElement('div','chat-section')
     let chatSectionHeader = createElement('div', "chats-section-header")
     let chatSectionHeaderTitle = createElement('h2', null, "Chats: ")
@@ -13,16 +13,17 @@ export function createChatSection() {
     let chatList = createElement('div', 'chat-list')
     chatList.dataset.offset = 0
 
-    fetchUsers(chatList)
+    await fetchUsers(chatList)
     chatSectionHeader.append(chatSectionHeaderTitle)
     chatSection.append(chatSectionHeader, chatList)
     return chatSection;
 }
 
 
-export function fetchUsers(chatList) {
+export async function fetchUsers(chatList) {
     let offset = chatList.dataset.offset
-    getUsers(offset).then(([status, data]) => {
+    let [status, data] = await getUsers(offset)
+    // getUsers(offset).then(([status, data]) => {
         if (status == 401) {
             navigateTo("login")
         }
@@ -42,6 +43,6 @@ export function fetchUsers(chatList) {
                 chatList.append("No users")
             }
         }
-    })
+    // })
 
 }

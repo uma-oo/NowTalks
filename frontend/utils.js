@@ -138,6 +138,6 @@ export function ReorderUsers(dataSent) {
 function editUserCard(userId, dataSent) {
     let userCard = document.querySelector(`.chat-user-card[data-id="${userId}"]`)
     let latest_message = userCard.querySelector(".latest_message")
-    latest_message.textContent = dataSent.content.length > 8 ? dataSent.content.slice(0, 8) + "..." : dataSent.content
+    latest_message.textContent = dataSent.content.length > 15 ? dataSent.content.slice(0, 15) + "..." : dataSent.content
     return userCard
 }

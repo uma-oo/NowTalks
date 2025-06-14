@@ -33,11 +33,14 @@ function receiveMessage(event) {
             if (openChatWindow) createChatMessageContainer(data, openChatWindow, "bottom")
             ReorderUsers(data)
             break;
-        case "read":
+        case "online":
+            console.log(data)
+            changeUsersStatus(data.data)
             break;
         case "typing":
             break;
-
+        default:
+            break;
     }
 }
 
@@ -54,4 +57,21 @@ export function sendMessage(messageContent) {
     };
     // Send the msg object as a JSON-formatted string.
     socket.send(JSON.stringify(msg));
+}
+
+
+function changeUsersStatus(data) {
+    let onlineUsers = data.map(user=>user.id)
+    console.log(onlineUsers)
+    // let chatList = document.getElementsByClassName('chat-list')
+    let chatList = document.querySelector('.chat-list')
+    console.log(chatList)
+    let users = document.getElementsByClassName('chat-user-card')
+    // let users = document.querySelectorAll('.chat-user-card')
+    console.log(users)
+    console.log(Array.from(users)[0].dataset)
+    
+    // users.array.forEach(user => {
+    //     console.log("card: ", user)
+    // });
 }
