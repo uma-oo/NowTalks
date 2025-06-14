@@ -69,8 +69,11 @@ func (messages *MessagesHandler) UpdataReadStatus(w http.ResponseWriter, r *http
 		return
 	}
 
-	messages.service.EditReadStatus(session.UserId, receiver_id)
-	
+	errJson = messages.service.EditReadStatus(session.UserId, receiver_id)
+	if errJson != nil {
+		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
+		return
+	}
 }
 
 func (messages *MessagesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
