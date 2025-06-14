@@ -26,8 +26,8 @@ export function closeConnection() {
 
 
 function receiveMessage(event) {
-
     let data = JSON.parse(event.data)
+    console.log("hnaaaaaaaaaaaaaaaaaaaaaa", data);
     switch (data.type) {
         case "message":
             createChatMessageContainer(data, document.querySelector(".chat-window_expanded .chat-window-body"), "bottom")

@@ -129,7 +129,7 @@ export function ReorderUsers(dataSent) {
     isLoggedIn().then(
         (data) => {
             userId = data.id
-            if (dataSent.receiver_id != userId && document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
+            if (dataSent.receiver_id != userId || document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
                 chatList.prepend(editUserCard(dataSent.receiver_id, dataSent))
             } else {
                 chatList.prepend(editUserCard(dataSent.sender_id, dataSent))
