@@ -11,7 +11,6 @@ import { setUpWebsocket } from "../websocket.js";
 
 
 export function renderHomePage(app) {
-
     isLoggedIn().then(data => {
         if (data.is_logged_in) {
             sessionStorage.setItem("userId", data.id)
@@ -32,9 +31,8 @@ export function renderHomePage(app) {
                 aside.append(createPostBtn, await createChatSection())
                 main.append(createPostsSection(), chatWindowSection)
                 app.append(header, aside, main)
-                // setTimeout(() => {
-                    setUpWebsocket()
-                // }, 3000);
+                setUpWebsocket()
+
             })
         } else { navigateTo("/login") }
     })

@@ -66,10 +66,18 @@ function changeUsersStatus(data) {
     // let chatList = document.getElementsByClassName('chat-list')
     let chatList = document.querySelector('.chat-list')
     console.log(chatList)
-    let users = document.getElementsByClassName('chat-user-card')
+    let usersCards = document.querySelectorAll('.chat-user-card')
     // let users = document.querySelectorAll('.chat-user-card')
-    console.log(users)
-    console.log(Array.from(users)[0].dataset)
+    usersCards.forEach(userCard => {
+        let id = userCard.dataset.id
+        if (onlineUsers.includes(+id)) {
+            userCard.dataset.status = "online"
+            userCard.querySelector('.user_status').textContent = "online"
+        }else {
+            userCard.dataset.status = "offline"
+            userCard.querySelector('.user_status').textContent = "offline"
+        }
+    });
     
     // users.array.forEach(user => {
     //     console.log("card: ", user)
