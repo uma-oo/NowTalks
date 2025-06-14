@@ -685,19 +685,23 @@ aside .create-post-btn {
 }
 
 .chat-list {
-    display:grid;
-    grid-template-columns:1fr max-content;   /* body | footer  */
-    row-gap:10px;                            /* keeps your old flex gap */
-    overflow-y:scroll !important;            /* keep the scroll you had */
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    /* body | footer  */
+    row-gap: 10px;
+    /* keeps your old flex gap */
+    overflow-y: scroll !important;
+    /* keep the scroll you had */
 }
 
 .chat-user-card {
     padding: 10px 0px;
-    display:contents;
+    display: contents;
     align-items: center;
     gap: 10px;
     cursor: pointer;
     border-left: solid var(--bg-color);
+
     span {
         opacity: .6;
         font-size: var(--font-size-sm);
@@ -708,9 +712,12 @@ aside .create-post-btn {
     flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
-    .user_name, .user_status {
-        width:50%;
+
+    .user_name,
+    .user_status {
+        width: 50%;
     }
+
     .latest_message {
         width: 110%;
     }
@@ -728,14 +735,16 @@ aside .create-post-btn {
     span {
         width: max-content;
     }
+
     width: max-content;
 }
 
-.chat-user-card-footer .notification_container{
+.chat-user-card-footer .notification_container {
     img {
         width: 18px;
         /* background: red; */
     }
+
     align-self: self-end;
 }
 
@@ -910,21 +919,18 @@ aside .create-post-btn {
 
 
 @media only screen and (max-width: 1000px) {
-    
+
     #app {
-    grid-template-rows: 1fr,2fr , 5fr;
-    grid-template-columns: 100%;
-    grid-template-areas:
-        'header  '
-        'aside  '
-        'main';
-
-}
-
-    aside  {
-        all: unset;
+        width: 100%;
         border: solid red;
-        display:  flex;
+        display: block;
+        background-color: var(--bg-color);
+    }
+
+
+    aside {
+        all: unset;
+        display: flex;
         justify-content: start;
         flex-direction: row;
         align-items: center;
@@ -933,17 +939,19 @@ aside .create-post-btn {
             margin: unset;
         }
     }
-    
+
     .chat-list {
         all: unset;
         display: flex;
         flex-direction: row;
-        border: solid green;
         flex-grow: 1;
-        overflow-x: scroll;
+        overflow: hidden;
+        overflow-x: auto !important;
     }
+
     .chat-list .chat-user-card {
-        width:  max-content;
+        display: block;
+        width: 300px;
     }
 }
 

@@ -30,7 +30,7 @@ export function renderHomePage(app) {
                     }
                 })
 
-                aside.append(createPostBtn, ...createChatSection())
+                aside.append(createPostBtn, createChatSection())
                 main.append(createPostsSection(), chatWindowSection)
                 app.append(header, aside, main)
             })

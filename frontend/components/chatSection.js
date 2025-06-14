@@ -5,6 +5,7 @@ import { openChatWindow } from "./chatWindow.js"
 import { createIcon } from "./icon.js"
 
 export function createChatSection() {
+    let chatSection = createElement('div','chat-section')
     let chatSectionHeader = createElement('div', "chats-section-header")
     let chatSectionHeaderTitle = createElement('h2', null, "Chats: ")
     chatSectionHeaderTitle.prepend(createIcon("chats"))
@@ -12,10 +13,10 @@ export function createChatSection() {
     let chatList = createElement('div', 'chat-list')
     chatList.dataset.offset = 0
 
-
     fetchUsers(chatList)
     chatSectionHeader.append(chatSectionHeaderTitle)
-    return [chatSectionHeader, chatList];
+    chatSection.append(chatSectionHeader, chatList)
+    return chatSection;
 }
 
 
