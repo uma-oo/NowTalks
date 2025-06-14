@@ -118,34 +118,25 @@ export function loadFormErrors(form, data) {
     }
 }
 
-
-
 // we need to edit the data also f
-
-
 export function ReorderUsers(dataSent) {
     let chatList = document.querySelector(".chat-list")
-    console.log("chatList", chatList);
-    let sender = document.querySelector(`.chat-user-card[data-id="${dataSent.sender_id}"]`)
-    let receiver = document.querySelector(`.chat-user-card[data-id="${dataSent.receiver_id}"]`)
-    console.log("sender", sender, "RECEIVER", receiver);
-    if (sender===null && receiver) {
-        let userCards = editUserCard(dataSent.receiver_id,dataSent)
-        for(let userCard of userCards) {
-            chatList.prepend(userCard)
+    isLoggedIn().then(
+        (data) => { 
+            userId = data.id
+            if (dataSent.receiver_id != userId || document.querySelector(`.chat-user-card[data-open="true"]`)?.dataset.id == dataSent.receiver_id) {
+                chatList.prepend(editUserCard(dataSent.receiver_id, dataSent))
+            } else {
+                chatList.prepend(editUserCard(dataSent.sender_id, dataSent))
+            }
         }
-    }
-    if (receiver===null && sender) {
-        chatList.prepend(editUserCard(dataSent.sender_id, dataSent))
-    }
+    )
 }
 
 
 function editUserCard(userId, dataSent) {
-    let userCards = document.querySelectorAll(`.chat-user-card[data-id="${userId}"]`)
-    for (let userCard of userCards) {
-        let latest_message = userCard.querySelector(".latest_message")
-        latest_message.textContent = dataSent.content.length > 8 ? dataSent.content.slice(0, 8) + "..." : dataSent.content
-    }
-    return userCards
+    let userCard = document.querySelector(`.chat-user-card[data-id="${userId}"]`)
+    let latest_message = userCard.querySelector(".latest_message")
+    latest_message.textContent = dataSent.content.length > 15 ? dataSent.content.slice(0, 15) + "..." : dataSent.content
+    return userCard
 }
