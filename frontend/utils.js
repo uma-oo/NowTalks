@@ -127,7 +127,7 @@ export function ReorderUsers(dataSent) {
     let userId
     let chatList = document.querySelector(".chat-list")
     isLoggedIn().then(
-        (data) => {
+        (data) => { 
             userId = data.id
             if (dataSent.receiver_id != userId && document.querySelector(`.chat-user-card[data-open="true"]`).dataset.id == dataSent.receiver_id) {
                 chatList.prepend(editUserCard(dataSent.receiver_id, dataSent))
@@ -140,7 +140,6 @@ export function ReorderUsers(dataSent) {
             console.log(err);
         }
     )
-
 }
 
 

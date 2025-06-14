@@ -908,6 +908,47 @@ aside .create-post-btn {
     background: var(--background-color);
 }
 
+
+@media only screen and (max-width: 1000px) {
+    
+    #app {
+    grid-template-rows: 1fr,2fr , 5fr;
+    grid-template-columns: 100%;
+    grid-template-areas:
+        'header  '
+        'aside  '
+        'main';
+
+}
+
+    aside  {
+        all: unset;
+        border: solid red;
+        display:  flex;
+        justify-content: start;
+        flex-direction: row;
+        align-items: center;
+
+        .create-post-btn {
+            margin: unset;
+        }
+    }
+    
+    .chat-list {
+        all: unset;
+        display: flex;
+        flex-direction: row;
+        border: solid green;
+        flex-grow: 1;
+        overflow-x: scroll;
+    }
+    .chat-list .chat-user-card {
+        width:  max-content;
+    }
+}
+
+
+
 @media only screen and (max-width: 600px) {
     .home-main {
         flex-direction: column;
