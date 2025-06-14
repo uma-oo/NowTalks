@@ -14,25 +14,11 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     if (chatUserCard.dataset.open) {
         return
     }
+
     const opendChat = document.querySelector('.chat-list > [data-open = "true"]');
     if (opendChat) {
         opendChat.dataset.open = "";
     }
-
-    // const observer = new IntersectionObserver(
-    //     entries => {
-    //         entires.forEach(entry => {
-    //             entry.target.innerText = `${Math.round(entry.intersectionRatio * 100)}%`
-    //         })
-    //     },
-    //     { threshold: [0, 0.25, 0.5, 0.75, 1] }
-    // )
-
-    // observer.observe(document.getElementById("test"))
-
-
-
-
 
     chatUserCard.dataset.open = "true"
     chatWindow.innerHTML = ""
@@ -40,19 +26,24 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
     let goBackBtn = createButton({ icon: "arrow-square-left" })
     let chatWindowBody = createElement('div', 'chat-window-body')
     chatWindowBody.dataset.last = 0
+    let targetTopElement = createElement('div',"observer-target top-observer-target ","top Observer target")
+    let targetBottomElement = createElement('div',"observer-target bottom-observer-target","bottom Observer target") 
 
-    fetchMessages(0, chatUserCard.dataset.id, chatWindow)
+    
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
-
-
+    
     goBackBtn.addEventListener('click', _ => {
         closeChatWindow(chatUserCard, chatWindow)
     })
-
+    
     chatWindowHeader.append(goBackBtn, chatUserCardClone)
+    chatWindowBody.append(targetTopElement,targetBottomElement)
     chatWindowFooter.append(messageform)
     chatWindow.append(chatWindowHeader, chatWindowBody, chatWindowFooter)
+
+    fetchMessages(0, chatUserCard.dataset.id, chatWindow)
+    chatWindowObservers(chatWindow,targetTopElement,targetBottomElement)
     return chatWindow
 }
 
@@ -60,4 +51,28 @@ export function closeChatWindow(chatUserCard, chatWindow) {
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
     chatWindow.innerHTML = ""
+}
+
+function chatWindowObservers(container,targetTopElement,targetBottomElement) {
+    const topObserver = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                console.log("Top Entery",entry)
+                entry.target.innerText = "fetch old messages"
+            })
+        }
+    )
+
+
+    const bottomObserver = new  IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                console.log("Bottom Entery",entry)
+                entry.target.innerText = "fetch new messages"
+            })
+        }
+    )
+
+    topObserver.observe(targetTopElement)
+    bottomObserver.observe(targetBottomElement)
 }

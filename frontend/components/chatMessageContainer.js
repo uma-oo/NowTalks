@@ -9,7 +9,11 @@ export function createChatMessageContainer(
     },
     openChatWindow,
     position = "top") {
-    
+    let chatWindowBody = openChatWindow.querySelector(".chat-window-body")
+    let topTargetObserver = chatWindowBody.querySelector(".top-observer-target ")
+    let bottomTargetObserver = chatWindowBody.querySelector(".bottom-observer-target ")
+
+
     let chatMessageContainer = createElement('div', `chat-message-container ${sessionStorage.getItem("userNickname") === sender_username ? "align-self-end" : ""}`)
     let messageBubble = createElement('div', 'message-bubble')
     let sender = createElement('p', 'message-sender', sender_username)
@@ -19,10 +23,12 @@ export function createChatMessageContainer(
     messageBubble.append(sender, messageContent, timeStamp)
     chatMessageContainer.append(messageBubble)
     
-    let messagesContainer = openChatWindow.querySelector(".chat-window-body")
     if (position == "top") {
-        messagesContainer?.prepend(chatMessageContainer)
+        chatWindowBody.insertBefore(chatMessageContainer, topTargetObserver.nextSibling);
+        // chatWindowBody?.prepend(chatMessageContainer)
     }  else if (position === "bottom") {
-        messagesContainer?.append(chatMessageContainer)
+        chatWindowBody.insertBefore(chatMessageContainer, bottomTargetObserver);
+
+        // chatWindowBody?.append(chatMessageContainer)
     }
 }

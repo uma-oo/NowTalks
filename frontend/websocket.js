@@ -26,12 +26,10 @@ export function closeConnection() {
 
 function receiveMessage(event) {
     let data = JSON.parse(event.data)
-    console.log("hnaaaaaaaaaaaaaaaaaaaaaa", data);
     switch (data.type) {
         case "message":
             let openChatWindow = document.querySelector(`.chat-window_expanded[data-id="${data.sender_id}"]`) || 
             document.querySelector(`.chat-window_expanded[data-id="${data.receiver_id}"]`)
-
             if (openChatWindow) createChatMessageContainer(data, openChatWindow, "bottom")
             ReorderUsers(data)
             break;
@@ -54,7 +52,6 @@ export function sendMessage(messageContent) {
         receiver_id: receiver_id,
         created_at: new Date(Date.now()),
     };
-
     // Send the msg object as a JSON-formatted string.
     socket.send(JSON.stringify(msg));
 }

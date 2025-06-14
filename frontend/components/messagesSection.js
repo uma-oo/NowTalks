@@ -8,10 +8,7 @@ import { createChatMessageContainer } from "./chatMessageContainer.js";
 
 
 
-export function fetchMessages(offset, receiver_id, messagesContainer) {
-    // let offset = messagesContainer.dataset.offset
-    // console.log("offset", offset);
-    // let receiver_id = document.querySelector(".chat-window_expanded [data-id]").dataset.id
+export function fetchMessages(offset, receiver_id, chatWindow) {
     getMessages(offset, receiver_id).then(([status, data]) => {
         if (status === 401) {
             navigateTo("/login")
@@ -21,9 +18,9 @@ export function fetchMessages(offset, receiver_id, messagesContainer) {
         }
         if (status === 200 && data) {
             data.forEach(message => {
-                createChatMessageContainer(message, messagesContainer)
+                createChatMessageContainer(message, chatWindow)
             });
-            messagesContainer.dataset.offset = +messagesContainer.dataset.offset + 10
+            // messagesContainer.dataset.offset = +messagesContainer.dataset.offset + 10
         }
     })
 
