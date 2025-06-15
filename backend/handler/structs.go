@@ -97,8 +97,8 @@ func WriteDataBack(w http.ResponseWriter, data any) {
 type ClientList map[int][]*Client
 
 type OnlineUsers struct {
-	Type string  `json:"type"`
-	Data []models.User  `json:"data"`
+	Type string        `json:"type"`
+	Data []models.User `json:"data"`
 }
 
 type Client struct {

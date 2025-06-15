@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"io"
+	"slices"
 
 	"real-time-forum/backend/models"
 
@@ -15,20 +16,36 @@ func (server *ChatServer) AddClient(client *Client) {
 	defer server.Unlock()
 }
 
-func (server *ChatServer) RemoveClient(client *Client) {
+func (server *ChatServer) RemoveClient(client *Client, logged_out bool) {
+	fmt.Println("inside remove client", logged_out)
 	server.Lock()
 	defer server.Unlock()
-	if _, ok := server.clients[client.userId]; ok {
-		client.connection.Close()
-		deleteConnection(server.clients, client.userId, client)
+	switch logged_out {
+	case true:
+		fmt.Println("hereee before!!", server.clients)
+		if connections, ok := server.clients[client.userId]; ok {
+			for _, conn := range connections {
+				conn.connection.Close()
+			}
+			deleteConnection(server.clients, client.userId, client)
+			go server.BroadCastOnlineStatus()
+		}
+		delete(server.clients, client.userId)
+		fmt.Println("heeere after !!", server.clients)
 		go server.BroadCastOnlineStatus()
+	case false:
+		fmt.Println("hhhhhhhhh")
+		if _, ok := server.clients[client.userId]; ok {
+			client.connection.Close()
+			deleteConnection(server.clients, client.userId, client)
+			go server.BroadCastOnlineStatus()
+		}
 	}
 }
 
 // first time working with channels and they seem great :!
 func (client *Client) ReadMessages() {
-	defer client.chatServer.RemoveClient(client)
-
+	logged_out := false
 	for {
 		message := &models.Message{}
 		err := client.connection.ReadJSON(&message)
@@ -43,6 +60,12 @@ func (client *Client) ReadMessages() {
 					},
 				}
 				continue
+			}
+			if isLogoutError(err) {
+				logged_out = true
+				fmt.Println("after", logged_out)
+				// delete(client.chatServer.clients, client.userId)
+				break
 			}
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) || err == io.EOF {
 				break
@@ -60,12 +83,14 @@ func (client *Client) ReadMessages() {
 		client.Message <- message_validated
 		client.BroadCastTheMessage(message_validated)
 	}
+
+	defer client.chatServer.RemoveClient(client, logged_out)
 }
 
 // i used the channels buy not sure if this is the correct way to handle this
 
 func (client *Client) WriteMessages() {
-	defer client.chatServer.RemoveClient(client)
+	defer client.chatServer.RemoveClient(client, false)
 
 	for {
 		select {
@@ -113,13 +138,12 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 		}
 	}
 	if index != -1 {
-		clientList[userId] = append(clientList[userId][:index], clientList[userId][index+1:]...)
+		clientList[userId] = slices.Delete(clientList[userId], index, index+1)
 	}
 }
 
 // let's do it inside another function and make it specific to the client
 func (server *ChatServer) BroadCastOnlineStatus() {
-	fmt.Println("broadcasting!!!!")
 	server.Lock()
 	defer server.Unlock()
 	online_users := []models.User{}
