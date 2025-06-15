@@ -3,7 +3,12 @@ import { navigateTo } from "../utils.js";
 import { createChatMessageContainer } from "./chatMessageContainer.js";
 
 export function fetchMessages(offset, receiver_id, type, chatWindow) {
-    getMessages(offset, receiver_id).then(([status, data]) => {
+
+    
+
+
+    getMessages(offset, receiver_id, type)
+    .then(([status, data]) => {
         if (status === 401) {
             navigateTo("/login")
         }

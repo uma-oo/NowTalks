@@ -23,14 +23,13 @@ export async function createChatSection() {
 export async function fetchUsers(chatList) {
     let offset = chatList.dataset.offset
     let [status, data] = await getUsers(offset)
-    // getUsers(offset).then(([status, data]) => {
         if (status == 401) {
             navigateTo("/login")
         }
         if (status == 200) {
             let chats = data?.map(userData => {
+                console.log(data)
                 let userCard = createChatUserCard(userData)
-                userCard.dataset.id = userData.id
                 let userCardClone = userCard.cloneNode(true)
                 userCard.addEventListener("click", _ => {
                     openChatWindow(userCard, userCardClone)
@@ -43,6 +42,4 @@ export async function fetchUsers(chatList) {
                 chatList.append("No users")
             }
         }
-    // })
-
 }

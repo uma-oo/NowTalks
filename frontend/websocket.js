@@ -23,7 +23,7 @@ export function setUpWebsocket() {
 }
 
 export function closeConnection() {
-    socket.close()
+    socket.close(1000,"user logged out")
 }
 
 function receiveMessage(event) {
@@ -47,16 +47,13 @@ function receiveMessage(event) {
 }
 
 export function sendMessage(messageContent) {
-
-    let receiver_id = parseInt(document.querySelector(".chat-window_expanded [data-id]").dataset.id)
-
+    let receiver_id = parseInt(document.querySelector(".chat-window_expanded").dataset.id)
     const msg = {
         content: messageContent,
         type: "message",
         receiver_id: receiver_id,
         created_at: new Date(Date.now()),
     };
-    // Send the msg object as a JSON-formatted string.
     socket.send(JSON.stringify(msg));
 }
 

@@ -119,24 +119,23 @@ export function loadFormErrors(form, data) {
 }
 
 // we need to edit the data also f
-export function ReorderUsers(dataSent) {
-    let chatList = document.querySelector(".chat-list")
-    isLoggedIn().then(
-        (data) => { 
-            userId = data.id
-            if (dataSent.receiver_id != userId || document.querySelector(`.chat-user-card[data-open="true"]`)?.dataset.id == dataSent.receiver_id) {
-                chatList.prepend(editUserCard(dataSent.receiver_id, dataSent))
-            } else {
-                chatList.prepend(editUserCard(dataSent.sender_id, dataSent))
-            }
-        }
-    )
+export function ReorderUsers(data) {
+    let chatList = document.querySelector('.chat-list')
+    let user1 = document.querySelector(`.chat-user-card[data-id="${data.receiver_id}"]`)
+    let user2 = document.querySelector(`.chat-user-card[data-id="${data.sender_id}"`)
+    let userCard = user1 || user2
+    chatList.prepend(editUserCard(userCard, data))
+    
 }
 
 
-function editUserCard(userId, dataSent) {
-    let userCard = document.querySelector(`.chat-user-card[data-id="${userId}"]`)
-    let latest_message = userCard.querySelector(".latest_message")
-    latest_message.textContent = dataSent.content.length > 15 ? dataSent.content.slice(0, 15) + "..." : dataSent.content
+function editUserCard(userCard, dataSent) {
+    console.log('data to update with: ', dataSent)
+    userCard.querySelector(".latest_message").textContent = dataSent.content
+    userCard.querySelector(".latest_interaction").textContent = formatTimestamp(dataSent.created_at)
+    if (userCard.dataset.open !== "true"){
+        console.log(userCard)
+        userCard.querySelector('.user_notifications').textContent = +userCard.dataset.notifications + 1
+    } 
     return userCard
 }
