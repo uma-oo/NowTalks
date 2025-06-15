@@ -103,10 +103,13 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int, type_
 func (repo *AppRepository) EditReadStatus(sender_id, receiver_id int) *models.ErrorJson {
 	query := `
 	UPDATE messages
-	SET readStatus = 1  
-	WHERE senderID IN (?, ?) AND receiverID IN (?,?)
+	SET
+		readStatus = 1
+	WHERE
+		senderID = ?
+		AND receiverID = ?
 	`
-	_, err := repo.db.Exec(query, sender_id, receiver_id, sender_id, receiver_id)
+	_, err := repo.db.Exec(query, receiver_id, sender_id)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}

@@ -63,7 +63,8 @@ func (messages *MessagesHandler) UpdataReadStatus(w http.ResponseWriter, r *http
 		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
 		return
 	}
-	// check if the user 2 exists
+	// the one who is logged in is the one who opens  the tab 
+	// so basically the messages sent by the other (receiver_id) must be marked read 
 	if !exists {
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! receiver_id Incorrect"})
 		return

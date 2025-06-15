@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"io"
 
 	"real-time-forum/backend/models"
@@ -17,8 +18,6 @@ func (server *ChatServer) AddClient(client *Client) {
 func (server *ChatServer) RemoveClient(client *Client) {
 	server.Lock()
 	defer server.Unlock()
-	delete(server.clients, client.userId)
-
 	if _, ok := server.clients[client.userId]; ok {
 		client.connection.Close()
 		deleteConnection(server.clients, client.userId, client)
@@ -120,6 +119,7 @@ func deleteConnection(clientList map[int][]*Client, userId int, client_to_be_del
 
 // let's do it inside another function and make it specific to the client
 func (server *ChatServer) BroadCastOnlineStatus() {
+	fmt.Println("broadcasting!!!!")
 	server.Lock()
 	defer server.Unlock()
 	online_users := []models.User{}
