@@ -25,7 +25,7 @@ export async function fetchUsers(chatList) {
     let [status, data] = await getUsers(offset)
     // getUsers(offset).then(([status, data]) => {
         if (status == 401) {
-            navigateTo("login")
+            navigateTo("/login")
         }
         if (status == 200) {
             let chats = data?.map(userData => {

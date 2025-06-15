@@ -24,7 +24,7 @@ function fetchPosts(container) {
     getPostsApi(offset).then(data => {
       
         if (data?.status == 401) {
-            navigateTo('/login')
+            navigateTo('login')
         } else if (data) {
             container.append(...createPostCards(data))
             container.dataset.offset = +container.dataset.offset + 10

@@ -1,28 +1,30 @@
 import { createChatMessageContainer } from "./components/chatMessageContainer.js"
-import { ReorderUsers } from "./utils.js";
-
+import { navigateTo, ReorderUsers } from "./utils.js";
 
 let socket = null
 
-
 export function setUpWebsocket() {
+    console.log("trying to setup a websocket connection");
     if (!socket) {
         socket = new WebSocket("ws://localhost:8080/ws/chat");
+    } else {
+        console.log("websocket connection already exists: ", socket)
     }
     socket.onopen = function (e) {
-        console.log("[open] Connection established");
-        console.log("Sending to server");
+        console.log("websocket connection established: ",e, socket)
     };
     socket.onmessage = (event) => receiveMessage(event)
 
+    socket.onclose = (event) => {
+        socket = null
+        console.log("connection has been closed", event, window.location.pathname);
+        if (window.location.pathname !== "/login") navigateTo('login')
+    }
 }
-
-
 
 export function closeConnection() {
     socket.close()
 }
-
 
 function receiveMessage(event) {
     let data = JSON.parse(event.data)
@@ -34,7 +36,7 @@ function receiveMessage(event) {
             ReorderUsers(data)
             break;
         case "online":
-            console.log(data)
+            console.log("recieving online users data", data)
             changeUsersStatus(data.data)
             break;
         case "typing":
@@ -43,7 +45,6 @@ function receiveMessage(event) {
             break;
     }
 }
-
 
 export function sendMessage(messageContent) {
 
@@ -62,24 +63,15 @@ export function sendMessage(messageContent) {
 
 function changeUsersStatus(data) {
     let onlineUsers = data.map(user=>user.id)
-    console.log(onlineUsers)
-    // let chatList = document.getElementsByClassName('chat-list')
-    let chatList = document.querySelector('.chat-list')
-    console.log(chatList)
     let usersCards = document.querySelectorAll('.chat-user-card')
-    // let users = document.querySelectorAll('.chat-user-card')
     usersCards.forEach(userCard => {
         let id = userCard.dataset.id
         if (onlineUsers.includes(+id)) {
             userCard.dataset.status = "online"
             userCard.querySelector('.user_status').textContent = "online"
-        }else {
+        } else {
             userCard.dataset.status = "offline"
             userCard.querySelector('.user_status').textContent = "offline"
         }
     });
-    
-    // users.array.forEach(user => {
-    //     console.log("card: ", user)
-    // });
 }

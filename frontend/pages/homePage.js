@@ -27,12 +27,10 @@ export function renderHomePage(app) {
                         toggleCreatePostFormContainer()
                     }
                 })
-
                 aside.append(createPostBtn, await createChatSection())
                 main.append(createPostsSection(), chatWindowSection)
                 app.append(header, aside, main)
                 setUpWebsocket()
-
             })
         } else { navigateTo("/login") }
     })
@@ -49,7 +47,7 @@ async function setCategories(app) {
                 app.dataset.categories += `${element.category_id}-${element.category_name},`
             });
         } else if (status == 401) {
-            navigateTo('/login')
+            navigateTo('login')
         }
     }).catch(error => console.error(error))
 }

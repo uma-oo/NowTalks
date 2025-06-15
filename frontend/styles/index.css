@@ -712,7 +712,6 @@ aside .create-post-btn {
     }
 }
 
-
 .chat-user-card-body {
     flex-grow: 1;
     display: flex;
@@ -730,7 +729,6 @@ aside .create-post-btn {
     .latest_message {
         width: 100%;
     }
-
 }
 
 .chat-user-card[data-status="offline"] .user_status::before {

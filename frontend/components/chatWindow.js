@@ -4,12 +4,10 @@ import { createElement } from "../utils.js";
 import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
-
-
-
 export function openChatWindow(chatUserCard, chatUserCardClone) {
     let chatWindow = document.querySelector('.chat-window')
     chatWindow.dataset.id = chatUserCard.dataset.id
+
     chatWindow.classList.add("chat-window_expanded")
     if (chatUserCard.dataset.open) {
         return
@@ -22,13 +20,14 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
 
     chatUserCard.dataset.open = "true"
     chatWindow.innerHTML = ""
+
+
     let chatWindowHeader = createElement('div', 'chat-window-header')
     let goBackBtn = createButton({ icon: "arrow-square-left" })
     let chatWindowBody = createElement('div', 'chat-window-body')
     chatWindowBody.dataset.last = 0
     let targetTopElement = createElement('div',"observer-target top-observer-target ","top Observer target")
     let targetBottomElement = createElement('div',"observer-target bottom-observer-target","bottom Observer target") 
-
     
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
@@ -48,9 +47,9 @@ export function openChatWindow(chatUserCard, chatUserCardClone) {
 }
 
 export function closeChatWindow(chatUserCard, chatWindow) {
+    chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
-    chatWindow.innerHTML = ""
 }
 
 function chatWindowObservers(container,targetTopElement,targetBottomElement) {
@@ -63,11 +62,13 @@ function chatWindowObservers(container,targetTopElement,targetBottomElement) {
         }
     )
 
-
     const bottomObserver = new  IntersectionObserver(
         entries => {
             entries.forEach(entry => {
+                let latest = targetBottomElement.previousSibling
                 console.log("Bottom Entery",entry)
+                if (entry.isIntersecting) console.log("latest",latest)
+                // fetchMessages(0, chatUserCard.dataset.id, chatWindow)
                 entry.target.innerText = "fetch new messages"
             })
         }
