@@ -1,9 +1,11 @@
 package middleware
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
+	"real-time-forum/backend/models"
 	"real-time-forum/backend/service"
 )
 
@@ -39,4 +41,9 @@ func NewMiddleWare(handler http.Handler, service *service.AppService) *Middlewar
 
 func NewLoginMiddleware(handler http.Handler, service *service.AppService) *LoginRegisterMiddleWare {
 	return &LoginRegisterMiddleWare{handler, service}
+}
+
+func WriteJsonErrors(w http.ResponseWriter, errJson models.ErrorJson) {
+	w.WriteHeader(errJson.Status)
+	json.NewEncoder(w).Encode(errJson)
 }
