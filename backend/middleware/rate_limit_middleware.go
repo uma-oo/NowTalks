@@ -10,6 +10,8 @@ import (
 // This is the middleware that comes after the the authentication
 // there are many cases to handle here
 func (RateLimitM *RateLimitMiddleWareLoggedIn) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// RateLimitM.Lock()
+	// defer RateLimitM.Unlock()
 	userId := RateLimitM.service.GetUsernameFromSession(r)
 	userInfo, ok := RateLimitM.Users[userId]
 	if ok {
@@ -33,9 +35,6 @@ func (RateLimitM *RateLimitMiddleWareLoggedIn) ServeHTTP(w http.ResponseWriter, 
 }
 
 // rate limiter for the / on the route of /api/
-
-
-
 
 func (rateLimiter *RateLimitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if rateLimiter.LastRequest.Add(1 * time.Minute).Before(time.Now()) {

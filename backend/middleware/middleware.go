@@ -29,6 +29,7 @@ type RateLimitMiddleWareLoggedIn struct {
 	MiddlewareHanlder http.Handler
 	service           *service.AppService
 	Users             map[int]*UserInfo
+	// sync.RWMutex
 }
 
 type RateLimitter struct {
