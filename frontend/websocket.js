@@ -4,12 +4,9 @@ import { navigateTo, ReorderUsers } from "./utils.js";
 let socket = null
 
 export function setUpWebsocket() {
-    console.log("trying to setup a websocket connection");
     if (!socket) {
         socket = new WebSocket("ws://localhost:8080/ws/chat");
-    } else {
-        console.log("websocket connection already exists: ", socket)
-    }
+    } 
     socket.onopen = function (e) {
         console.log("websocket connection established: ",e, socket)
     };
@@ -17,7 +14,6 @@ export function setUpWebsocket() {
 
     socket.onclose = (event) => {
         socket = null
-        console.log("connection has been closed", event, window.location.pathname);
         if (window.location.pathname !== "/login") navigateTo('login')
     }
 }
@@ -36,7 +32,6 @@ function receiveMessage(event) {
             ReorderUsers(data)
             break;
         case "online":
-            console.log("recieving online users data", data)
             changeUsersStatus(data.data)
             break;
         case "typing":

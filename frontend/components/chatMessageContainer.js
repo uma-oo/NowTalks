@@ -10,7 +10,7 @@ export function createChatMessageContainer(
     },
     openChatWindow,
     position = "top") {
-    let messageBubble = createElement(`div', 'message-bubble ${sessionStorage.getItem("userNickname") === sender_username ? "align-self-end" : ""}`)
+    let messageBubble = createElement('div', `message-bubble ${sessionStorage.getItem("userNickname") === sender_username ? "align-self-end" : ""}`)
     messageBubble.dataset.messageId = message_id
 
     let chatWindowBody = openChatWindow.querySelector(".chat-window-body")
@@ -25,7 +25,7 @@ export function createChatMessageContainer(
     messageBubble.append(sender, messageContent, timeStamp)
 
     if (position == "top") {
-        chatWindowBody.insertBefore(chatMessageContainer, topTargetObserver.nextSibling);
+        chatWindowBody.insertBefore(messageBubble, topTargetObserver.nextSibling);
     } else if (position === "bottom") {
         chatWindowBody.insertBefore(messageBubble, bottomTargetObserver);
         if (messageBubble.classList.contains("align-self-end")) messageBubble.scrollIntoView()

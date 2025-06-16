@@ -12,8 +12,8 @@ export function createChatUserCard({
     chatUserCard.dataset.open = ""
     chatUserCard.dataset.id = id
     chatUserCard.dataset.status = "offline"
-    chatUserCard.dataset.userName = nickname
-    chatUserCard.dataset.notifications = notifications 
+    chatUserCard.dataset.userName = nickname 
+    chatUserCard.dataset.notifications = notifications || 0
 
 
     let chatUserCardBody = createElement('div', 'chat-user-card-body')

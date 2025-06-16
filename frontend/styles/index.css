@@ -857,17 +857,17 @@ aside .create-post-btn {
     flex-direction: column;
     gap: 1rem;
     overflow-y: scroll;
-    /* background: url(../assets/chatbg2.jpg) repeat center; */
     background-size: 25%;
 }
 
-.chat-window-body .chat-message-container {
-    /* border: solid 1px red; */
-    /* border: solid red; */
-    align-self: flex-start;
+.chat-window-body  .message-bubble {
+    background-color: #ddd;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    position: relative;
     justify-content: space-between;
-    width: 100%;
-    display: flex;
+    width: max-content;
+    max-width: 80%;
 
     span {
         font-size: .8rem;
@@ -893,13 +893,8 @@ aside .create-post-btn {
     }
 }
 
-.message-bubble {
-    background-color: #ddd;
-    padding: .5rem 1rem;
-    border-radius: 10px;
-    position: relative;
-    /* background-color: transparent; */
-}
+
+
 
 .message-bubble::after {
     position: absolute;
@@ -915,7 +910,7 @@ aside .create-post-btn {
     z-index: 2;
 }
 
-.align-self-end .message-bubble::after {
+.align-self-end::after {
     left: unset;
     right: -1rem;
     transform: rotate(-90deg);

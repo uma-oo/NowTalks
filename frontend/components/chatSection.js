@@ -28,7 +28,6 @@ export async function fetchUsers(chatList) {
         }
         if (status == 200) {
             let chats = data?.map(userData => {
-                console.log(data)
                 let userCard = createChatUserCard(userData)
                 let userCardClone = userCard.cloneNode(true)
                 userCard.addEventListener("click", _ => {

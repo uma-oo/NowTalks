@@ -8,7 +8,6 @@ import { createIcon } from "./icon.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
-    // post creation elements
     let createPostFormContainer = createElement('div', 'create-post-form-container')
     let postsContainer = createElement('div', 'posts_container')
     postsContainer.dataset.offset = 0
@@ -22,7 +21,6 @@ export function createPostsSection() {
 function fetchPosts(container) {
     let offset = container.dataset.offset
     getPostsApi(offset).then(data => {
-      
         if (data?.status == 401) {
             navigateTo('login')
         } else if (data) {

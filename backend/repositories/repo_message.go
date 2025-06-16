@@ -56,7 +56,7 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int, type_
 				senderID IN (?, ?)
 				AND receiverID IN (?, ?)
 				AND messages.messageID > ?
-			ORDER BY  messages.createdAt  DESC
+			ORDER BY  messages.createdAt 
 			LIMIT
 				10;`
 	case "old":
@@ -76,7 +76,7 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int, type_
 				senderID IN (?, ?)
 				AND receiverID IN (?, ?)
 				AND messages.messageID < ?
-			ORDER BY  messages.createdAt  DESC
+			ORDER BY  messages.createdAt DESC
 			LIMIT
 				10;`
 

@@ -1,6 +1,4 @@
 
-import { isLoggedIn } from "./api/user.js";
-
 import { renderApp } from "./index.js";
 
 export async function navigateTo(pathname) {
@@ -60,7 +58,6 @@ export function formatTimestamp(date) {
     }
 }
 
-
 export function throttledScrollFetcher(func) {
     return throttle((e) => {
         const container = e.target
@@ -118,7 +115,6 @@ export function loadFormErrors(form, data) {
     }
 }
 
-// we need to edit the data also f
 export function ReorderUsers(data) {
     let chatList = document.querySelector('.chat-list')
     let user1 = document.querySelector(`.chat-user-card[data-id="${data.receiver_id}"]`)
@@ -128,13 +124,10 @@ export function ReorderUsers(data) {
     
 }
 
-
 function editUserCard(userCard, dataSent) {
-    console.log('data to update with: ', dataSent)
     userCard.querySelector(".latest_message").textContent = dataSent.content
     userCard.querySelector(".latest_interaction").textContent = formatTimestamp(dataSent.created_at)
     if (userCard.dataset.open !== "true"){
-        console.log(userCard)
         userCard.querySelector('.user_notifications').textContent = +userCard.dataset.notifications + 1
     } 
     return userCard
