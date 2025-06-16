@@ -15,7 +15,7 @@ export function createPostCommentsSection(postId) {
     //  offset of the id from to start fetching 
     fetchComments(postId, commentsContainer)
     seeMore.addEventListener("click", () => {
-        commentsContainer.dataset.offset += 10
+        commentsContainer.dataset.offset = + commentsContainer.dataset.offset +10
         fetchComments(postId, commentsContainer)
     })
     // commentsContainer.append(...comments)

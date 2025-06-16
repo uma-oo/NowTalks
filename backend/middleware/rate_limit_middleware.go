@@ -13,17 +13,17 @@ func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.
 	userId := RateLimitM.service.GetUsernameFromSession(r)
 	userInfo, ok := RateLimitM.Users[userId]
 	if ok {
-		if userInfo.Count > 11 && userInfo.LastRequest.Before(time.Now().Add(1*time.Minute)) {
+		if userInfo.LastRequest.Add(1 * time.Minute).Before(time.Now()) {
+			userInfo.Count = 1
+		} else if userInfo.Count > 60 && userInfo.LastRequest.Before(time.Now().Add(1*time.Minute)) {
 			WriteJsonErrors(w, models.ErrorJson{Status: 429, Message: "Hey! Too Many requests!!"})
 			return
-		} else if !userInfo.LastRequest.Before(time.Now().Add(1 * time.Minute)) {
-			userInfo.Count = 1
 		} else {
 			userInfo.Count++
 		}
 		userInfo.LastRequest = time.Now()
 	} else {
-		RateLimitM.Users[userId] = UserInfo{
+		RateLimitM.Users[userId] = &UserInfo{
 			UserID:      userId,
 			Count:       1,
 			LastRequest: time.Now(),

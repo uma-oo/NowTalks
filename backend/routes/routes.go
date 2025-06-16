@@ -23,7 +23,7 @@ func SetRoutes(
 	messages *handler.MessagesHandler,
 	service *s.AppService,
 ) {
-	http.Handle("/api/comment", m.NewMiddleWare(Chandler, service))
+	http.Handle("/api/comment", m.NewMiddleWare(m.NewRateLimitMiddleWare(Chandler, service), service))
 	http.Handle("/api/post", m.NewMiddleWare(Phandler, service))
 	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
 	http.Handle("/api/react/", m.NewMiddleWare(Rhanlder, service))

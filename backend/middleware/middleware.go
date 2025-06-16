@@ -28,11 +28,11 @@ type UserInfo struct {
 type RateLimitMiddleWare struct {
 	MiddlewareHanlder http.Handler
 	service           *service.AppService
-	Users             map[int]UserInfo
+	Users             map[int]*UserInfo
 }
 
 func NewRateLimitMiddleWare(handler http.Handler, service *service.AppService) *RateLimitMiddleWare {
-	return &RateLimitMiddleWare{handler, service, make(map[int]UserInfo)}
+	return &RateLimitMiddleWare{handler, service, map[int]*UserInfo{}}
 }
 
 func NewMiddleWare(handler http.Handler, service *service.AppService) *Middleware {
