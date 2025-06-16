@@ -23,10 +23,11 @@ func SetRoutes(
 	messages *handler.MessagesHandler,
 	service *s.AppService,
 ) {
+	// http.Handle("/api/", m.NewRateLimitter())
 	http.Handle("/api/comment", m.NewMiddleWare(m.NewRateLimitMiddleWare(Chandler, service), service))
-	http.Handle("/api/post", m.NewMiddleWare(Phandler, service))
+	http.Handle("/api/post", m.NewMiddleWare(m.NewRateLimitMiddleWare(Phandler, service), service))
 	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
-	http.Handle("/api/react/", m.NewMiddleWare(Rhanlder, service))
+	http.Handle("/api/react/", m.NewMiddleWare(m.NewRateLimitMiddleWare(Rhanlder, service), service))
 	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
 	http.HandleFunc("/api/categories", categories.GetCategories)
 	http.Handle("/api/users", m.NewMiddleWare(users, service))

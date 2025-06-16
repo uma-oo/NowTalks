@@ -25,14 +25,23 @@ type UserInfo struct {
 	LastRequest time.Time
 }
 
-type RateLimitMiddleWare struct {
+type RateLimitMiddleWareLoggedIn struct {
 	MiddlewareHanlder http.Handler
 	service           *service.AppService
 	Users             map[int]*UserInfo
 }
 
-func NewRateLimitMiddleWare(handler http.Handler, service *service.AppService) *RateLimitMiddleWare {
-	return &RateLimitMiddleWare{handler, service, map[int]*UserInfo{}}
+type RateLimitter struct {
+	Count       int
+	LastRequest time.Time
+}
+
+func NewRateLimitMiddleWare(handler http.Handler, service *service.AppService) *RateLimitMiddleWareLoggedIn {
+	return &RateLimitMiddleWareLoggedIn{handler, service, map[int]*UserInfo{}}
+}
+
+func NewRateLimitter() *RateLimitter {
+	return &RateLimitter{}
 }
 
 func NewMiddleWare(handler http.Handler, service *service.AppService) *Middleware {

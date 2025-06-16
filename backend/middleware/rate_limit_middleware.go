@@ -9,7 +9,7 @@ import (
 
 // This is the middleware that comes after the the authentication
 // there are many cases to handle here
-func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (RateLimitM *RateLimitMiddleWareLoggedIn) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	userId := RateLimitM.service.GetUsernameFromSession(r)
 	userInfo, ok := RateLimitM.Users[userId]
 	if ok {
@@ -30,4 +30,22 @@ func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.
 		}
 	}
 	RateLimitM.MiddlewareHanlder.ServeHTTP(w, r)
+}
+
+// rate limiter for the / on the route of /api/
+
+
+
+
+func (rateLimiter *RateLimitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if rateLimiter.LastRequest.Add(1 * time.Minute).Before(time.Now()) {
+		rateLimiter.Count = 1
+		rateLimiter.LastRequest = time.Now()
+	} else if rateLimiter.Count > 1000 && rateLimiter.LastRequest.Before(time.Now().Add(1*time.Minute)) {
+		WriteJsonErrors(w, models.ErrorJson{Status: 429, Message: "Hey! Too Many requests!!"})
+		return
+	} else {
+		rateLimiter.Count++
+		rateLimiter.LastRequest = time.Now()
+	}
 }
