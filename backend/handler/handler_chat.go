@@ -55,3 +55,7 @@ func (server *ChatServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func isHandshakeError(err error) bool {
 	return strings.Contains(err.Error(), "not a websocket handshake")
 }
+
+func isLogoutError(err error) bool {
+	return strings.Contains(err.Error(), "close 1000 (normal)")
+}

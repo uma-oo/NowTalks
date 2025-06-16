@@ -11,8 +11,6 @@ import (
 // to avoid duplication we need to have the type of the entity and then send it with the entity_id
 
 func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Request) {
-	cookie, _ := r.Cookie("session")
-	session, _ := Rhanlder.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	liked := models.Reaction{}
 	if err := json.NewDecoder(r.Body).Decode(&liked); err != nil {
 		if err == io.EOF {
@@ -25,7 +23,7 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
 		return
 	}
-	liked.UserId = session.UserId
+	liked.UserId = Rhanlder.service.GetUsernameFromSession(r)
 	entity_type_id := Rhanlder.service.GetTypeIdByName(liked.EntityType)
 	if entity_type_id == 0 {
 		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}

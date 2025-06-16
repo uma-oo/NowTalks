@@ -1,6 +1,8 @@
 package service
 
 import (
+	"net/http"
+
 	"real-time-forum/backend/models"
 )
 
@@ -26,4 +28,10 @@ func (s *AppService) UserExists(id int) (bool, *models.ErrorJson) {
 		return false, errJson
 	}
 	return exists, nil
+}
+
+func (service *AppService) GetUsernameFromSession(r *http.Request) int {
+	cookie, _ := r.Cookie("session")
+	session, _ := service.GetSessionByTokenEnsureAuth(cookie.Value)
+	return session.UserId
 }

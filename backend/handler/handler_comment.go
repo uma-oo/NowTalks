@@ -12,8 +12,6 @@ import (
 
 // GET THE request body
 func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Request) {
-	cookie, _ := r.Cookie("session")
-	session, _ := CHanlder.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	var comment *models.Comment
 	err := json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
@@ -30,7 +28,7 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 		return
 
 	}
-	comment.UserId = session.UserId
+	comment.UserId = CHanlder.service.GetUsernameFromSession(r)
 	comment_created, err_ := CHanlder.service.AddComment(comment)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
