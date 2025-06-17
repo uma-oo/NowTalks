@@ -3,6 +3,7 @@ package middleware
 import (
 	"encoding/json"
 	"net/http"
+	"sync"
 	"time"
 
 	"real-time-forum/backend/models"
@@ -29,7 +30,7 @@ type RateLimitMiddleWareLoggedIn struct {
 	MiddlewareHanlder http.Handler
 	service           *service.AppService
 	Users             map[int]*UserInfo
-	// sync.RWMutex
+	sync.RWMutex
 }
 
 type RateLimitter struct {
@@ -38,7 +39,7 @@ type RateLimitter struct {
 }
 
 func NewRateLimitMiddleWare(handler http.Handler, service *service.AppService) *RateLimitMiddleWareLoggedIn {
-	return &RateLimitMiddleWareLoggedIn{handler, service, map[int]*UserInfo{}}
+	return &RateLimitMiddleWareLoggedIn{handler, service, map[int]*UserInfo{}, sync.RWMutex{}}
 }
 
 func NewRateLimitter() *RateLimitter {

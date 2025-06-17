@@ -10,6 +10,7 @@ import (
 )
 
 func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hnaaaaaaaa")
 	var user models.User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {

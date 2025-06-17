@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Load Test</title>
+</head>
+
+<body>
+    <h2>API Load Test - Check Console</h2>
+    <script>
+        const totalRequests = 1000;
+        const apiUrl = 'http://localhost:8080/api/user/register'; // Change to your actual endpoint
+        const logoutUrl = 'http://localhost:8080/api/user/logout'
+        const names = Array.from({ length: 1000 }, (_, i) => `oumayma${i}`);
+        // console.log(names);
+        function sendRequest(index, name) {
+            const nickname = `${name}${index}`;
+            const email = `${nickname}@gmail.com`;
+
+            const payload = {
+                nickname: nickname,
+                age: 25,
+                gender: "Female",
+                firstname: "oumayma",
+                lastname: "ELFAHSI",
+                email: email,
+                password: "Abcd@2024",
+                password2: "Abcd@2024"
+            };
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(response => {
+                console.log(`Request ${index}: Status ${response.status}`);
+                return response.json()
+            }).catch(error => {
+                console.error(`Request ${index} failed:`, error);
+            });
+        }
+
+
+        function logout() {
+            fetch(logoutUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            }).then(response => {
+                console.log(`Request ${index}: Status ${response.status}, data ${response.json()}`);
+                return response.json()
+            }).catch(error => {
+                console.error(`Request ${index} failed:`, error);
+            });
+        }
+
+        for (let i = 0; i < totalRequests; i++) {
+            console.log(names[i]);
+             sendRequest(i, names[i])
+             logout()
+        }
+    </script>
+</body>
+
+</html>
