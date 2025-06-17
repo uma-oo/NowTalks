@@ -63,20 +63,15 @@ function chatWindowObserver(container, targetTopElement) {
                 let chatData = container.dataset
                 let nextSibling = targetTopElement.nextSibling
                 let offset = nextSibling?.dataset.messageId || 0
-
                 if (chatData.topObsorver === "off") {
                     console.log("unobserve the topTarget")
                     observer.unobserve(entry.target)
                 };
-
                 if (entry.isIntersecting) {
                     fetchMessages(offset, chatData.id, "old", container)
                 }
             })
         },{ rootMargin: "20px" }
     )
-
-    
-
     topObserver.observe(targetTopElement)
 }

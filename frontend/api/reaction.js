@@ -13,11 +13,7 @@ async function addReaction(reactionData) {
     }
 }
 
-
-
-
 export function ToggleLike(reactionData, svg, count) {
-
     addReaction(reactionData).then(
         ([status, response]) => {
             if (status == 401) {
@@ -35,10 +31,7 @@ export function ToggleLike(reactionData, svg, count) {
                         svg.style.fill = "white"
                         break;
                 }
-
             }
         }
     )
-
-
 }

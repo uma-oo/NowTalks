@@ -1,5 +1,3 @@
-import { closeConnection } from "../websocket.js";
-
 export async function getUsers(offset) {
     try {
         const response = await fetch(`api/users?offset=${offset}`);
@@ -7,8 +5,6 @@ export async function getUsers(offset) {
     } catch (error) {
         console.error("error trying to get users", error)
     }
-
-
 }
 
 export async function createUser(data) {
@@ -37,20 +33,16 @@ export async function loginUser(data) {
     }
 }
 
-
-
 export async function logoutUser() {
     try {
         await fetch("api/user/logout", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         })
-        
     } catch (error) {
         console.error(`Error trying to logout: ${error}`)
     }
 }
-
 
 export async function isLoggedIn() {
     try {
