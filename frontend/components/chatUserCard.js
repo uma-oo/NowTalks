@@ -15,7 +15,6 @@ export function createChatUserCard({
     chatUserCard.dataset.userName = nickname 
     chatUserCard.dataset.notifications = notifications || 0
 
-
     let chatUserCardBody = createElement('div', 'chat-user-card-body')
     let chatUserCardFooter = createElement('div', 'chat-user-card-footer')
 
@@ -31,6 +30,5 @@ export function createChatUserCard({
     chatUserCardBody.append(user_nickname, user_status, last_message)
     chatUserCardFooter.append(last_interaction, notifications_container)
     chatUserCard.append(chatUserCardBody, chatUserCardFooter)
-
     return chatUserCard
 }

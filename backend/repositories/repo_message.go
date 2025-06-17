@@ -38,8 +38,8 @@ func (repo *AppRepository) AddMessage(message *models.Message) (*models.Message,
 func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int, type_ string) ([]models.Message, *models.ErrorJson) {
 	var messages []models.Message
 	var query string
-	switch type_ {
-	case "new":
+	switch offset {
+	case 0:
 		query = `
 			SELECT
 				s.nickname AS sender,
@@ -55,11 +55,10 @@ func (repo *AppRepository) GetMessages(sender_id, receiver_id, offset int, type_
 			WHERE
 				senderID IN (?, ?)
 				AND receiverID IN (?, ?)
-				AND messages.messageID > ?
-			ORDER BY  messages.createdAt 
+			ORDER BY  messages.createdAt DESC
 			LIMIT
 				10;`
-	case "old":
+	default:
 		query = `
 			SELECT
 				s.nickname AS sender,

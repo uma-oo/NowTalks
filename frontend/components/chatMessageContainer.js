@@ -15,7 +15,6 @@ export function createChatMessageContainer(
 
     let chatWindowBody = openChatWindow.querySelector(".chat-window-body")
     let topTargetObserver = chatWindowBody.querySelector(".top-observer-target ")
-    let bottomTargetObserver = chatWindowBody.querySelector(".bottom-observer-target ")
 
 
     let sender = createElement('p', 'message-sender', sender_username)
@@ -27,7 +26,7 @@ export function createChatMessageContainer(
     if (position == "top") {
         chatWindowBody.insertBefore(messageBubble, topTargetObserver.nextSibling);
     } else if (position === "bottom") {
-        chatWindowBody.insertBefore(messageBubble, bottomTargetObserver);
+        chatWindowBody.append(messageBubble);
         if (messageBubble.classList.contains("align-self-end")) messageBubble.scrollIntoView()
     }
 }
