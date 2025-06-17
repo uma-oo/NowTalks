@@ -17,12 +17,10 @@ func (server *ChatServer) AddClient(client *Client) {
 }
 
 func (server *ChatServer) RemoveClient(client *Client, logged_out bool) {
-	fmt.Println("inside remove client", logged_out)
 	server.Lock()
 	defer server.Unlock()
 	switch logged_out {
 	case true:
-		fmt.Println("hereee before!!", server.clients)
 		if connections, ok := server.clients[client.userId]; ok {
 			for _, conn := range connections {
 				conn.connection.Close()
@@ -31,10 +29,8 @@ func (server *ChatServer) RemoveClient(client *Client, logged_out bool) {
 			go server.BroadCastOnlineStatus()
 		}
 		delete(server.clients, client.userId)
-		fmt.Println("heeere after !!", server.clients)
 		go server.BroadCastOnlineStatus()
 	case false:
-		fmt.Println("hhhhhhhhh")
 		if _, ok := server.clients[client.userId]; ok {
 			client.connection.Close()
 			deleteConnection(server.clients, client.userId, client)

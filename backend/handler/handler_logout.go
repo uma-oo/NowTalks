@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 
 // let's implement the logout
 func (logout *Logout) Logout(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hnaaa")
 	// delete from the database before
 	cookie, _ := r.Cookie("session")
 	session, errJson := logout.service.GetSessionByTokenEnsureAuth(cookie.Value)
@@ -32,7 +34,16 @@ func (logout *Logout) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (logout *Logout) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	// Allow specific methods
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+
+	// Handle preflight OPTIONS request
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+	}
 	switch {
 	case r.Method != http.MethodPost && r.URL.Path == "/api/user/logout":
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!"})
