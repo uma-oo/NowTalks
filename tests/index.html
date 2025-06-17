@@ -9,13 +9,20 @@
 <body>
     <h2>API Load Test - Check Console</h2>
     <script>
-        const totalRequests = 1000;
+        const totalRequests = 10000;
         const apiUrl = 'http://localhost:8080/api/user/register'; // Change to your actual endpoint
         const logoutUrl = 'http://localhost:8080/api/user/logout'
-        const names = Array.from({ length: 1000 }, (_, i) => `oumayma${i}`);
+        let names = []
+        const total_requests = []
         // console.log(names);
+        function createNames(size) {
+            for (let i = 0; i < size; i++) {
+                names.push(`oumayma${i}`)
+            }
+            return names
+        }
         function sendRequest(index, name) {
-            const nickname = `${name}${index}`;
+            const nickname = `${name}`;
             const email = `${nickname}@gmail.com`;
 
             const payload = {
@@ -25,8 +32,8 @@
                 firstname: "oumayma",
                 lastname: "ELFAHSI",
                 email: email,
-                password: "Abcd@2024",
-                password2: "Abcd@2024"
+                password: `Abcd@2024${nickname}`,
+                password2: `Abcd@2024${nickname}`
             };
 
             fetch(apiUrl, {
@@ -53,12 +60,15 @@
                 console.error(`Request ${index} failed:`, error);
             });
         }
-
-        for (let i = 0; i < totalRequests; i++) {
-            console.log(names[i]);
-             sendRequest(i, names[i])
-             logout()
+        async function run() {
+            const names = createNames(totalRequests);
+            for (let i = 0; i < totalRequests; i++) {
+                await sendRequest(i, names[i]);
+                await logout(i);
+            }
         }
+
+        run();
     </script>
 </body>
 

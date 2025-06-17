@@ -651,6 +651,7 @@ aside {
     overflow: hidden;
     /* width: 20%; */
     max-width: 300px;
+    height: 100%;
 }
 
 aside .create-post-btn {
@@ -668,6 +669,11 @@ aside .create-post-btn {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
 }
 
+.chat-section {
+    height: 80%;
+    /* overflow: hidden;
+    overflow-y: auto; */
+}
 .chats-section-header {
     padding: .5rem 0;
     border-bottom: var(--secondary-color) solid;
@@ -689,6 +695,9 @@ aside .create-post-btn {
     display: grid;
     grid-template-columns: minmax(0,1fr) min-content;
     row-gap: 15px;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 .chat-user-card {
