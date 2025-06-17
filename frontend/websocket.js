@@ -52,7 +52,7 @@ export function sendMessage(messageContent="", type="message") {
         receiver_id: receiver_id,
         created_at: new Date(Date.now()),
     };
-
+    console.log(msg);
     socket.send(JSON.stringify(msg));
 }
 

@@ -1,3 +1,4 @@
+
 import { fetchMessages } from "../components/messagesSection.js";
 import { MessageForm } from "../const/forms.js";
 import { createElement } from "../utils.js";
@@ -10,14 +11,7 @@ export function openChatWindow(chatUserCard) {
     let user = chatUserCard.dataset
     console.log(user);
     let notificationsContainer = chatUserCard.querySelector(".notification_container")
-    console.log(+notificationsContainer.querySelector("span").textContent != 0, +notificationsContainer.querySelector("span").textContent);
-    if (+notificationsContainer.querySelector("span").textContent != 0) {
-        console.log("norificatiions");
-        sendMessage({
 
-        },"read")
-    }
-    notificationsContainer.querySelector("span").textContent = 0
     notificationsContainer.classList.add("hide")
     let chatWindow = document.querySelector('.chat-window')
     chatWindow.dataset.id = user.id
@@ -28,6 +22,14 @@ export function openChatWindow(chatUserCard) {
     if (chatUserCard.dataset.open) {
         return
     }
+    console.log(+notificationsContainer.querySelector("span").textContent != 0, +notificationsContainer.querySelector("span").textContent);
+    if (+notificationsContainer.querySelector("span").textContent != 0) {
+        console.log("norificatiions");
+        sendMessage({ 
+            receiver_id : user.id          
+        }, "read")
+    }
+    notificationsContainer.querySelector("span").textContent = 0
 
     const previousOpendChat = document.querySelector('.chat-list > [data-open = "true"]');
     if (previousOpendChat) {
