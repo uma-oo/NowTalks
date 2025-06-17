@@ -1,6 +1,7 @@
+import { markMessagesRead } from "../api/messages.js";
 import { fetchMessages } from "../components/messagesSection.js";
 import { MessageForm } from "../const/forms.js";
-import { createElement } from "../utils.js";
+import { createElement, navigateTo } from "../utils.js";
 import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
@@ -8,6 +9,7 @@ export function openChatWindow(chatUserCard) {
     let user = chatUserCard.dataset
     chatUserCard.querySelector(".user_notifications").textContent = 0
     chatUserCard.querySelector(".notification_container").classList.add("hide")
+
     let chatWindow = document.querySelector('.chat-window')
     chatWindow.dataset.id = user.id
     chatWindow.dataset.firstFetch = "true"
@@ -20,6 +22,7 @@ export function openChatWindow(chatUserCard) {
 
     const previousOpendChat = document.querySelector('.chat-list > [data-open = "true"]');
     if (previousOpendChat) {
+        clearNotificaitons(previousOpendChat)
         // here you can mark the messages for the previous chat read
         previousOpendChat.dataset.open = "";
     }
@@ -38,6 +41,7 @@ export function openChatWindow(chatUserCard) {
     let messageform = createForm(MessageForm, "message-form")
 
     goBackBtn.addEventListener('click', () => {
+        clearNotificaitons(chatUserCard)
         closeChatWindow(chatUserCard, chatWindow)
     })
 
@@ -50,11 +54,15 @@ export function openChatWindow(chatUserCard) {
     return chatWindow
 }
 
+
+
+
 export function closeChatWindow(chatUserCard, chatWindow) {
     chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
 }
+
 
 function chatWindowObserver(container, targetTopElement) {
     const topObserver = new IntersectionObserver(
@@ -74,4 +82,16 @@ function chatWindowObserver(container, targetTopElement) {
         },{ rootMargin: "20px" }
     )
     topObserver.observe(targetTopElement)
+}
+
+
+function clearNotificaitons(chatUserCard) {
+    markMessagesRead(chatUserCard.dataset.id)
+        .then(status => {
+            if (status == 401) navigateTo('/login')
+            if (status == 200) {
+                chatUserCard.dataset.notifications = 0
+                chatUserCard.querySelector(".user_notifications").classList.add("hide")
+            }
+        })
 }

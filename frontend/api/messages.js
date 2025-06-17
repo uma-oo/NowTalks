@@ -19,7 +19,7 @@ export async function markMessagesRead(receiver_id) {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' }
         })
-        return [response.status, await response.json()];
+        return response.status;
     } catch (error) {
         console.error("error trying to mark messages as read", error)
     }
