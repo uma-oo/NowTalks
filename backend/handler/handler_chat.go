@@ -57,5 +57,5 @@ func isHandshakeError(err error) bool {
 }
 
 func isLogoutError(err error) bool {
-	return strings.Contains(err.Error(), "close 1000 (normal)")
+	return strings.Contains(err.Error(), "close 1000 (normal): user logged out")
 }

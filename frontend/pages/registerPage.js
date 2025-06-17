@@ -24,8 +24,6 @@ export function renderRegisterPage(app) {
             app.append(header, formError, registerFomlement, goToLogin)
         }
         else {
-            app.dataset.nickname = data.nickname
-            app.dataset.id = data.id
             navigateTo("/")
         }
     })

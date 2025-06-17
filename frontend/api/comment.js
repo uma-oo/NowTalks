@@ -1,7 +1,6 @@
 
 
 
-// You have to specify the id assi ayoub 
 export async function getComments(postId, offset) {
     try {
         const response = await fetch(`/api/comment?post=${postId}&offset=${offset}`);
@@ -10,11 +9,6 @@ export async function getComments(postId, offset) {
         console.error("Error While Trying to get comments")
     }
 }
-
-
-
-
-
 
 export async function addComment(commentData) {
     try {

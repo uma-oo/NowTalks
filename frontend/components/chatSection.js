@@ -5,7 +5,7 @@ import { openChatWindow } from "./chatWindow.js"
 import { createIcon } from "./icon.js"
 
 export async function createChatSection() {
-    let chatSection = createElement('div','chat-section')
+    let chatSection = createElement('div', 'chat-section')
     let chatSectionHeader = createElement('div', "chats-section-header")
     let chatSectionHeaderTitle = createElement('h2', null, "Chats: ")
     chatSectionHeaderTitle.prepend(createIcon("chats"))
@@ -23,26 +23,22 @@ export async function createChatSection() {
 export async function fetchUsers(chatList) {
     let offset = chatList.dataset.offset
     let [status, data] = await getUsers(offset)
-    // getUsers(offset).then(([status, data]) => {
-        if (status == 401) {
-            navigateTo("login")
+    if (status == 401) {
+        navigateTo("/login")
+    }
+    if (status == 200) {
+        let chats = data?.map(userData => {
+            let userCard = createChatUserCard(userData)
+            let userCardClone = userCard.cloneNode(true)
+            userCard.addEventListener("click", _ => {
+                openChatWindow(userCard, userCardClone)
+            })
+            return userCard
+        });
+        if (chats) {
+            chatList.append(...chats)
+        } else {
+            chatList.append("No users")
         }
-        if (status == 200) {
-            let chats = data?.map(userData => {
-                let userCard = createChatUserCard(userData)
-                userCard.dataset.id = userData.id
-                let userCardClone = userCard.cloneNode(true)
-                userCard.addEventListener("click", _ => {
-                    openChatWindow(userCard, userCardClone)
-                })
-                return userCard
-            });
-            if (chats) {
-                chatList.append(...chats)
-            } else {
-                chatList.append("No users")
-            }
-        }
-    // })
-
+    }
 }

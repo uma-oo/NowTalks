@@ -2,26 +2,29 @@ import { getMessages } from "../api/messages.js";
 import { navigateTo } from "../utils.js";
 import { createChatMessageContainer } from "./chatMessageContainer.js";
 
+export function fetchMessages(offset, receiver_id, type, chatWindow) {
+    let chatWindowBody = chatWindow.querySelector('.chat-window-body');
+    const prevScrollHeight = chatWindowBody.scrollHeight
+    getMessages(offset, receiver_id, type)
+        .then(([status, data]) => {
+            if (status === 401) {
+                navigateTo("/login")
+            }
+            if (status === 400) {
+                console.log(data);
+            }
+            if (status === 200) {
+                console.log(data)
+                if (!data || data.length < 10) {
+                    chatWindow.dataset.topObsorver = "off"
+                }
+        
+                data?.forEach(message => {
+                    createChatMessageContainer(message, chatWindow, "top")
+                });
 
-
-
-
-
-
-export function fetchMessages(offset, receiver_id, chatWindow) {
-    getMessages(offset, receiver_id).then(([status, data]) => {
-        if (status === 401) {
-            navigateTo("/login")
-        }
-        if (status === 400) {
-            console.log(data);
-        }
-        if (status === 200 && data) {
-            data.forEach(message => {
-                createChatMessageContainer(message, chatWindow)
-            });
-            // messagesContainer.dataset.offset = +messagesContainer.dataset.offset + 10
-        }
-    })
-
+                const diff = chatWindowBody.scrollHeight - prevScrollHeight;
+                chatWindowBody.scrollTop += diff;
+            }
+        })
 }
