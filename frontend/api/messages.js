@@ -13,6 +13,8 @@ export async function getMessages(offset, receiver_id) {
     }
 }
 
+
+// we don't need this anymore 
 export async function markMessagesRead(receiver_id) {
     try {
         const response = await fetch(`${API_URL}?receiver_id=${receiver_id}`, {

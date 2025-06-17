@@ -1,13 +1,24 @@
 import { fetchMessages } from "../components/messagesSection.js";
 import { MessageForm } from "../const/forms.js";
 import { createElement } from "../utils.js";
+import { sendMessage } from "../websocket.js";
 import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
 export function openChatWindow(chatUserCard) {
+    console.log("hnaaaa");
     let user = chatUserCard.dataset
-    chatUserCard.querySelector(".user_notifications").textContent = 0
-    chatUserCard.querySelector(".notification_container").classList.add("hide")
+    console.log(user);
+    let notificationsContainer = chatUserCard.querySelector(".notification_container")
+    console.log(+notificationsContainer.querySelector("span").textContent != 0, +notificationsContainer.querySelector("span").textContent);
+    if (+notificationsContainer.querySelector("span").textContent != 0) {
+        console.log("norificatiions");
+        sendMessage({
+
+        },"read")
+    }
+    notificationsContainer.querySelector("span").textContent = 0
+    notificationsContainer.classList.add("hide")
     let chatWindow = document.querySelector('.chat-window')
     chatWindow.dataset.id = user.id
     chatWindow.dataset.firstFetch = "true"
@@ -71,7 +82,7 @@ function chatWindowObserver(container, targetTopElement) {
                     fetchMessages(offset, chatData.id, "old", container)
                 }
             })
-        },{ rootMargin: "20px" }
+        }, { rootMargin: "20px" }
     )
     topObserver.observe(targetTopElement)
 }

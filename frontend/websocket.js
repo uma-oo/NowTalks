@@ -34,6 +34,9 @@ function receiveMessage(event) {
         case "online":
             changeUsersStatus(data.data)
             break;
+        case  "read":
+            markMessagesRead(data)
+            break;
         case "typing":
             break;
         default:
@@ -41,14 +44,15 @@ function receiveMessage(event) {
     }
 }
 
-export function sendMessage(messageContent) {
+export function sendMessage(messageContent="", type="message") {
     let receiver_id = parseInt(document.querySelector(".chat-window_expanded").dataset.id)
     const msg = {
         content: messageContent,
-        type: "message",
+        type: type,
         receiver_id: receiver_id,
         created_at: new Date(Date.now()),
     };
+
     socket.send(JSON.stringify(msg));
 }
 
@@ -66,4 +70,10 @@ function changeUsersStatus(data) {
             userCard.querySelector('.user_status').textContent = "offline"
         }
     });
+}
+
+
+
+function markMessagesRead(){
+
 }
