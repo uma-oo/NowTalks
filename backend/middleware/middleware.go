@@ -26,24 +26,21 @@ type UserInfo struct {
 	LastRequest time.Time
 }
 
-type RateLimitMiddleWareLoggedIn struct {
+type RateLimitMiddleWare struct {
 	MiddlewareHanlder http.Handler
-	service           *service.AppService
-	Users             map[int]*UserInfo
+	Users             sync.Map
+	MaxDuration       time.Duration
+	MaxRequests        int
+}
+
+type ClientInfo struct {
+	Count       int
+	LastRequest time.Time
 	sync.RWMutex
 }
 
-type RateLimitter struct {
-	Count       int
-	LastRequest time.Time
-}
-
-func NewRateLimitMiddleWare(handler http.Handler, service *service.AppService) *RateLimitMiddleWareLoggedIn {
-	return &RateLimitMiddleWareLoggedIn{handler, service, map[int]*UserInfo{}, sync.RWMutex{}}
-}
-
-func NewRateLimitter() *RateLimitter {
-	return &RateLimitter{}
+func NewRateLimitMiddleWare(handler http.Handler) *RateLimitMiddleWare {
+	return &RateLimitMiddleWare{handler, sync.Map{}, time.Duration(time.Minute * 1), 1000}
 }
 
 func NewMiddleWare(handler http.Handler, service *service.AppService) *Middleware {

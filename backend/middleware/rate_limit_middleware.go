@@ -9,43 +9,26 @@ import (
 
 // This is the middleware that comes after the the authentication
 // there are many cases to handle here
-func (RateLimitM *RateLimitMiddleWareLoggedIn) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	RateLimitM.Lock()
-	defer RateLimitM.Unlock()
-	userId := RateLimitM.service.GetUsernameFromSession(r)
-	userInfo, ok := RateLimitM.Users[userId]
+func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	ipAddress := r.RemoteAddr
+	value, ok := RateLimitM.Users.Load(ipAddress)
 	if ok {
-		if userInfo.LastRequest.Add(1 * time.Minute).Before(time.Now()) {
-			userInfo.Count = 1
-		} else if userInfo.Count > 100 && userInfo.LastRequest.Before(time.Now().Add(1*time.Minute)) {
-			WriteJsonErrors(w, models.ErrorJson{Status: 429, Message: "Hey! Too Many requests!!"})
-			return
+		if time.Since(value.(*ClientInfo).LastRequest) > RateLimitM.MaxDuration {
+			value.(*ClientInfo).Count = 1
+			value.(*ClientInfo).LastRequest = time.Now()
 		} else {
-			userInfo.Count++
+			if value.(*ClientInfo).Count > RateLimitM.MaxRequests {
+				WriteJsonErrors(w, models.ErrorJson{Status: http.StatusTooManyRequests, Message: "ERROR!! Too many Requests"})
+				return
+			}
+			value.(*ClientInfo).Count++
 		}
-		userInfo.LastRequest = time.Now()
 	} else {
-		RateLimitM.Users[userId] = &UserInfo{
-			UserID:      userId,
+		RateLimitM.Users.Store(ipAddress, &ClientInfo{
 			Count:       1,
 			LastRequest: time.Now(),
-		}
+		})
 	}
-	RateLimitM.MiddlewareHanlder.ServeHTTP(w, r)
-}
 
-// rate limiter for the / on the route of /api/
-// for later 
-func (rateLimiter *RateLimitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	if rateLimiter.LastRequest.Add(1 * time.Minute).Before(time.Now()) {
-		rateLimiter.Count = 1
-		rateLimiter.LastRequest = time.Now()
-	} else if rateLimiter.Count > 1000 && rateLimiter.LastRequest.Before(time.Now().Add(1*time.Minute)) {
-		WriteJsonErrors(w, models.ErrorJson{Status: 429, Message: "Hey! Too Many requests!!"})
-		return
-	} else {
-		rateLimiter.Count++
-		rateLimiter.LastRequest = time.Now()
-	}
+	RateLimitM.MiddlewareHanlder.ServeHTTP(w, r)
 }

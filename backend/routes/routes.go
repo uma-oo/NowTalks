@@ -22,23 +22,24 @@ func SetRoutes(
 	chat *handler.ChatServer,
 	messages *handler.MessagesHandler,
 	service *s.AppService,
-) {
-	// http.Handle("/api/", m.NewRateLimitter())
-	http.Handle("/api/comment", m.NewMiddleWare(m.NewRateLimitMiddleWare(Chandler, service), service))
-	http.Handle("/api/post", m.NewMiddleWare(m.NewRateLimitMiddleWare(Phandler, service), service))
-	http.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
-	http.Handle("/api/react/", m.NewMiddleWare(m.NewRateLimitMiddleWare(Rhanlder, service), service))
-	http.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
-	http.HandleFunc("/api/categories", categories.GetCategories)
-	http.Handle("/api/users", m.NewMiddleWare(users, service))
-	http.Handle("/api/messages", m.NewMiddleWare(messages, service))
-	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
-	http.Handle("/ws/", m.NewMiddleWare(chat, service))
+) *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.Handle("/api/comment", m.NewMiddleWare(Chandler, service))
+	mux.Handle("/api/post", m.NewMiddleWare(Phandler, service))
+	mux.Handle("/api/user/", m.NewLoginMiddleware(Uhandler, service))
+	mux.Handle("/api/react/", m.NewMiddleWare(Rhanlder, service))
+	mux.Handle("/api/user/logout", m.NewMiddleWare(logout, service))
+	mux.HandleFunc("/api/categories", categories.GetCategories)
+	mux.Handle("/api/users", m.NewMiddleWare(users, service))
+	mux.Handle("/api/messages", m.NewMiddleWare(messages, service))
+	mux.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
+	mux.Handle("/ws/", m.NewMiddleWare(chat, service))
 	var frontend fs.FS = os.DirFS("../frontend")
 	httpFS := http.FS(frontend)
 	fileServer := http.FileServer(httpFS)
 	serveIndex := handler.ServeFileContents("index.html", httpFS)
-	http.Handle("/", handler.Intercept404(fileServer, serveIndex))
+	mux.Handle("/", handler.Intercept404(fileServer, serveIndex))
+	return mux
 }
 
 // func handleSPA(w http.ResponseWriter, r *http.Request) {
