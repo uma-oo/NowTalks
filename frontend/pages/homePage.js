@@ -13,6 +13,7 @@ export function renderHomePage(app) {
             sessionStorage.setItem("userId", data.id)
             sessionStorage.setItem("userNickname", data.nickname)
             sessionStorage.setItem("onlineUsers", [])
+            sessionStorage.setItem("openChat", null)
             setCategories(app).then(async () => {
                 let header = createHeader()
                 let main = createElement('main', "home-main")

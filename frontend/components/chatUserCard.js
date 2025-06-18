@@ -10,8 +10,8 @@ export function createChatUserCard({
 }) {
     let chatUserCard = createElement('div', 'chat-user-card')
     let onlineUsers = sessionStorage.getItem("onlineUsers")
-    chatUserCard.dataset.open = ""
     chatUserCard.dataset.id = id
+    chatUserCard.dataset.open = + sessionStorage.getItem("openChat") ===  id  ? "true" : ""
     chatUserCard.dataset.status = onlineUsers.includes(id) ? "online" : "offline"
     chatUserCard.dataset.userName = nickname
     chatUserCard.dataset.notifications = notifications || 0

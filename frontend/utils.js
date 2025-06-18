@@ -133,6 +133,6 @@ function editUserCard(userCard) {
         userCard.querySelector('.notification_container').classList.remove('hide')
         userCard.querySelector('.user_notifications').textContent = + userCard.dataset.notifications + 1
         userCard.dataset.notifications = + userCard.dataset.notifications + 1
-    } 
+    }
     return userCard
 }

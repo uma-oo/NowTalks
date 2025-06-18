@@ -7,32 +7,34 @@ import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
 export function openChatWindow(chatUserCard) {
-    let user = chatUserCard.dataset
-    console.log(user);
-    let notificationsContainer = chatUserCard.querySelector(".notification_container")
 
-    notificationsContainer.classList.add("hide")
-    let chatWindow = document.querySelector('.chat-window')
-    chatWindow.dataset.id = user.id
-    chatWindow.dataset.firstFetch = "true"
-    chatWindow.dataset.topObsorver = "on"
-
-    chatWindow.classList.add("chat-window_expanded")
-    if (chatUserCard.dataset.open) {
+    if (chatUserCard.dataset.open) { // if chat already open
         return
     }
-    if (+notificationsContainer.querySelector("span").textContent != 0) {
-        sendMessage("read", "read")
-    }
-    notificationsContainer.querySelector("span").textContent = 0
 
     const previousOpendChat = document.querySelector('.chat-list > [data-open = "true"]');
-    if (previousOpendChat) {
-        // here you can mark the messages for the previous chat read
+    if (previousOpendChat) { // if there is an already open chat
         previousOpendChat.dataset.open = "";
     }
 
+    // open new chat
+    let user = chatUserCard.dataset
+    let chatWindow = document.querySelector('.chat-window')
+    chatWindow.classList.add("chat-window_expanded")
+    chatWindow.dataset.id = user.id
+    chatWindow.dataset.firstFetch = "true"
+    chatWindow.dataset.topObsorver = "on"
+    let notificationsContainer = chatUserCard.querySelector(".notification_container")
+    let notificationsCounter = notificationsContainer.querySelector(".user_notifications")
+    notificationsContainer.classList.add("hide")
+    
+    if (user.notifications != 0) {
+        sendMessage("read", "read")
+    }
+
+    notificationsCounter.textContent = 0
     chatUserCard.dataset.open = "true"
+    sessionStorage.setItem("openChat", +user.id)
     chatWindow.innerHTML = ""
 
     let chatWindowHeader = createElement('div', 'chat-window-header')
