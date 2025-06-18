@@ -120,7 +120,7 @@ type Message struct {
 	ReceiverUsername string    `json:"receiver_username"`
 	Message          string    `json:"content"`
 	CreatedAt        time.Time `json:"created_at"`
-	Status           string    `json:"status,omitempty"`
+	// Status           string    `json:"status,omitempty"`
 	Type             string    `json:"type"`
 }
 

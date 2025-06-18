@@ -34,7 +34,7 @@ func main() {
 		<-c
 		db.Database.Close()
 		fmt.Println("cleaned!!")
-		os.Exit(1)
+		os.Exit(0)
 	}()
 
 	fmt.Println("Listening on: http://localhost:8080")

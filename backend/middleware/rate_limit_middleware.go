@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -18,7 +17,7 @@ func (RateLimitM *RateLimitMiddleWareLoggedIn) ServeHTTP(w http.ResponseWriter, 
 	if ok {
 		if userInfo.LastRequest.Add(1 * time.Minute).Before(time.Now()) {
 			userInfo.Count = 1
-		} else if userInfo.Count > 60 && userInfo.LastRequest.Before(time.Now().Add(1*time.Minute)) {
+		} else if userInfo.Count > 100 && userInfo.LastRequest.Before(time.Now().Add(1*time.Minute)) {
 			WriteJsonErrors(w, models.ErrorJson{Status: 429, Message: "Hey! Too Many requests!!"})
 			return
 		} else {
@@ -36,15 +35,13 @@ func (RateLimitM *RateLimitMiddleWareLoggedIn) ServeHTTP(w http.ResponseWriter, 
 }
 
 // rate limiter for the / on the route of /api/
-
+// for later 
 func (rateLimiter *RateLimitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if rateLimiter.LastRequest.Add(1 * time.Minute).Before(time.Now()) {
-		fmt.Println("hnaaa")
 		rateLimiter.Count = 1
 		rateLimiter.LastRequest = time.Now()
 	} else if rateLimiter.Count > 1000 && rateLimiter.LastRequest.Before(time.Now().Add(1*time.Minute)) {
-		fmt.Println("lhiiih")
 		WriteJsonErrors(w, models.ErrorJson{Status: 429, Message: "Hey! Too Many requests!!"})
 		return
 	} else {

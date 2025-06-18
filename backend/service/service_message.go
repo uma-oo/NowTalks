@@ -13,7 +13,7 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 	trimmedMsg := strings.TrimSpace(message.Message)
 	type_message := strings.ToLower(strings.TrimSpace(message.Type))
 
-	if type_message != "message" && type_message != "status" && type_message != "typing" {
+	if type_message != "message" && type_message != "read" && type_message != "typing" {
 		errMessage.Type = "ERROR!! Wrong type of message"
 	}
 
@@ -44,8 +44,9 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 		}
 		message_created.Type = type_message
 		return message_created, nil
-	case "status":
-
+	case "read":
+		service.EditReadStatus(message.SenderID, message.ReceiverID)
+		return message, nil
 	case "typing":
 
 	}

@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"io/fs"
 	"net/http"
 	"os"
-	"path/filepath"
 
 	"real-time-forum/backend/handler"
 	m "real-time-forum/backend/middleware"
@@ -34,14 +34,18 @@ func SetRoutes(
 	http.Handle("/api/messages", m.NewMiddleWare(messages, service))
 	http.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
 	http.Handle("/ws/", m.NewMiddleWare(chat, service))
-	http.HandleFunc("/", handleSPA)
+	var frontend fs.FS = os.DirFS("../frontend")
+	httpFS := http.FS(frontend)
+	fileServer := http.FileServer(httpFS)
+	serveIndex := handler.ServeFileContents("index.html", httpFS)
+	http.Handle("/", handler.Intercept404(fileServer, serveIndex))
 }
 
-func handleSPA(w http.ResponseWriter, r *http.Request) {
-	file_info, err := os.Stat(filepath.Join("../frontend/", r.URL.Path[1:]))
-	if err != nil || file_info.IsDir() {
-		http.ServeFile(w, r, "../frontend/index.html")
-		return
-	}
-	http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
-}
+// func handleSPA(w http.ResponseWriter, r *http.Request) {
+// 	file_info, err := os.Stat(filepath.Join("../frontend/", r.URL.Path[1:]))
+// 	if err != nil || file_info.IsDir() {
+// 		http.ServeFile(w, r, "../frontend/index.html")
+// 		return
+// 	}
+// 	http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
+// }

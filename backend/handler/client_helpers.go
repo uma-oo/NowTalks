@@ -113,14 +113,26 @@ func (sender *Client) BroadCastTheMessage(message *models.Message) {
 	// braodcast to the connections dyal sender
 	sender.chatServer.Lock()
 	defer sender.chatServer.Unlock()
-	for _, conn := range sender.chatServer.clients[sender.userId] {
-		if conn.connection != sender.connection {
-			conn.Message <- message
+
+	switch message.Type {
+	case "message":
+		for _, conn := range sender.chatServer.clients[sender.userId] {
+			if conn.connection != sender.connection {
+				conn.Message <- message
+			}
 		}
-	}
-	// dyal receiver
-	for _, value := range sender.chatServer.clients[message.ReceiverID] {
-		value.Message <- message
+		// dyal receiver
+		for _, value := range sender.chatServer.clients[message.ReceiverID] {
+			value.Message <- message
+		}
+	case "read":
+		for _, conn := range sender.chatServer.clients[sender.userId] {
+			if conn.connection != sender.connection {
+				conn.Message <- message
+			}
+		}
+	case "typing":
+
 	}
 }
 
