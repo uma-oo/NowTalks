@@ -31,7 +31,6 @@ export async function fetchUsers(chatList) {
         let chats = data?.map(userData => {
             let userCard = createChatUserCard(userData)
             let userCardClone = userCard.cloneNode(true)
-            console.log("userCard", userCard);
             userCard.addEventListener("click", _ => {
                 openChatWindow(userCard, userCardClone)
             })

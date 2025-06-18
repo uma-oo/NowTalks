@@ -7,7 +7,6 @@ import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
 export function openChatWindow(chatUserCard) {
-    console.log("hnaaaa");
     let user = chatUserCard.dataset
     console.log(user);
     let notificationsContainer = chatUserCard.querySelector(".notification_container")
@@ -24,10 +23,7 @@ export function openChatWindow(chatUserCard) {
     }
     console.log(+notificationsContainer.querySelector("span").textContent != 0, +notificationsContainer.querySelector("span").textContent);
     if (+notificationsContainer.querySelector("span").textContent != 0) {
-        console.log("norificatiions");
-        sendMessage({ 
-            receiver_id : user.id          
-        }, "read")
+        sendMessage("read", "read")
     }
     notificationsContainer.querySelector("span").textContent = 0
 
