@@ -54,15 +54,11 @@ export function openChatWindow(chatUserCard) {
     return chatWindow
 }
 
-
-
-
 export function closeChatWindow(chatUserCard, chatWindow) {
     chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
 }
-
 
 function chatWindowObserver(container, targetTopElement) {
     const topObserver = new IntersectionObserver(
@@ -79,7 +75,7 @@ function chatWindowObserver(container, targetTopElement) {
                     fetchMessages(offset, chatData.id, "old", container)
                 }
             })
-        },{ rootMargin: "20px" }
+        }
     )
     topObserver.observe(targetTopElement)
 }

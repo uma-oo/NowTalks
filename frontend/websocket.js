@@ -55,6 +55,7 @@ export function sendMessage(messageContent) {
 
 function changeUsersStatus(data) {
     let onlineUsers = data.map(user=>user.id)
+    sessionStorage.setItem("onlineUsers",onlineUsers)
     let usersCards = document.querySelectorAll('.chat-user-card')
     usersCards.forEach(userCard => {
         let id = userCard.dataset.id

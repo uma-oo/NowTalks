@@ -1,6 +1,6 @@
 import { addPostApi } from "../api/posts.js";
 import { createButton } from "./button.js";
-import { createUser, loginUser } from "../api/user.js";
+import { createUser, isLoggedIn, loginUser } from "../api/user.js";
 import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
 import { addComment } from "../api/comment.js";
 import { createComment } from "./comment.js";
@@ -81,7 +81,10 @@ export function handleFormSubmit(event) {
             break;
         case "message-form":
             event.target.reset()
-            sendMessage(formData.chatMessage)
+            isLoggedIn().then(data => {
+                if (data.is_logged_in) sendMessage(formData.chatMessage)
+                else navigateTo("/login")
+            })
             break;
         default:
             break;
