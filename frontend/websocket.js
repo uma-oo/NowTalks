@@ -29,10 +29,9 @@ function receiveMessage(event) {
             let senderChatWindow = document.querySelector(`.chat-window_expanded[data-id="${data.sender_id}"]`)
             let openChatWindow = receiverChatWindow || senderChatWindow
             if (openChatWindow) createChatMessageContainer(data, openChatWindow, "bottom")
-
             if (sessionStorage.getItem("openChat") == openChatWindow?.dataset.id && openChatWindow?.dataset.id == data.sender_id) {
                 sendMessage("read","read")
-            } 
+            }
             ReorderUsers(data)
             break;
         case "online":

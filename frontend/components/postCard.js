@@ -4,7 +4,6 @@ import { createElement } from "../utils.js"
 import { createIcon } from "./icon.js"
 import { createPostCommentsSection } from "./postCommentsSection.js"
 
-
 export function createPostCard({
     id,
     user_name,
@@ -17,7 +16,7 @@ export function createPostCard({
     liked
 }) {
     let container = createElement('div', 'post-container')
-    container.dataset.id = id
+    container.dataset.postId = id
 
     let postHeader = createElement('div', 'post-header')
     let postInfo = createElement('div', 'post-info')
@@ -25,7 +24,6 @@ export function createPostCard({
     let timestamp = createElement('span', null, timeAgo(created_at))
     let categoriesList = createElement('div', 'categories')
     let postTitle = createElement('p', 'post-title', title)
-
     let postBody = createElement('div', 'post-body')
     let postContent = createElement('p', 'post-content', content)
     let postFooter = createElement('div', 'post-footer')

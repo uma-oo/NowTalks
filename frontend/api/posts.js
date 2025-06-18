@@ -19,7 +19,7 @@ export async function getPostsApi(offset) {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })
-        return await response.json()
+        return [response.status, await response.json()]
     } catch (error) {
         console.error("trying to fetch posts",error);
     }

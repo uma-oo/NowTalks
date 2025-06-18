@@ -66,12 +66,12 @@ export function closeChatWindow(chatUserCard, chatWindow) {
     chatUserCard.dataset.open = ""
 }
 
-function chatWindowObserver(container, targetTopElement) {
+function chatWindowObserver(container, target) {
     const topObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach(entry => {
                 let chatData = container.dataset
-                let nextSibling = targetTopElement.nextSibling
+                let nextSibling = target.nextSibling
                 let offset = nextSibling?.dataset.messageId || 0
                 if (chatData.topObsorver === "off") {
                     console.log("unobserve the topTarget")
@@ -83,6 +83,6 @@ function chatWindowObserver(container, targetTopElement) {
             })
         }
     )
-    topObserver.observe(targetTopElement)
+    topObserver.observe(target)
 }
 
