@@ -15,14 +15,3 @@ export async function getMessages(offset, receiver_id) {
 
 
 // we don't need this anymore 
-export async function markMessagesRead(receiver_id) {
-    try {
-        const response = await fetch(`${API_URL}?receiver_id=${receiver_id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        return [response.status, await response.json()];
-    } catch (error) {
-        console.error("error trying to mark messages as read", error)
-    }
-}
