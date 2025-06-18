@@ -1,4 +1,5 @@
 
+import { fetchUsers } from "./components/chatSection.js";
 import { renderApp } from "./index.js";
 
 export async function navigateTo(pathname) {
@@ -121,13 +122,11 @@ export function ReorderUsers(data) {
     let user2 = document.querySelector(`.chat-user-card[data-id="${data.sender_id}"`)
     let userCard = user1 || user2
     chatList.prepend(editUserCard(userCard, data))
-    
+
+    fetchUsers(chatList).then(()=> editUserCard(userCard))
 }
 
-function editUserCard(userCard, dataSent) {
-
-    userCard.querySelector(".latest_message").textContent = dataSent.content
-    userCard.querySelector(".latest_interaction").textContent = formatTimestamp(dataSent.created_at)
+function editUserCard(userCard) {
     if (userCard.dataset.open !== "true") {
         console.log("updating user card notifications")
         console.log(userCard.dataset.notifications)
