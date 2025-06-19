@@ -35,10 +35,11 @@ export async function loginUser(data) {
 
 export async function logoutUser() {
     try {
-        await fetch("api/user/logout", {
+        const response = await fetch("api/user/logout", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         })
+        return response.status
     } catch (error) {
         console.error(`Error trying to logout: ${error}`)
     }

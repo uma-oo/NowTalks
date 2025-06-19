@@ -4,14 +4,14 @@
     --text-color: black;
     --border-color: black;
     --shadow: rgba(0, 0, 0, 0.25) 0 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0 0 0 1px inset;
-    --header-bg: rgb(231, 231, 231);
+    --header-bg: #e7e7e7;
     --error-bg: rgb(201, 133, 133);
     --logout-bg: rgb(182, 0, 0);
     --primary-color: #47307B;
     --secondary-color: #6559A2;
     --bg-color: #ebe3ff;
     --chat-bg: #ddd;
-    --border-radius: 10px;
+    --border-radius: 6px;
     --border-radius-circle: 50%;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -70,12 +70,23 @@ a {
     font-size: larger;
 }
 
+button {
+    border-radius: var(--border-radius);
+}
+
 .primary-btn {
     background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: var(--secondary-color);
 }
 
 .secondary-btn {
-    background-color: var(--bg-color);
+    /* background-color: var(--bg-color); */
+    border: var(--primary-color) solid 1px;
+    color: var(--primary-color);
 }
 
 /* App Container */
@@ -88,8 +99,6 @@ a {
         'aside main ';
     width: 100%;
     height: 100%;
-    background: #fff;
-    /* gap: var(--spacing-md); */
 }
 
 #app:has(#login-form, #register-form) {
@@ -98,7 +107,40 @@ a {
     flex-direction: column;
     align-items: center;
     overflow: auto;
-    gap: 1rem
+    gap: 10px;
+    background: conic-gradient(from 0deg at 50% 100%, #f7f4ff, #f0eaff, #bcadff, #a08dff, #a08dff, #bcadff, #f0eaff, #f7f4ff);
+
+    .logo {
+        margin-bottom: 2rem;
+    }
+}
+
+#app:has(.app-error-container) {
+    display: block;
+    background: conic-gradient(from 0deg at 50% 100%, #f7f4ff, #f0eaff, #bcadff, #a08dff, #a08dff, #bcadff, #f0eaff, #f7f4ff);
+    border: solid;
+    header {
+        box-shadow: var(--shadow);
+    }
+    button {
+        box-shadow: var(--shadow);
+    }
+}
+
+.app-error-container {
+    width: 100%;
+    height: 100%;
+    display: flex   ;
+    flex-direction: column;
+    gap: .6rem;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        font-size: 60px;
+        font-weight:bolder;
+    }
+
 }
 
 /* Header */
@@ -118,7 +160,6 @@ header {
     display: flex;
     gap: 8px;
     align-items: end;
-
     img {
         height: 40px;
     }
@@ -145,18 +186,31 @@ form {
     }
 }
 
+
+
+
 .form-have-error {
-    padding: var(--spacing-lg);
-    background: var(--error-bg);
-    max-width: 500px;
+    /* padding: var(--spacing-lg);
+    background: var(--error-bg); */
+    max-width: 350px;
+    color: var(--scrollbar-thumb-hover);
+}
+
+.form-header {
+    max-width: 400px;
+    text-align: center;
+
 }
 
 #login-form,
 #register-form {
     width: 100%;
     max-width: 400px;
-    background: transparent;
+    background: white;
     animation: appear 0.3s linear;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
 }
 
 form+p {
@@ -166,11 +220,11 @@ form+p {
 .form-grp {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 
 .form-grp label {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-sm);
     font-weight: 600;
 }
 
@@ -193,6 +247,8 @@ textarea {
 }
 
 .form-buttons {
+    margin-top: 10px;
+    border: none;
     display: flex;
     gap: 10px;
 }
@@ -233,6 +289,7 @@ button {
 
 /* Main Content */
 .home-main {
+    width: 100%;
     height: 100%;
     display: flex;
     overflow: hidden;
@@ -240,37 +297,31 @@ button {
 
 main {
     grid-area: main;
-    margin-top: 1rem;
     background-color: var(--bg-color);
-    flex-grow: 1;
     position: relative;
     overflow: hidden;
     border-top-left-radius: 15px;
     box-shadow: rgba(99, 99, 99, 0.4) 3px 3px 10px 0px inset;
-    overflow: hidden;
 }
 
 /* Posts Section */
 .posts_section {
-    margin-top: 2rem;
+    padding: 1rem;
+    width: 100%;
+    /* margin-top: 2rem; */
 }
 
 .posts_container {
-    padding: 2rem;
+    padding: 1rem;
     top: 0;
     width: 100%;
     height: 100%;
-    position: absolute;
+    /* position: absolute; */
     overflow-y: scroll;
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 1rem;
-}
-
-.posts_container:has(.post-container_expand) {
-    top: 0;
-    overflow: hidden;
 }
 
 .post-container {
@@ -283,7 +334,6 @@ main {
     transition: var(--transition);
     background: white;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-
 }
 
 .post-header,
@@ -408,12 +458,10 @@ main {
     background-color: white;
     border-radius: 10px;
     padding: 1rem;
-}
-
-.comment-container {
     display: flex;
     align-items: end;
 }
+
 
 .comment-container .comment-content {
     display: flex;
@@ -463,8 +511,8 @@ main {
 
 #comment-form .form-buttons {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0rem;
+    right: .3rem;
 }
 
 #comment-form .form-buttons button {
@@ -473,7 +521,7 @@ main {
     background-color: var(--primary-color);
     padding: 0.5rem 1rem;
     width: min-content;
-    border-radius: 8px;
+    border-radius: 10px;
     /* height: min-content; */
 }
 
@@ -643,15 +691,16 @@ main {
 /* Chat Section */
 aside {
     grid-area: aside;
-    padding: 1.5rem 1.5rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
     background: white;
     display: flex;
     gap: 10px;
     flex-direction: column;
     overflow: hidden;
-    /* width: 20%; */
     max-width: 300px;
     height: 100%;
+    padding-top: 2rem;
 }
 
 aside .create-post-btn {
@@ -669,11 +718,14 @@ aside .create-post-btn {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
 }
 
+
 .chat-section {
-    height: 80%;
-    /* overflow: hidden;
-    overflow-y: auto; */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
 }
+
 .chats-section-header {
     padding: .5rem 0;
     border-bottom: var(--secondary-color) solid;
@@ -691,13 +743,14 @@ aside .create-post-btn {
 }
 
 .chat-list {
-    padding: 1rem 0;
+    margin: 1rem;
+    padding: 1rem;
     display: grid;
-    grid-template-columns: minmax(0,1fr) min-content;
+    grid-template-columns: minmax(0, 1fr) min-content;
     row-gap: 15px;
-    height: 100%;
-    overflow: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
+
+
 }
 
 .chat-user-card {
@@ -749,6 +802,7 @@ aside .create-post-btn {
     background-color: red;
     border-radius: var(--border-radius-circle);
 }
+
 .chat-user-card[data-status="online"] .user_status::before {
     content: "";
     display: inline-block;
@@ -761,6 +815,9 @@ aside .create-post-btn {
 
 
 .chat-user-card-body .user_name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-weight: 600;
 }
 
@@ -814,18 +871,20 @@ aside .create-post-btn {
 .chat-window {
     position: absolute;
     height: 100%;
-    width: 0px;
     display: flex;
     flex-direction: column;
     background-color: var(--bg-color);
     transition: var(--transition) padding 0;
+    box-shadow: rgba(99, 99, 99, 0.4) 3px 3px 10px 0px inset;
+
+
 }
 
 .chat-window_expanded {
     padding: 2rem;
+    width: 100%;
     top: 0;
     left: 0;
-    width: 100%;
 }
 
 .chat-window-header,
@@ -838,13 +897,12 @@ aside .create-post-btn {
 }
 
 .chat-window .chat-window-header {
-    left: 2rem;
-    right: 2rem;
     /* border: solid red; */
     display: flex;
     align-items: center;
-    position: absolute;
+    /* position: absolute; */
     z-index: 3;
+    width: 40%;
 
     .chat-user-card {
         border: none;
@@ -861,7 +919,6 @@ aside .create-post-btn {
 .chat-window-body {
     flex-grow: 1;
     padding: 1rem;
-    padding-top: 4rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -869,7 +926,7 @@ aside .create-post-btn {
     background-size: 25%;
 }
 
-.chat-window-body  .message-bubble {
+.chat-window-body .message-bubble {
     background-color: #ddd;
     padding: .5rem 1rem;
     border-radius: 10px;
@@ -975,42 +1032,86 @@ aside .create-post-btn {
 }
 
 
-/* @media only screen and (max-width: 1000px) {
-
+@media only screen and (max-width: 900px) {
     #app {
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        border: solid red;
-        display: block;
+        height: 100vh;
+        overflow: auto;
         background-color: var(--bg-color);
     }
 
+    header {
+        grid-area: unset;
+        /* Remove grid-area to avoid conflicts */
+        width: 100%;
+    }
 
     aside {
-        all: unset;
+        padding: unset;
+        grid-area: unset;
         display: flex;
-        justify-content: start;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        max-width: none;
+    }
 
-        .create-post-btn {
-            margin: unset;
-        }
+
+    main {
+        grid-area: unset;
+        width: 100%;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+    .chat-section {
+        padding: .5rem;
+        height: auto;
+    }
+
+    .chats-section {
+        all: unset;
+        height:  max-content;
     }
 
     .chat-list {
-        all: unset;
+        overflow-y: unset;
         display: flex;
-        flex-direction: row;
-        flex-grow: 1;
-        overflow: hidden;
-        overflow-x: auto !important;
+        width: 100%;
+        margin: 0;
+        padding: var(--spacing-md);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
     }
 
-    .chat-list .chat-user-card {
-        display: block;
+    .chat-user-card {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        max-width: none;
+        padding: var(--spacing-sm) 0;
         width: 300px;
+        overflow: hidden;
     }
-} */
+
+    .chat-user-card-body {
+        /* flex-grow: 1; */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        overflow: hidden;
+        width: 60%;
+    }
+
+    .chat-user-card-footer {
+        width: 30%;
+        border: solid;
+    }
+
+}
 
 @media only screen and (max-width: 600px) {
     .home-main {

@@ -1,4 +1,5 @@
 
+import { fetchUsers } from "./components/chatSection.js";
 import { renderApp } from "./index.js";
 
 export async function navigateTo(pathname) {
@@ -58,30 +59,20 @@ export function formatTimestamp(date) {
     }
 }
 
-export function throttledScrollFetcher(func) {
-    return throttle((e) => {
-        const container = e.target
-        const scrollTop = container.scrollTop
-        const scrollHeight = container.scrollHeight
-        const clientHeight = container.clientHeight
-
-        if (scrollTop + clientHeight >= scrollHeight * 0.8) {
-            func(container)
-        }
-    }, 300)
-}
-
 export function throttle(func, delay) {
-    let delayPassed = true
-    return function (...arg) {
-        if (delayPassed) {
-            func(...arg);
-            delayPassed = false
-            setTimeout(() => {
-                delayPassed = true
-            }, delay)
+    console.log("throttle is set");
+    let lastExecutionTime = 0;  // Track the last execution time
+
+    return function (...args) {
+        const now = Date.now();
+        if (now - lastExecutionTime >= delay) {
+            console.log("Executing at the beginning of the delay");
+            func(...args);  // Execute the function immediately
+            lastExecutionTime = now;  // Update the last execution time
+        } else {
+            console.log("waiting...");
         }
-    }
+    };
 }
 
 export function createElement(tag, className, text = '') {
@@ -121,14 +112,17 @@ export function ReorderUsers(data) {
     let user2 = document.querySelector(`.chat-user-card[data-id="${data.sender_id}"`)
     let userCard = user1 || user2
     chatList.prepend(editUserCard(userCard, data))
-    
+
+    fetchUsers(chatList).then(() => editUserCard(userCard))
 }
 
-function editUserCard(userCard, dataSent) {
-    userCard.querySelector(".latest_message").textContent = dataSent.content
-    userCard.querySelector(".latest_interaction").textContent = formatTimestamp(dataSent.created_at)
-    if (userCard.dataset.open !== "true"){
-        userCard.querySelector('.user_notifications').textContent = +userCard.dataset.notifications + 1
-    } 
+function editUserCard(userCard) {
+    if (userCard.dataset.open !== "true") {
+        console.log("updating user card notifications")
+        console.log(userCard.dataset.notifications)
+        userCard.querySelector('.notification_container').classList.remove('hide')
+        userCard.querySelector('.user_notifications').textContent = + userCard.dataset.notifications + 1
+        userCard.dataset.notifications = + userCard.dataset.notifications + 1
+    }
     return userCard
 }

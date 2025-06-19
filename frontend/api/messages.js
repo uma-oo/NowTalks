@@ -12,6 +12,3 @@ export async function getMessages(offset, receiver_id) {
         console.error("error trying to get users", error)
     }
 }
-
-
-// we don't need this anymore 

@@ -3,6 +3,7 @@ import { creatLink } from "../components/links.js"
 import { registerFom } from "../const/forms.js"
 import { navigateTo, createElement } from "../utils.js"
 import { isLoggedIn } from "../api/user.js"
+import { createLogo } from "../components/logo.js"
 
 export function renderRegisterPage(app) {
     isLoggedIn().then(data => {
@@ -10,18 +11,19 @@ export function renderRegisterPage(app) {
             app.dataset.nickname = data.nickname
             app.dataset.id = data.id
             app.innerHTML = ""
-            let header = createElement("div", null)
-            let formTititls = createElement("h1", null, "Sign Up")
-            let formSubTitle = createElement("h2", null, "New to the forum? Create an account to join the conversation.")
+            let logo = createLogo()
+            let header = createElement("div", "form-header")
+            let formTititls = createElement("h2", null, "Sign Up")
+            let formSubTitle = createElement("p", null, "New to the forum? Create an account to join the conversation.")
             let formError = createElement("div","form-Error")
             formError.className = "form-Error"
             let registerFomlement = createForm(registerFom, "register-form")
             let goToLogin = document.createElement('p')
-            goToLogin.textContent = "Already have an account ? "
+            goToLogin.textContent = "Already have an account ?  "
             let LoginLink = creatLink("Log In", "/login", "")
             goToLogin.append(LoginLink)
             header.append(formTititls,formSubTitle)
-            app.append(header, formError, registerFomlement, goToLogin)
+            app.append(logo,header, formError, registerFomlement, goToLogin)
         }
         else {
             navigateTo("/")

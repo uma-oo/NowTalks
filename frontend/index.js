@@ -18,7 +18,7 @@ export function renderApp() {
             renderHomePage(app)
             break;
         default:
-            renderErrorPage(app,'404')
+            renderErrorPage(404)
             break;
     }
 }

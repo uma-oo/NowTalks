@@ -1,3 +1,4 @@
+import { renderErrorPage } from "../pages/errorPage.js"
 import { navigateTo } from "../utils.js"
 
 async function addReaction(reactionData) {
@@ -19,6 +20,9 @@ export function ToggleLike(reactionData, svg, count) {
             if (status == 401) {
                 navigateTo("/login")
             }
+            if ([400, 429, 500].includes(status)) {
+                renderErrorPage(status)
+            }
             if (status == 200 && response) {
                 let reaction = parseInt(response.reaction)
                 switch (reaction) {
@@ -26,7 +30,7 @@ export function ToggleLike(reactionData, svg, count) {
                         count.textContent = + count.textContent + 1
                         svg.style.fill = "red"
                         break;
-                    case 0 :
+                    case 0:
                         count.textContent = + count.textContent - 1
                         svg.style.fill = "white"
                         break;

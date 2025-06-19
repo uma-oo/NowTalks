@@ -1,11 +1,12 @@
 import { addPostApi } from "../api/posts.js";
 import { createButton } from "./button.js";
-import { createUser, loginUser } from "../api/user.js";
+import { createUser, isLoggedIn, loginUser } from "../api/user.js";
 import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
 import { addComment } from "../api/comment.js";
 import { createComment } from "./comment.js";
 import { sendMessage } from "../websocket.js";
 import { createCheckboxInput } from "./checkbox.js";
+import { renderErrorPage } from "../pages/errorPage.js";
 
 
 export function createForm(formRepresentaion, id) {
@@ -81,7 +82,10 @@ export function handleFormSubmit(event) {
             break;
         case "message-form":
             event.target.reset()
-            sendMessage(formData.chatMessage)
+            isLoggedIn().then(data => {
+                if (data.is_logged_in) sendMessage(formData.chatMessage)
+                else navigateTo("/login")
+            })
             break;
         default:
             break;
@@ -102,6 +106,8 @@ export function login(form, data) {
             errors.forEach(error => error.textContent = "")
             formError.innerText = "ERROR!! Username or Email does not exist! Or Password Incorrect!"
             formError.classList.add("form-have-error")
+        } else if ([429, 500].includes(status)) {
+            renderErrorPage(status)
         }
     }).catch(error => console.error("Error submitting login form", error))
 }
@@ -114,6 +120,9 @@ export function register(form, data) {
             }
             else if (status === 400) {
                 loadFormErrors(form, data.errors)
+            }
+            else if ([429, 500].includes(status)) {
+                renderErrorPage(status)
             }
         })
         .catch(error => console.log("error submitting register form: ", error))
@@ -130,6 +139,8 @@ export function createPost(form, data) {
                 loadFormErrors(form, data.errors)
             } else if (status === 401) {
                 navigateTo("/login")
+            } else if ([429, 500].includes(status)) {
+                renderErrorPage(status)
             }
         })
         .catch(error => console.log("error submitting register form: ", error))
@@ -150,15 +161,8 @@ function handleCreateComment(form, data) {
                 form.querySelector('.input-error').textContent = ""
             } else if (status == 400) {
                 loadFormErrors(form, data.errors)
+            } else if ([ 429, 500].includes(status)) {
+                renderErrorPage(status)
             }
         })
 }
-
-
-
-export function createReaction(data) {
-
-
-
-}
-

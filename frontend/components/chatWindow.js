@@ -1,39 +1,40 @@
 
 import { fetchMessages } from "../components/messagesSection.js";
 import { MessageForm } from "../const/forms.js";
-import { createElement } from "../utils.js";
+import { createElement, navigateTo } from "../utils.js";
 import { sendMessage } from "../websocket.js";
 import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
 export function openChatWindow(chatUserCard) {
-    let user = chatUserCard.dataset
-    console.log(user);
-    let notificationsContainer = chatUserCard.querySelector(".notification_container")
 
-    notificationsContainer.classList.add("hide")
-    let chatWindow = document.querySelector('.chat-window')
-    chatWindow.dataset.id = user.id
-    chatWindow.dataset.firstFetch = "true"
-    chatWindow.dataset.topObsorver = "on"
-
-    chatWindow.classList.add("chat-window_expanded")
-    if (chatUserCard.dataset.open) {
+    if (chatUserCard.dataset.open) { // if chat already open
         return
     }
-    console.log(+notificationsContainer.querySelector("span").textContent != 0, +notificationsContainer.querySelector("span").textContent);
-    if (+notificationsContainer.querySelector("span").textContent != 0) {
-        sendMessage("read", "read")
-    }
-    notificationsContainer.querySelector("span").textContent = 0
 
     const previousOpendChat = document.querySelector('.chat-list > [data-open = "true"]');
-    if (previousOpendChat) {
-        // here you can mark the messages for the previous chat read
+    if (previousOpendChat) { // if there is an already open chat
         previousOpendChat.dataset.open = "";
     }
 
+    // open new chat
+    let user = chatUserCard.dataset
+    let chatWindow = document.querySelector('.chat-window')
+    chatWindow.classList.add("chat-window_expanded")
+    chatWindow.dataset.id = user.id
+    chatWindow.dataset.firstFetch = "true"
+    chatWindow.dataset.topObsorver = "on"
+    let notificationsContainer = chatUserCard.querySelector(".notification_container")
+    let notificationsCounter = notificationsContainer.querySelector(".user_notifications")
+    notificationsContainer.classList.add("hide")
+    
+    if (user.notifications != 0) {
+        sendMessage("read", "read")
+    }
+
+    notificationsCounter.textContent = 0
     chatUserCard.dataset.open = "true"
+    sessionStorage.setItem("openChat", +user.id)
     chatWindow.innerHTML = ""
 
     let chatWindowHeader = createElement('div', 'chat-window-header')
@@ -65,12 +66,12 @@ export function closeChatWindow(chatUserCard, chatWindow) {
     chatUserCard.dataset.open = ""
 }
 
-function chatWindowObserver(container, targetTopElement) {
+function chatWindowObserver(container, target) {
     const topObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach(entry => {
                 let chatData = container.dataset
-                let nextSibling = targetTopElement.nextSibling
+                let nextSibling = target.nextSibling
                 let offset = nextSibling?.dataset.messageId || 0
                 if (chatData.topObsorver === "off") {
                     console.log("unobserve the topTarget")
@@ -80,7 +81,8 @@ function chatWindowObserver(container, targetTopElement) {
                     fetchMessages(offset, chatData.id, "old", container)
                 }
             })
-        }, { rootMargin: "20px" }
+        }
     )
-    topObserver.observe(targetTopElement)
+    topObserver.observe(target)
 }
+
