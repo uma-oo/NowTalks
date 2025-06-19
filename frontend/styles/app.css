@@ -1066,12 +1066,7 @@ aside .create-post-btn {
     }
     .chat-section {
         padding: .5rem;
-        height: auto;
-    }
-
-    .chats-section {
-        all: unset;
-        height:  max-content;
+        /* height: auto; */
     }
 
     .chat-list {
@@ -1096,6 +1091,8 @@ aside .create-post-btn {
         overflow: hidden;
     }
 
+    
+
     .chat-user-card-body {
         /* flex-grow: 1; */
         display: flex;
@@ -1114,14 +1111,11 @@ aside .create-post-btn {
 }
 
 @media only screen and (max-width: 600px) {
-    .home-main {
-        flex-direction: column;
-        padding: 10px;
-    }
+    
 
-    .chat-list {
+    /* .chat-list {
         display: flex;
-    }
+    } */
 
     .chat-window-body .chat-message-container {
         flex-direction: column !important;

@@ -40,7 +40,7 @@ type ClientInfo struct {
 }
 
 func NewRateLimitMiddleWare(handler http.Handler) *RateLimitMiddleWare {
-	return &RateLimitMiddleWare{handler, sync.Map{}, time.Duration(time.Minute * 1), 100}
+	return &RateLimitMiddleWare{handler, sync.Map{}, time.Duration(time.Minute * 1), 1000}
 }
 
 func NewMiddleWare(handler http.Handler, service *service.AppService) *Middleware {

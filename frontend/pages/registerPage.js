@@ -8,9 +8,6 @@ import { createLogo } from "../components/logo.js"
 export function renderRegisterPage(app) {
     isLoggedIn().then(data => {
         if (!data.is_logged_in) {
-            app.dataset.nickname = data.nickname
-            app.dataset.id = data.id
-            app.innerHTML = ""
             let logo = createLogo()
             let header = createElement("div", "form-header")
             let formTititls = createElement("h2", null, "Sign Up")
