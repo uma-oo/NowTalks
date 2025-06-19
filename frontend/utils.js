@@ -113,7 +113,7 @@ export function ReorderUsers(data) {
     let userCard = user1 || user2
     chatList.prepend(editUserCard(userCard, data))
 
-    fetchUsers(chatList).then(()=> editUserCard(userCard))
+    fetchUsers(chatList).then(() => editUserCard(userCard))
 }
 
 function editUserCard(userCard) {

@@ -6,6 +6,7 @@ import { PostForm } from "../const/forms.js"
 // import { throttle, throttledScrollFetcher } from "../utils.js"
 import { createIcon } from "./icon.js"
 import { throttle } from "../utils.js"
+import { renderErrorPage } from "../pages/errorPage.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
@@ -47,7 +48,10 @@ function fetchPosts(container, offset) {
     getPostsApi(offset).then(([status, data]) => {
         if (status == 401) {
             navigateTo('login')
-        } else if (status == 200) {
+        } else if ([400,429,500].includes(status)) {
+            renderErrorPage(status)
+        }
+        else if (status == 200) {
             if (!data || data.length < 10) {
                 container.dataset.canFetch = "false"
             }
@@ -63,9 +67,8 @@ function fetchPosts(container, offset) {
             } else {
                 data.map(postData => container.insertBefore(createPostCard(postData), container.lastChild))
             }
-
         }
-    }).catch(error => console.error(error))
+    })
 }
 
 

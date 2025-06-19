@@ -3,6 +3,7 @@ import { CommentForm } from "../const/forms.js";
 import { createElement, navigateTo } from "../utils.js";
 import { createForm } from "./form.js";
 import { createComment } from "./comment.js";
+import { renderErrorPage } from "../pages/errorPage.js";
 
 export function createPostCommentsSection(postId) {
     let postCommentsSection = createElement('div', "post-comments-section")
@@ -12,13 +13,11 @@ export function createPostCommentsSection(postId) {
     let commentForm = createForm(CommentForm, "comment-form")
     commentForm.dataset.postId = postId
 
-    //  offset of the id from to start fetching 
     fetchComments(postId, commentsContainer)
     seeMore.addEventListener("click", () => {
         commentsContainer.dataset.offset = + commentsContainer.dataset.offset +10
         fetchComments(postId, commentsContainer)
     })
-    // commentsContainer.append(...comments)
     postCommentsSection.append(commentsContainer, seeMore, commentForm)
     return postCommentsSection
 }
@@ -31,6 +30,9 @@ function fetchComments(id, commentsContainer) {
     getComments(id, offset).then(([status, data]) => {
         if (status === 401) {
             navigateTo("/login")
+        }
+        if ([400,429].includes(status)){
+            renderErrorPage(status)
         }
         if (status === 200 && data) {
             data.forEach(commentData => {

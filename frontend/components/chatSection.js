@@ -24,11 +24,15 @@ export async function fetchUsers(chatList) {
     if (status == 401) {
         navigateTo("/login")
     }
+    if ([400, 429, 500].includes(status)) {
+        renderErrorPage(status)
+    }
+
     if (status == 200) {
         let chats = data?.map(userData => {
             let userCard = createChatUserCard(userData)
             let userCardClone = userCard.cloneNode(true)
-            userCard.addEventListener("click",() => {
+            userCard.addEventListener("click", () => {
                 openChatWindow(userCard, userCardClone)
             })
             return userCard
@@ -40,4 +44,5 @@ export async function fetchUsers(chatList) {
             chatList.append("No users")
         }
     }
+    
 }

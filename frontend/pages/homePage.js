@@ -6,6 +6,7 @@ import { createHeader } from "../components/header.js";
 import { createPostsSection, toggleCreatePostFormContainer } from "../components/postsSection.js";
 import { navigateTo, createElement } from "../utils.js";
 import { setUpWebsocket } from "../websocket.js";
+import { renderErrorPage } from "./errorPage.js";
 
 export function renderHomePage(app) {
     isLoggedIn().then(data => {
@@ -45,6 +46,8 @@ async function setCategories(app) {
             });
         } else if (status == 401) {
             navigateTo('login')
+        } else if ([429,500].includes(status)) {
+            renderErrorPage(status)
         }
     }).catch(error => console.error(error))
 }
