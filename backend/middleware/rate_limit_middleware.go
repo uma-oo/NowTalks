@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net"
 	"net/http"
 	"time"
 
@@ -11,9 +12,14 @@ import (
 // there are many cases to handle here
 func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ipAddress := r.RemoteAddr
-	value, ok := RateLimitM.Users.Load(ipAddress)
+	// m7taja l ip u salam
+	ip, _, _ := net.SplitHostPort(ipAddress)
+	value, ok := RateLimitM.Users.Load(ip)
 	if ok {
+		value.(*ClientInfo).Lock()
+		defer value.(*ClientInfo).Unlock()
 		if time.Since(value.(*ClientInfo).LastRequest) > RateLimitM.MaxDuration {
+
 			value.(*ClientInfo).Count = 1
 			value.(*ClientInfo).LastRequest = time.Now()
 		} else {
@@ -24,7 +30,7 @@ func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.
 			value.(*ClientInfo).Count++
 		}
 	} else {
-		RateLimitM.Users.Store(ipAddress, &ClientInfo{
+		RateLimitM.Users.Store(ip, &ClientInfo{
 			Count:       1,
 			LastRequest: time.Now(),
 		})
