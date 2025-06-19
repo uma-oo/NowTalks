@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"time"
@@ -15,7 +16,9 @@ func (RateLimitM *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.
 	// m7taja l ip u salam
 	ip, _, _ := net.SplitHostPort(ipAddress)
 	value, ok := RateLimitM.Users.Load(ip)
+
 	if ok {
+		fmt.Printf("value.(*ClientInfo).Count: %v\n", value.(*ClientInfo).Count)
 		value.(*ClientInfo).Lock()
 		defer value.(*ClientInfo).Unlock()
 		if time.Since(value.(*ClientInfo).LastRequest) > RateLimitM.MaxDuration {

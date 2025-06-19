@@ -8,7 +8,6 @@ import (
 
 	database "real-time-forum/backend/database"
 	Init "real-time-forum/backend/init"
-	"real-time-forum/backend/middleware"
 )
 
 // insure that the database is always closed
@@ -37,5 +36,5 @@ func main() {
 
 	mux := Init.InitSetup(db.Database)
 	fmt.Println("Listening on: http://localhost:8080")
-	http.ListenAndServe(":8080", middleware.NewRateLimitMiddleWare(mux))
+	http.ListenAndServe(":8080", mux)
 }
