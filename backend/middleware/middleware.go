@@ -30,12 +30,13 @@ type RateLimitMiddleWare struct {
 	MiddlewareHanlder http.Handler
 	Users             sync.Map
 	MaxDuration       time.Duration
-	MaxRequests        int
+	MaxRequests       int
 }
 
 type ClientInfo struct {
 	Count       int
 	LastRequest time.Time
+	IP          string
 	sync.Mutex
 }
 
