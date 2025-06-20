@@ -58,19 +58,34 @@ func isFrontendPath(path string) bool {
 }
 
 func ServeStaticFiles(w http.ResponseWriter, r *http.Request) {
-	file_info, err := os.Stat(filepath.Join("../frontend/", r.URL.Path[1:]))
+	staticDir := "../frontend" 
+	requestedFile := filepath.Join(staticDir, filepath.Clean(r.URL.Path))
+	fmt.Println("requtes", requestedFile)
+	file_info, err := os.Stat(requestedFile)
 	if isFrontendPath(r.URL.Path) {
 		http.ServeFile(w, r, "../frontend/index.html")
 		return
 	}
 	if err != nil && !isFrontendPath(r.URL.Path) {
-		WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "Page Not Found :)"})
+		serveIndexWithStatus(w, 404, filepath.Join(staticDir, "index.html"))
 		return
 	}
 	if file_info.IsDir() && file_info.Name() != "frontend" {
-		WriteJsonErrors(w, models.ErrorJson{Status: 403, Message: "Access Forbiden :)"})
+		serveIndexWithStatus(w, 404, filepath.Join(staticDir, "index.html"))
 		return
 	}
-	// http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
 	http.ServeFile(w, r, filepath.Join("../frontend/", r.URL.Path[1:]))
+}
+
+func serveIndexWithStatus(w http.ResponseWriter, statusCode int, indexPath string) {
+	fmt.Println("indexPath", indexPath)
+	data, err := os.ReadFile(indexPath)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(statusCode)
+	w.Write(data)
 }

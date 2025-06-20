@@ -6,6 +6,7 @@ import { renderRegisterPage } from "./pages/registerPage.js";
 export let app  = document.querySelector('#app')
 
 export function renderApp() {
+    console.log("inside the renderApp function:");
     app.innerHTML = ""
     switch (window.location.pathname) {
         case "/register":

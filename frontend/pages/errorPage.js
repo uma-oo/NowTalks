@@ -5,6 +5,7 @@ import { createElement } from "../utils.js"
 import { renderHomePage } from "./homePage.js"
 
 export function renderErrorPage(status){
+    console.log("heeeeere!!");
     app.innerHTML = ""
     let header = createHeader()
     let container = createElement("div", "app-error-container" )
