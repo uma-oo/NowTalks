@@ -36,12 +36,11 @@ type RateLimitMiddleWare struct {
 type ClientInfo struct {
 	Count       int
 	LastRequest time.Time
-	IP          string
 	sync.Mutex
 }
 
 func NewRateLimitMiddleWare(handler http.Handler) *RateLimitMiddleWare {
-	return &RateLimitMiddleWare{handler, sync.Map{}, time.Duration(time.Minute * 1), 20}
+	return &RateLimitMiddleWare{handler, sync.Map{}, time.Duration(time.Minute * 1), 500}
 }
 
 func NewMiddleWare(handler http.Handler, service *service.AppService) *Middleware {
