@@ -1,11 +1,12 @@
-import { getPostsApi } from "../api/posts.js"
-import { navigateTo, createElement } from "../../utils.js"
-import { createPostCard } from "./postCard.js"
-import { createForm } from "./form.js"
-import { PostForm } from "../const/forms.js"
-import { createIcon } from "./icon.js"
-import { throttle } from "../utils.js"
-import { renderErrorPage } from "../pages/errorPage.js"
+import { getPostsApi } from "/frontend/api/posts.js"
+import { navigateTo, createElement } from "/frontend/../utils.js"
+import { createPostCard } from "/frontend/components/postCard.js"
+import { createForm } from "/frontend/components/form.js"
+import { PostForm } from "/frontend/const/forms.js"
+// import { throttle, throttledScrollFetcher } from "/frontend/utils.js"
+import { createIcon } from "/frontend/components/icon.js"
+import { throttle } from "/frontend/utils.js"
+import { renderErrorPage } from "/frontend/pages/errorPage.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")

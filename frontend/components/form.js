@@ -1,14 +1,12 @@
-import { addPostApi } from "../api/posts.js";
-import { createButton } from "./button.js";
-import { createUser, isLoggedIn, loginUser } from "../api/user.js";
-import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "../utils.js";
-import { addComment } from "../api/comment.js";
-import { createComment } from "./comment.js";
-import { sendMessage } from "../websocket.js";
-import { createCheckboxInput } from "./checkbox.js";
-import { renderErrorPage } from "../pages/errorPage.js";
-import { createPostCard } from "./postCard.js";
-import { toggleCreatePostFormContainer } from "./postsSection.js";
+import { addPostApi } from "/frontend/api/posts.js";
+import { createButton } from "/frontend/components/button.js";
+import { createUser, isLoggedIn, loginUser } from "/frontend/api/user.js";
+import { createElement, loadFormErrors, navigateTo, setAttributes, setOpions } from "/frontend/utils.js";
+import { addComment } from "/frontend/api/comment.js";
+import { createComment } from "/frontend/components/comment.js";
+import { sendMessage } from "/frontend/websocket.js";
+import { createCheckboxInput } from "/frontend/components/checkbox.js";
+import { renderErrorPage } from "/frontend/pages/errorPage.js";
 
 
 export function createForm(formRepresentaion, id) {

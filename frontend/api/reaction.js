@@ -1,9 +1,9 @@
-import { renderErrorPage } from "../pages/errorPage.js"
-import { navigateTo } from "../utils.js"
+import { renderErrorPage } from "/frontend/pages/errorPage.js"
+import { navigateTo } from "/frontend/utils.js"
 
 async function addReaction(reactionData) {
     try {
-        let response = await fetch("/api/react/like", {
+        let response = await fetch("http://localhost:8080/api/react/like", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(reactionData)

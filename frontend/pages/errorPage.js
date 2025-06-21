@@ -1,8 +1,8 @@
-import { createButton } from "../components/button.js"
-import { createHeader } from "../components/header.js"
-import { app } from "../index.js"
-import { createElement } from "../utils.js"
-import { renderHomePage } from "./homePage.js"
+import { createButton } from "/frontend/components/button.js"
+import { createHeader } from "/frontend/components/header.js"
+import { app } from "/frontend/index.js"
+import { createElement } from "/frontend/utils.js"
+import { renderHomePage } from "/frontend/pages/homePage.js"
 
 export function renderErrorPage(status){
     console.log("heeeeere!!");

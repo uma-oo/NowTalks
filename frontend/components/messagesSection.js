@@ -1,5 +1,5 @@
-import { getMessages } from "../api/messages.js";
-import { navigateTo } from "../utils.js";
+import { getMessages } from "/frontend/api/messages.js";
+import { navigateTo } from "/frontend/utils.js";
 import { createChatMessageContainer } from "./chatMessageContainer.js";
 
 export function fetchMessages(offset, receiver_id, type, chatWindow) {

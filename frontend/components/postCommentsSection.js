@@ -1,10 +1,9 @@
-import { getComments } from "../api/comment.js";
-import { CommentForm } from "../const/forms.js";
-import { createElement, navigateTo } from "../utils.js";
-import { createForm } from "./form.js";
-import { createComment } from "./comment.js";
-import { renderErrorPage } from "../pages/errorPage.js";
-import { createIcon } from "./icon.js";
+import { getComments } from "/frontend/api/comment.js";
+import { CommentForm } from "/frontend/const/forms.js";
+import { createElement, navigateTo } from "/frontend/utils.js";
+import { createForm } from "/frontend/components/form.js";
+import { createComment } from "/frontend/components/comment.js";
+import { renderErrorPage } from "/frontend/pages/errorPage.js";
 
 export function createPostCommentsSection(postId) {
     let postCommentsSection = createElement('div', "post-comments-section")

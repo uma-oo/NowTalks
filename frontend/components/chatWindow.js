@@ -1,10 +1,10 @@
 
-import { fetchMessages } from "../components/messagesSection.js";
-import { MessageForm } from "../const/forms.js";
-import { createElement, navigateTo } from "../utils.js";
-import { sendMessage } from "../websocket.js";
-import { createButton } from "./button.js";
-import { createForm } from "./form.js";
+import { fetchMessages } from "/frontend/components/messagesSection.js";
+import { MessageForm } from "/frontend/const/forms.js";
+import { createElement, navigateTo } from "/frontend/utils.js";
+import { sendMessage } from "/frontend/websocket.js";
+import { createButton } from "/frontend/components/button.js";
+import { createForm } from "/frontend/components/form.js";
 
 export function openChatWindow(chatUserCard) {
     if (chatUserCard.dataset.open) { // if chat already open

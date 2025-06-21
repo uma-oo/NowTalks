@@ -1,5 +1,5 @@
-import { createChatMessageContainer } from "./components/chatMessageContainer.js"
-import { navigateTo, ReorderUsers } from "./utils.js";
+import { createChatMessageContainer } from "/frontend/components/chatMessageContainer.js"
+import { navigateTo, ReorderUsers } from "/frontend/utils.js";
 
 let socket = null
 

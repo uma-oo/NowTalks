@@ -67,20 +67,20 @@ func (client *Client) ReadMessages() {
 				break
 			}
 		}
-
+		
 		message.SenderID = client.userId
-
+		
 		message_validated, errJson := client.chatServer.service.ValidateMessage(message)
 		if errJson != nil {
 			client.ErrorJson <- errJson
 			continue
 		}
-
+		
 		client.Message <- message_validated
 		client.BroadCastTheMessage(message_validated)
 	}
-
 	defer client.chatServer.RemoveClient(client, logged_out)
+
 }
 
 // i used the channels buy not sure if this is the correct way to handle this

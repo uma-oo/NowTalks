@@ -1,5 +1,5 @@
-import { createIcon } from "./icon.js";
-import { createElement, formatTimestamp, timeAgo } from "../utils.js";
+import { createIcon } from "/frontend/components/icon.js";
+import { createElement, formatTimestamp, timeAgo } from "/frontend/utils.js";
 
 export function createChatUserCard({
     id,

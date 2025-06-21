@@ -1,6 +1,6 @@
-import { ToggleLike } from "../api/reaction.js"
-import { createElement, timeAgo } from "../utils.js"
-import { createIcon } from "./icon.js"
+import { ToggleLike } from "/frontend/api/reaction.js"
+import { createElement, timeAgo } from "/frontend/utils.js"
+import { createIcon } from "/frontend/components/icon.js"
 
 
 export function createComment({

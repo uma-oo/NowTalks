@@ -1,8 +1,8 @@
-import { ToggleLike } from "../api/reaction.js"
-import { timeAgo } from "../utils.js"
-import { createElement } from "../utils.js"
-import { createIcon } from "./icon.js"
-import { createPostCommentsSection } from "./postCommentsSection.js"
+import { ToggleLike } from "/frontend/api/reaction.js"
+import { timeAgo } from "/frontend/utils.js"
+import { createElement } from "/frontend/utils.js"
+import { createIcon } from "/frontend/components/icon.js"
+import { createPostCommentsSection } from "/frontend/components/postCommentsSection.js"
 
 export function createPostCard({
     id,
