@@ -1,11 +1,11 @@
 
-import { fetchMessages } from "/frontend/components/messagesSection.js";
 import { MessageForm } from "/frontend/const/forms.js";
-import { createElement, navigateTo } from "/frontend/utils.js";
+import { createElement, navigateTo, throttle } from "/frontend/utils.js";
 import { sendMessage } from "/frontend/websocket.js";
 import { createButton } from "/frontend/components/button.js";
 import { createForm } from "/frontend/components/form.js";
-
+import { createChatMessageContainer } from "./chatMessageContainer.js";
+import { getMessages } from "/frontend/api/messages.js";
 export function openChatWindow(chatUserCard) {
     if (chatUserCard.dataset.open) { // if chat already open
         return
@@ -26,7 +26,7 @@ export function openChatWindow(chatUserCard) {
     let notificationsContainer = chatUserCard.querySelector(".notification_container")
     let notificationsCounter = notificationsContainer.querySelector(".user_notifications")
     notificationsContainer.classList.add("hide")
-    
+
     if (user.notifications != 0) {
         sendMessage("read", "read")
     }
@@ -69,6 +69,11 @@ export function closeChatWindow(chatUserCard, chatWindow) {
 }
 
 function chatWindowObserver(container, target) {
+    const throttledFetch = throttle((offset, id, type, container) => {
+        fetchMessages(offset, id, type, container)
+    }, 8000);
+    console.log(throttledFetch)
+
     const topObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach(entry => {
@@ -80,7 +85,7 @@ function chatWindowObserver(container, target) {
                     observer.unobserve(entry.target)
                 };
                 if (entry.isIntersecting) {
-                    fetchMessages(offset, chatData.id, "old", container)
+                    throttledFetch(offset, chatData.id, "old", container)
                 }
             })
         }
@@ -88,3 +93,26 @@ function chatWindowObserver(container, target) {
     topObserver.observe(target)
 }
 
+function fetchMessages(offset, receiver_id, type, chatWindow) {
+    let chatWindowBody = chatWindow.querySelector('.chat-window-body');
+    const prevScrollHeight = chatWindowBody.scrollHeight
+    getMessages(offset, receiver_id, type)
+        .then(([status, data]) => {
+            if (status === 401) {
+                navigateTo("/login")
+            }
+            if (status === 200) {
+                if (!data || data.length < 10) {
+                    chatWindow.dataset.topObsorver = "off"
+                }
+                data?.forEach(message => {
+                    createChatMessageContainer(message, chatWindow, "top")
+                });
+                const diff = chatWindowBody.scrollHeight - prevScrollHeight;
+                chatWindowBody.scrollTop += diff;
+            }
+            if ([400, 429, 500].includes(status)) {
+                renderErrorPage(status)
+            }
+        })
+}

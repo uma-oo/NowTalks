@@ -6,7 +6,9 @@ import { addComment } from "/frontend/api/comment.js";
 import { createComment } from "/frontend/components/comment.js";
 import { sendMessage } from "/frontend/websocket.js";
 import { createCheckboxInput } from "/frontend/components/checkbox.js";
+import {createPostCard} from "/frontend/components/postCard.js"
 import { renderErrorPage } from "/frontend/pages/errorPage.js";
+import { toggleCreatePostFormContainer } from "/frontend/components/postsSection.js"
 
 
 export function createForm(formRepresentaion, id) {
@@ -47,7 +49,6 @@ export function createForm(formRepresentaion, id) {
         categories.forEach(category => {
             if (!category) return
             let [id, name] = category.split('-')
-
             let optionElem = createCheckboxInput(`category${id}`, id, name)
             categoriesList.append(optionElem)
         })
@@ -55,7 +56,6 @@ export function createForm(formRepresentaion, id) {
         categoriesFormGrp.append(categoriesLabel, categoriesList, inputError)
         formElement.append(categoriesFormGrp)
     }
-
     formElement.append(formButtons)
     formElement.addEventListener('submit', (e) => { handleFormSubmit(e) })
     return formElement
@@ -81,13 +81,13 @@ export function handleFormSubmit(event) {
             handleCreateComment(event.target, formData)
             break;
         case "message-form":
-            event.target.reset()
             isLoggedIn().then(data => {
                 if (data.is_logged_in) sendMessage(formData.chatMessage)
                 else navigateTo("/login")
             })
             break;
     }
+    event.target.reset()
 }
 
 export function login(form, data) {
@@ -130,7 +130,6 @@ export function createPost(form, data) {
     addPostApi(data)
         .then(([status, data]) => {
             if (status === 200) {
-                form.reset()
                 let post = createPostCard(data)
                 let postsContainer = document.querySelector(".posts_container")
                 toggleCreatePostFormContainer()
@@ -151,13 +150,14 @@ function handleCreateComment(form, data) {
     addComment(data)
         .then(([status, data]) => {
             if (status === 200) {
-                data.createdAt = Date.now()
+                console.log("comment added: ", data)
                 data.user_name = sessionStorage.getItem("userNickname")
                 let commentsContainer = form.parentElement.querySelector(".comments-container")
                 let commentsCount = commentsContainer.parentElement.parentElement.querySelector('.reaction-container[data-reaction="comment"] > span')
                 commentsCount.textContent = +commentsCount.textContent + 1
                 commentsContainer.prepend(createComment(data))
-                form.reset()
+                let noComent = commentsContainer.querySelector(".no-content")
+                if (noComent) noComent.remove()
                 form.querySelector('.input-error').textContent = ""
             } else if (status == 400) {
                 loadFormErrors(form, data.errors)

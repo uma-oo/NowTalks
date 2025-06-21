@@ -2,7 +2,7 @@
 import { fetchUsers } from "/frontend/components/chatSection.js";
 import { renderApp } from "/frontend/index.js";
 
-export async function navigateTo(pathname) {
+export function navigateTo(pathname) {
     history.replaceState({}, "", pathname)
     renderApp()
 }
@@ -28,7 +28,6 @@ export function timeAgo(timestamp, locale = 'en') {
     } else if (minutes > 0) {
         value = rtf.format(-  minutes, "minute");
     } else {
-
         value = rtf.format(-  diff, "second");
     }
     return value;
@@ -39,11 +38,8 @@ export function formatTimestamp(date) {
     const d = new Date(date);
     const diffTime = now - d;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
     const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-
     if (diffDays === 0 && d.getDate() === now.getDate()) {
-        // Today
         return d.toLocaleTimeString([], options);
     } else if (diffDays === 1 || (
         now.getDate() - d.getDate() === 1 &&
@@ -52,7 +48,6 @@ export function formatTimestamp(date) {
     )) {
         return "Yesterday";
     } else if (diffDays < 7 && d.getDay() !== now.getDay()) {
-        // Within the same week
         return d.toLocaleDateString(undefined, { weekday: 'long' });
     } else {
         return d.toLocaleDateString();
@@ -60,18 +55,21 @@ export function formatTimestamp(date) {
 }
 
 export function throttle(func, delay) {
-    let lastExecutionTime = 0;  // Track the last execution time
+    console.log("throttle set with delay: ", delay)
+   let delayPassed = true
+    return function (...arg) {
 
-    return function (...args) {
-        const now = Date.now();
-        if (now - lastExecutionTime >= delay) {
-            func(...args);  // Execute the function immediately
-            lastExecutionTime = now;  // Update the last execution time
-        } else {
-            console.log("waiting...");
+        if (delayPassed) {
+            console.log("delay passed")
+            func(...arg);
+            delayPassed = false
+            setTimeout(() => {
+                delayPassed = true
+            }, delay)
         }
-    };
+    }
 }
+
 
 export function createElement(tag, className, text = '') {
     let element = document.createElement(tag)
@@ -110,7 +108,6 @@ export function ReorderUsers(data) {
     let user2 = document.querySelector(`.chat-user-card[data-id="${data.sender_id}"`)
     let userCard = user1 || user2
     chatList.prepend(editUserCard(userCard, data))
-
     fetchUsers(chatList).then(() => editUserCard(userCard))
 }
 

@@ -136,8 +136,6 @@ export const registerFom = {
     ]
 }
 
-
-
 export const loginForm = {
     elements: [
         {
@@ -206,7 +204,6 @@ export const PostForm = {
         },
         {
             tag: 'textarea',
-            // label: 'Post Content:',
             attributes: {
                 required: 'true',
                 id: 'content',
@@ -223,7 +220,7 @@ export const PostForm = {
             type: 'submit',
             content: {
                 text : "share",
-                icon : "share"
+                icon : "send"
             },
             style: ['primary-btn','row-reverse']
         },

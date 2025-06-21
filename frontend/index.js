@@ -3,11 +3,11 @@ import { renderHomePage } from "/frontend/pages/homePage.js"
 import { renderLoginPage } from "/frontend/pages/loginPage.js";
 import { renderRegisterPage } from "/frontend/pages/registerPage.js";
 
-export let app  = document.querySelector('#app')
+export let app = document.querySelector('#app')
 
 export function renderApp() {
-    console.log("inside the renderApp function:");
     app.innerHTML = ""
+    console.log(window.location.pathname)
     switch (window.location.pathname) {
         case "/register":
             renderRegisterPage(app)
@@ -17,6 +17,20 @@ export function renderApp() {
             break;
         case "/":
             renderHomePage(app)
+            break;
+        case "/api":
+        case "/assets":
+        case "/components":
+        case "/const":
+        case "/pages":
+        case "/styles":
+        case "/api/":
+        case "/assets/":
+        case "/components/":
+        case "/const/":
+        case "/pages/":
+        case "/styles/":
+            renderErrorPage(403)
             break;
         default:
             renderErrorPage(404)

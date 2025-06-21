@@ -1,8 +1,8 @@
-import { ToggleLike } from "/frontend/api/reaction.js"
-import { timeAgo } from "/frontend/utils.js"
-import { createElement } from "/frontend/utils.js"
-import { createIcon } from "/frontend/components/icon.js"
 import { createPostCommentsSection } from "/frontend/components/postCommentsSection.js"
+import { createIcon } from "/frontend/components/icon.js"
+import { ToggleLike } from "/frontend/api/reaction.js"
+import { createElement } from "/frontend/utils.js"
+import { timeAgo } from "/frontend/utils.js"
 
 export function createPostCard({
     id,
@@ -17,7 +17,6 @@ export function createPostCard({
 }) {
     let container = createElement('div', 'post-container')
     container.dataset.postId = id
-
     let postHeader = createElement('div', 'post-header')
     let postInfo = createElement('div', 'post-info')
     let postWriter = createElement('span', null, `${user_name}`)
@@ -50,8 +49,7 @@ export function createPostCard({
         return containerElem;
     });
 
-    let postCommentsSection = createPostCommentsSection(id)
-
+    let postCommentsSection = createPostCommentsSection(id,total_comments)
     postWriter.prepend(createIcon('user'))
     timestamp.prepend(createIcon('calendar'))
     postInfo.append(postWriter, timestamp)

@@ -12,6 +12,7 @@ export function createComment({
     liked
 }) {
     let commentContainer = createElement('div', "comment-container")
+    commentContainer.dataset.commentId = id
     let commentContent = createElement('div', "comment-content")
     let commentWriter = createElement('span', null, user_name)
     let commentCreatedAt = createElement('span', null, timeAgo(created_at))

@@ -1,12 +1,11 @@
-import { getPostsApi } from "/frontend/api/posts.js"
-import { navigateTo, createElement } from "/frontend/../utils.js"
-import { createPostCard } from "/frontend/components/postCard.js"
-import { createForm } from "/frontend/components/form.js"
-import { PostForm } from "/frontend/const/forms.js"
-// import { throttle, throttledScrollFetcher } from "/frontend/utils.js"
 import { createIcon } from "/frontend/components/icon.js"
-import { throttle } from "/frontend/utils.js"
+import { navigateTo, createElement } from "/frontend/utils.js"
+import { createPostCard } from "/frontend/components/postCard.js"
 import { renderErrorPage } from "/frontend/pages/errorPage.js"
+import { createForm } from "/frontend/components/form.js"
+import { getPostsApi } from "/frontend/api/posts.js"
+import { PostForm } from "/frontend/const/forms.js"
+import { throttle } from "/frontend/utils.js"
 
 export function createPostsSection() {
     let postsSection = createElement('section', "posts_section")
@@ -14,10 +13,8 @@ export function createPostsSection() {
     let postsContainer = createElement('div', 'posts_container')
     postsContainer.dataset.canFetch = "true"
     let fetchObserverTarget = createElement("div", null)
-
     postsContainer.append(fetchObserverTarget)
     postsSection.append(postsContainer, createPostFormContainer)
-
     postsSectionObserver(postsContainer, fetchObserverTarget)
     return postsSection
 }
@@ -53,24 +50,17 @@ function fetchPosts(container, offset) {
             }
             if (!data || data.length < 10) {
                 container.dataset.canFetch = "false"
-                let img = document.createElement("img")
-                img.src = "../assets/icons/finishline.png"
-                img.style.width = "100px"
-                let text = createElement("p", null, "You have reached the end :)")
-                text.style.fontWeight = 600
-                text.style.fontSize = "20px"
+                let text = createElement("p", null,  "You have reached the end :)")
+                text.style.fontWeight = "thin"
                 container.append(text)
-            } 
-            
+            }
         }
     })
 }
 
-
 export function toggleCreatePostFormContainer() {
     let container = document.querySelector('.create-post-form-container')
     container.classList.toggle("create-post-form-container_expanded")
-
     if (!container.querySelector("#create-post-form")) {
         let title = createElement('h2', null, "Share your thoughts:")
         let goBack = createIcon("arrow-square-left")
@@ -81,4 +71,3 @@ export function toggleCreatePostFormContainer() {
         container.innerHTML = ""
     }
 }
-
