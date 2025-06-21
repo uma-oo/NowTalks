@@ -13,7 +13,7 @@ export async function addPostApi(postData) {
 }
 
 export async function getPostsApi(offset) {
-
+    
     try {
         const response = await fetch(`http://localhost:8080/api/post?offset=${offset}`, {
             method: 'GET',

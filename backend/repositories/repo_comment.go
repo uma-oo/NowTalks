@@ -31,8 +31,14 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 
 // But hna comments dyal wa7d l post specific
 func (appRep *AppRepository) GetComments(user_id, postId, offset int) ([]models.Comment, error) {
+	var where string
+	if offset == 0 {
+		where = `comments.postID = ?`
+	} else {
+		where = `comments.postID = ? AND comments.commentID < ?`
+	}
 	var comments []models.Comment
-	query := `
+	query := fmt.Sprintf(`
 	with
     cte_likes as (
         SELECT
@@ -59,21 +65,20 @@ func (appRep *AppRepository) GetComments(user_id, postId, offset int) ([]models.
 		LEFT JOIN cte_likes ON cte_likes.entityID = comments.commentID
         LEFT JOIN reactions ON comments.commentID = reactions.entityID 
         AND reactions.userID = ?  AND reactions.reaction =1 AND reactions.entityTypeID = 2
-	WHERE
-		comments.postID = ?
+	WHERE 
+		%v
 	ORDER BY
 		comments.createdAt DESC
 	LIMIT
-		10
-	OFFSET
-		?;
-	`
-	rows, err := appRep.db.Query(query, user_id, postId, offset)
-	if rows.Err() == sql.ErrNoRows {
-		return comments, nil
-	}
+		10;
+	`, where)
+
+	rows, err := appRep.db.Query(query,user_id, postId, offset)
 	if err != nil {
 		return nil, err
+	}
+	if rows.Err() == sql.ErrNoRows {
+		return comments, nil
 	}
 
 	for rows.Next() {

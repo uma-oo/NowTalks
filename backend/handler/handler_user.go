@@ -8,16 +8,6 @@ import (
 
 // add the endpoint of getusers
 func (Uhandler *UserHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	 w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-        // Allow specific methods
-        w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-
-        // Handle preflight OPTIONS request
-        if r.Method == "OPTIONS" {
-            w.WriteHeader(http.StatusOK)
-            
-        }
 	w.Header().Set("Content-Type", "application/json")
 	switch {
 	case r.Method == http.MethodPost && r.URL.Path == "/api/user/login":

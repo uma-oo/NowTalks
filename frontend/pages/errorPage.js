@@ -20,8 +20,8 @@ export function renderErrorPage(status){
 
 function getErrorMessage(status) {
     switch (status) {
-        case 403: 
-            return "Access Forbidden"
+        case 403:
+            return "Access Forbidden."
         case 404:
             return "Page Not Found."
         case 429:
