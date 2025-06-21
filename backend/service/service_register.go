@@ -14,41 +14,40 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	_, has_nickname, _ := s.repo.GetItem("users", "nickname", user.Nickname)
 	_, has_email, _ := s.repo.GetItem("users", "email", user.Email)
 	if has_nickname {
-		registerErr.Nickname = "ERROR! Username already exists"
+		registerErr.Nickname = "Username already exists"
 	}
-	if !utils.CheckEmailFormat(user.Email) {
-		registerErr.Email = "ERROR! email Format is Incorrect"
+	if errEMail := utils.CheckEmailFormat(user.Email); errEMail != nil {
+		registerErr.Email = errEMail.Error()
 	}
 
 	if has_email {
-		registerErr.Email = "ERROR! Email already in use"
+		registerErr.Email = "Email already in use"
 	}
 	if !utils.IsValidNickname(user.Nickname) {
-		registerErr.Nickname = "ERROR! Username Format is Incorrect"
+		registerErr.Nickname = "Username Format is Incorrect"
 	}
-	if user.Age < 18 || user.Age >= 100 {
-		registerErr.Age = "ERROR! Age had to be 18 and less than 100"
+	if user.Age < 15 || user.Age >= 100 {
+		registerErr.Age = "You are too Young!! Go play outside :)"
 	}
 	if !utils.FirstLastNameVerf(user.FirstName) {
-		registerErr.FirstName = "ERROR! Sorry your First Name can't be stored on our system"
+		registerErr.FirstName = "Sorry your First Name can't be stored on our system"
 	}
 	if !utils.FirstLastNameVerf(user.LastName) {
-		registerErr.LastName = "ERROR! Sorry your Last Name can't be stored on our system"
+		registerErr.LastName = "Sorry your Last Name can't be stored on our system"
 	}
-	if !utils.PwdFormatVerf(user.Password) {
-		registerErr.Password = "ERROR! Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+	if err := utils.PwdFormatVerf(user.Password); err != nil {
+		registerErr.Password = fmt.Sprintf("ERROR!! %s", err.Error())
 	}
 	if !utils.PwdVerification(user.Password, user.VerifPassword) {
-		registerErr.VerifPassword = "ERROR! Passwords are not matched!"
+		registerErr.VerifPassword = "Passwords does not match!"
 	}
 	if !utils.CheckGender(user.Gender) {
-		registerErr.Gender ="ERROR!! Please be sure to enter Male or Female"
+		registerErr.Gender = "Please be sure to enter Male or Female"
 	}
 	// check if struct 3amra wlla la
 	if registerErr != (models.RegisterError{}) {
 		return &models.ErrorJson{Status: 400, Message: registerErr}
 	}
-
 
 	// hash the password here !! before the database insertion
 	hash, err := utils.HashPassword(user.Password)
