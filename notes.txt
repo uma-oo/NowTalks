@@ -9,3 +9,6 @@ Client ──[POST /api/logout]──→ Auth Middleware ──[Authenticated]�
 
 
 this is the way we are designing the logout endpoint
+
+
+while true; do go run -race main.go; done

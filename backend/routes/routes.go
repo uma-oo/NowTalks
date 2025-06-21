@@ -1,9 +1,7 @@
 package routes
 
 import (
-	"io/fs"
 	"net/http"
-	"os"
 
 	"real-time-forum/backend/handler"
 	m "real-time-forum/backend/middleware"
@@ -34,19 +32,26 @@ func SetRoutes(
 	mux.Handle("/api/messages", m.NewMiddleWare(messages, service))
 	mux.HandleFunc("/api/loggedin", loggedin.GetLoggedIn)
 	mux.Handle("/ws/", m.NewMiddleWare(chat, service))
-	var frontend fs.FS = os.DirFS("../frontend")
-	httpFS := http.FS(frontend)
-	fileServer := http.FileServer(httpFS)
-	serveIndex := handler.ServeFileContents("index.html", httpFS)
-	mux.Handle("/", handler.Intercept404(fileServer, serveIndex))
+	// var frontend fs.FS = os.DirFS("../frontend")
+	// httpFS := http.FS(frontend)
+	// fileServer := http.FileServer(httpFS)
+	// serveIndex := handler.ServeFileContents("index.html", httpFS)
+	// mux.Handle("/", handler.Intercept404(fileServer, serveIndex))
+	handlerSPA := http.HandlerFunc(m.ServeStaticFiles)
+	mux.Handle("/", handlerSPA)
 	return mux
 }
 
 // func handleSPA(w http.ResponseWriter, r *http.Request) {
+// 	fmt.Println("inside the handleSPA", r.URL.Path[1:])
 // 	file_info, err := os.Stat(filepath.Join("../frontend/", r.URL.Path[1:]))
 // 	if err != nil || file_info.IsDir() {
+// 		fmt.Printf("err: %v\n", err)
 // 		http.ServeFile(w, r, "../frontend/index.html")
 // 		return
+// 	} else {
+// 		fmt.Printf("file_info: %v\n", file_info.Name())
+// 		http.ServeFile(w, r, file_info.Name())
+// 		http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
 // 	}
-// 	http.FileServer(http.Dir("../frontend")).ServeHTTP(w, r)
 // }
