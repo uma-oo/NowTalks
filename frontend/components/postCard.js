@@ -50,9 +50,6 @@ export function createPostCard({
         return containerElem;
     });
 
-
-
-    // postCommentsSection = 
     let postCommentsSection = createPostCommentsSection(id)
 
     postWriter.prepend(createIcon('user'))
@@ -67,7 +64,6 @@ export function createPostCard({
     commentReaction.addEventListener("click", () => {
         container.scrollIntoView()
         postCommentsSection.classList.toggle("post-comments-section_expanded")
-
     })
 
     let likeReaction = postFooter.querySelector('.reaction-container[data-reaction="like"]')
@@ -77,6 +73,7 @@ export function createPostCard({
             entity_type: "post"
         }, likeReaction.querySelector("svg"), likeReaction.querySelector("span"))
     })
+
     return container
 }
 

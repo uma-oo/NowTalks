@@ -8,8 +8,7 @@ import { createIcon } from "./icon.js"
 export async function createChatSection() {
     let chatSection = createElement('div', 'chat-section')
     let chatSectionHeader = createElement('div', "chats-section-header")
-    let chatSectionHeaderTitle = createElement('h2', null, "Chats: ")
-    chatSectionHeaderTitle.prepend(createIcon("chats"))
+    let chatSectionHeaderTitle = createElement('h2', null, "Messages: ")
     let chatList = createElement('div', 'chat-list')
     chatList.dataset.offset = 0
     await fetchUsers(chatList)
@@ -24,6 +23,7 @@ export async function fetchUsers(chatList) {
     if (status == 401) {
         navigateTo("/login")
     }
+
     if ([400, 429, 500].includes(status)) {
         renderErrorPage(status)
     }
@@ -44,5 +44,4 @@ export async function fetchUsers(chatList) {
             chatList.append("No users")
         }
     }
-    
 }

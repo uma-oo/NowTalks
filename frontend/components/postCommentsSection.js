@@ -4,6 +4,7 @@ import { createElement, navigateTo } from "../utils.js";
 import { createForm } from "./form.js";
 import { createComment } from "./comment.js";
 import { renderErrorPage } from "../pages/errorPage.js";
+import { createIcon } from "./icon.js";
 
 export function createPostCommentsSection(postId) {
     let postCommentsSection = createElement('div', "post-comments-section")
@@ -22,9 +23,6 @@ export function createPostCommentsSection(postId) {
     return postCommentsSection
 }
 
-
-
-
 function fetchComments(id, commentsContainer) {
     let offset = commentsContainer.dataset.offset
     getComments(id, offset).then(([status, data]) => {
@@ -34,8 +32,18 @@ function fetchComments(id, commentsContainer) {
         if ([400,429].includes(status)){
             renderErrorPage(status)
         }
-        if (status === 200 && data) {
-            data.forEach(commentData => {
+        if (status === 200) {
+            if (!data && !commentsContainer.children.length) {
+                let noContent = createElement("div", "no-content")
+                let icon = createIcon("no-comment")
+                icon.style.width = "74px"
+                icon.style.opacity = "0.8px"
+                let noMessages = createElement("p", null, "No Comments for this post - be the first to comment.")
+                noContent.append(icon, noMessages)
+                commentsContainer.append(noContent)
+                // commentsContainer.
+            }
+            data?.forEach(commentData => {
                 commentsContainer.append(createComment(commentData))
             });
         }

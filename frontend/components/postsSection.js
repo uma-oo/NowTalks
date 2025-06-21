@@ -12,7 +12,6 @@ export function createPostsSection() {
     let createPostFormContainer = createElement('div', 'create-post-form-container')
     let postsContainer = createElement('div', 'posts_container')
     postsContainer.dataset.canFetch = "true"
-    postsContainer.dataset.offset = 0
     let fetchObserverTarget = createElement("div", null)
 
     postsContainer.append(fetchObserverTarget)

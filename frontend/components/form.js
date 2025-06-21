@@ -89,29 +89,28 @@ export function handleFormSubmit(event) {
                 else navigateTo("/login")
             })
             break;
-        default:
-            break;
     }
 }
 
 export function login(form, data) {
-    loginUser(data).then(([status, data]) => {
-        let formError = form.parentElement.querySelector(".form-error")
-        if (status == 200) {
-            navigateTo("/")
-        } else if (status == 400) {
-            formError.innerText = ""
-            formError.classList.remove("form-have-error")
-            loadFormErrors(form, data.errors)
-        } else if (status == 401) {
-            let errors = form.querySelectorAll(".input-error")
-            errors.forEach(error => error.textContent = "")
-            formError.innerText = "ERROR!! Username or Email does not exist! Or Password Incorrect!"
-            formError.classList.add("form-have-error")
-        } else if ([429, 500].includes(status)) {
-            renderErrorPage(status)
-        }
-    }).catch(error => console.error("Error submitting login form", error))
+    loginUser(data)
+        .then(([status, data]) => {
+            let formError = form.parentElement.querySelector(".form-error")
+            if (status == 200) {
+                navigateTo("/")
+            } else if (status == 400) {
+                formError.innerText = ""
+                formError.classList.remove("form-have-error")
+                loadFormErrors(form, data.errors)
+            } else if (status == 401) {
+                let errors = form.querySelectorAll(".input-error")
+                errors.forEach(error => error.textContent = "")
+                formError.innerText = "ERROR!! Username or Email does not exist! Or Password Incorrect!"
+                formError.classList.add("form-have-error")
+            } else if ([429, 500].includes(status)) {
+                renderErrorPage(status)
+            }
+        })
 }
 
 export function register(form, data) {
@@ -127,7 +126,6 @@ export function register(form, data) {
                 renderErrorPage(status)
             }
         })
-        .catch(error => console.log("error submitting register form: ", error))
 }
 
 export function createPost(form, data) {
@@ -148,7 +146,6 @@ export function createPost(form, data) {
                 renderErrorPage(status)
             }
         })
-        .catch(error => console.log("error submitting register form: ", error))
 }
 
 function handleCreateComment(form, data) {
@@ -166,7 +163,7 @@ function handleCreateComment(form, data) {
                 form.querySelector('.input-error').textContent = ""
             } else if (status == 400) {
                 loadFormErrors(form, data.errors)
-            } else if ([ 429, 500].includes(status)) {
+            } else if ([429, 500].includes(status)) {
                 renderErrorPage(status)
             }
         })
