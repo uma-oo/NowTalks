@@ -38,8 +38,16 @@ func (appRep *AppRepository) CreatePost(post *models.Post) (*models.Post, *model
 // all the posts
 // add the offset and the limit after
 func (appRep *AppRepository) GetPosts(user_id, offset int) ([]models.Post, *models.ErrorJson) {
+	var where string
+	if offset == 0 {
+		where = `comments.postID = ?`
+	} else {
+		where = `comments.postID = ? AND comments.commentID < ?`
+	}
+
 	var posts []models.Post
-	query := `
+
+	query := fmt.Sprintf(`
 	with
     cte_likes as (
         select
@@ -79,10 +87,12 @@ func (appRep *AppRepository) GetPosts(user_id, offset int) ([]models.Post, *mode
 		LEFT JOIN cte_comments ON cte_comments.postID = posts.postID
 		LEFT JOIN reactions ON reactions.entityID = posts.postID 
 		AND reactions.userID = ? AND reactions.reaction = 1 AND reactions.entityTypeID = 1
+	WHERE 
+	  %v
 	ORDER BY
 		posts.createdAt DESC
-		LIMIT 10 offset ?;
-	`
+		LIMIT 10;
+	`, where)
 	rows, err := appRep.db.Query(query, user_id, offset)
 	if rows.Err() == sql.ErrNoRows {
 		return posts, nil
