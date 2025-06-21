@@ -1,5 +1,5 @@
-import { createElement } from "../utils.js"
-import { createIcon } from "./icon.js"
+import { createElement } from "/frontend/utils.js"
+import { createIcon } from "/frontend/components/icon.js"
 
 export function createButton(content, type, className) {
     let button = document.createElement('button')

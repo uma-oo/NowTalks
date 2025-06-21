@@ -1,6 +1,6 @@
 
-import { fetchUsers } from "./components/chatSection.js";
-import { renderApp } from "./index.js";
+import { fetchUsers } from "/frontend/components/chatSection.js";
+import { renderApp } from "/frontend/index.js";
 
 export async function navigateTo(pathname) {
     history.replaceState({}, "", pathname)

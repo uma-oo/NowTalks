@@ -1,4 +1,4 @@
-import { createElement } from "../utils.js"
+import { createElement } from "/frontend/utils.js"
 
 export function createCheckboxInput(label, categoryId, categoryName) {
     let labelElem = createElement('label', "category-option", categoryName)

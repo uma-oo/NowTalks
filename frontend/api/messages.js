@@ -1,5 +1,5 @@
 
-const API_URL = '/api/messages';
+const API_URL = 'http://localhost:8080/api/messages';
 
 export async function getMessages(offset, receiver_id) {
     try {

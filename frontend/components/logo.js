@@ -1,10 +1,10 @@
-import { createElement } from "../utils.js"
+import { createElement } from "/frontend/utils.js"
 
 export function createLogo () {
     let appLogo = createElement('a','logo')
     let appImg = createElement('img')
     let appName = createElement('span',null, "ⵙⴰⵡⵍ")
-    appImg.src = "../assets/logo.png"
+    appImg.src = "/frontend/assets/logo.png"
     appLogo.href = './'
     appLogo.append(appImg,appName)
     return appLogo

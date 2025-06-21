@@ -1,9 +1,9 @@
-import { createElement } from "../utils.js"
-import { isLoggedIn, logoutUser } from "../api/user.js"
-import { navigateTo } from "../utils.js"
-import { createButton } from "./button.js"
-import { createLogo } from "./logo.js"
-import { closeConnection } from "../websocket.js"
+import { createElement } from "/frontend/utils.js"
+import { isLoggedIn, logoutUser } from "/frontend/api/user.js"
+import { navigateTo } from "/frontend/utils.js"
+import { createButton } from "/frontend/components/button.js"
+import { createLogo } from "/frontend/components/logo.js"
+import { closeConnection } from "/frontend/websocket.js"
 
 export function createHeader() {
     let header = createElement('header')

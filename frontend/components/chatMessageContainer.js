@@ -1,4 +1,4 @@
-import { createElement, formatTimestamp, timeAgo } from "../utils.js";
+import { createElement, formatTimestamp, timeAgo } from "/frontend/utils.js";
 
 
 export function createChatMessageContainer(

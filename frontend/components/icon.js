@@ -1,4 +1,4 @@
-import { createElement } from "../utils.js"
+import { createElement } from "/frontend/utils.js"
 
 export function createIcon(name, type) {
     switch (type) {
@@ -27,7 +27,7 @@ export function createIcon(name, type) {
 
         default:
             let icon = createElement('img', 'icon')
-            icon.src = `../assets/icons/${name}.svg`
+            icon.src = `/frontend/assets/icons/${name}.svg`
             return icon
 
     }

@@ -1,4 +1,4 @@
-import { navigateTo } from "../utils.js"
+import { navigateTo } from "/frontend/utils.js"
 
 export function creatLink(content,url,target="_blank") {
     let a = document.createElement('a')

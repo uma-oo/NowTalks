@@ -1,9 +1,9 @@
-import { createForm } from "../components/form.js"
-import { creatLink } from "../components/links.js"
-import { loginForm } from "../const/forms.js"
-import { navigateTo, createElement } from "../utils.js"
-import { isLoggedIn } from "../api/user.js"
-import { createLogo } from "../components/logo.js"
+import { createForm } from "/frontend/components/form.js"
+import { creatLink } from "/frontend/components/links.js"
+import { loginForm } from "/frontend/const/forms.js"
+import { navigateTo, createElement } from "/frontend/utils.js"
+import { isLoggedIn } from "/frontend/api/user.js"
+import { createLogo } from "/frontend/components/logo.js"
 
 
 export function renderLoginPage(app) {

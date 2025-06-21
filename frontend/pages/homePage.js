@@ -1,12 +1,12 @@
-import { getCategories } from "../api/posts.js";
-import { isLoggedIn } from "../api/user.js";
-import { createButton } from "../components/button.js";
-import { createChatSection } from "../components/chatSection.js";
-import { createHeader } from "../components/header.js";
-import { createPostsSection, toggleCreatePostFormContainer } from "../components/postsSection.js";
-import { navigateTo, createElement } from "../utils.js";
-import { setUpWebsocket } from "../websocket.js";
-import { renderErrorPage } from "./errorPage.js";
+import { getCategories } from "/frontend/api/posts.js";
+import { isLoggedIn } from "/frontend/api/user.js";
+import { createButton } from "/frontend/components/button.js";
+import { createChatSection } from "/frontend/components/chatSection.js";
+import { createHeader } from "/frontend/components/header.js";
+import { createPostsSection, toggleCreatePostFormContainer } from "/frontend/components/postsSection.js";
+import { navigateTo, createElement } from "/frontend/utils.js";
+import { setUpWebsocket } from "/frontend/websocket.js";
+import { renderErrorPage } from "/frontend/pages/errorPage.js";
 
 export function renderHomePage(app) {
     isLoggedIn().then(data => {

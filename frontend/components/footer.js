@@ -1,4 +1,4 @@
-import { creatLink } from "./links.js"
+import { creatLink } from "/frontend/components/links.js"
 
 export function createFooter() {
     let footer = document.createElement('footer')

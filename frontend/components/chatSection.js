@@ -1,9 +1,9 @@
 
-import { getUsers } from "../api/user.js"
-import { createElement, navigateTo } from "../utils.js"
-import { createChatUserCard } from "./chatUserCard.js"
-import { openChatWindow } from "./chatWindow.js"
-import { createIcon } from "./icon.js"
+import { getUsers } from "/frontend/api/user.js"
+import { createElement, navigateTo } from "/frontend/utils.js"
+import { createChatUserCard } from "/frontend/components/chatUserCard.js"
+import { openChatWindow } from "/frontend/components/chatWindow.js"
+import { createIcon } from "/frontend/components/icon.js"
 
 export async function createChatSection() {
     let chatSection = createElement('div', 'chat-section')

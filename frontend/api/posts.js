@@ -1,7 +1,7 @@
 
 export async function addPostApi(postData) {
     try {
-        const response = await fetch('/api/post', {
+        const response = await fetch('http://localhost:8080/api/post', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body : JSON.stringify(postData)
@@ -15,7 +15,7 @@ export async function addPostApi(postData) {
 export async function getPostsApi(offset) {
 
     try {
-        const response = await fetch(`/api/post?offset=${offset}`, {
+        const response = await fetch(`http://localhost:8080/api/post?offset=${offset}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -29,7 +29,7 @@ export async function getPostsApi(offset) {
 
 export async function getCategories() {
     try {
-        let response = await fetch(`/api/categories`, {
+        let response = await fetch(`http://localhost:8080/api/categories`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })
