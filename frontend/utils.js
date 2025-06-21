@@ -60,13 +60,11 @@ export function formatTimestamp(date) {
 }
 
 export function throttle(func, delay) {
-    console.log("throttle is set");
     let lastExecutionTime = 0;  // Track the last execution time
 
     return function (...args) {
         const now = Date.now();
         if (now - lastExecutionTime >= delay) {
-            console.log("Executing at the beginning of the delay");
             func(...args);  // Execute the function immediately
             lastExecutionTime = now;  // Update the last execution time
         } else {

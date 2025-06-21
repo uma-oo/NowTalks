@@ -11,7 +11,6 @@ export function fetchMessages(offset, receiver_id, type, chatWindow) {
                 navigateTo("/login")
             }
             if (status === 200) {
-                console.log(data)
                 if (!data || data.length < 10) {
                     chatWindow.dataset.topObsorver = "off"
                 }

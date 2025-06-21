@@ -10,7 +10,6 @@ export function createHeader() {
     let logOut = createButton({ text: "log out", icon: "logout" }, 'button', 'logout-btn')
     logOut.addEventListener("click", (e) => {
         logoutUser().then(status => {
-            console.log(status)
             if (status == 200 || status == 401) {
                 navigateTo("/login")
                 closeConnection()

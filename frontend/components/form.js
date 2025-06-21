@@ -7,6 +7,8 @@ import { createComment } from "./comment.js";
 import { sendMessage } from "../websocket.js";
 import { createCheckboxInput } from "./checkbox.js";
 import { renderErrorPage } from "../pages/errorPage.js";
+import { createPostCard } from "./postCard.js";
+import { toggleCreatePostFormContainer } from "./postsSection.js";
 
 
 export function createForm(formRepresentaion, id) {
@@ -133,7 +135,10 @@ export function createPost(form, data) {
         .then(([status, data]) => {
             if (status === 200) {
                 form.reset()
-                navigateTo("/")
+                let post = createPostCard(data)
+                let postsContainer = document.querySelector(".posts_container")
+                toggleCreatePostFormContainer()
+                postsContainer.prepend(post)
             }
             else if (status === 400) {
                 loadFormErrors(form, data.errors)

@@ -1,7 +1,7 @@
-import { createElement, formatTimestamp, timeAgo } from "../utils.js";
+import { createElement, formatTimestamp } from "../utils.js";
 
 
-export function createChatMessageContainer(
+export function createChatMessageContainer (
     {
         message_id,
         sender_username,

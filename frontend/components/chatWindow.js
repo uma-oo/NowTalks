@@ -7,7 +7,6 @@ import { createButton } from "./button.js";
 import { createForm } from "./form.js";
 
 export function openChatWindow(chatUserCard) {
-
     if (chatUserCard.dataset.open) { // if chat already open
         return
     }
@@ -48,6 +47,8 @@ export function openChatWindow(chatUserCard) {
     let messageform = createForm(MessageForm, "message-form")
 
     goBackBtn.addEventListener('click', () => {
+        let chatUserCard = document.querySelector("[data-open = 'true']")
+        let chatWindow = document.querySelector(".chat-window_expanded")
         closeChatWindow(chatUserCard, chatWindow)
     })
 
@@ -64,6 +65,7 @@ export function closeChatWindow(chatUserCard, chatWindow) {
     chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
+    console.log("chatUser: ", chatUserCard)
 }
 
 function chatWindowObserver(container, target) {

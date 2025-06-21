@@ -3,7 +3,6 @@ import { navigateTo, createElement } from "../../utils.js"
 import { createPostCard } from "./postCard.js"
 import { createForm } from "./form.js"
 import { PostForm } from "../const/forms.js"
-// import { throttle, throttledScrollFetcher } from "../utils.js"
 import { createIcon } from "./icon.js"
 import { throttle } from "../utils.js"
 import { renderErrorPage } from "../pages/errorPage.js"
@@ -31,12 +30,10 @@ function postsSectionObserver(container, target) {
                 let lastPost = target.previousSibling
                 let offset = lastPost?.dataset.postId || 0
                 if (container.dataset.canFetch === "false") {
-                    console.log("can't fetch no more")
                     observer.unobserve(entry.target)
                 }
                 if (entry.isIntersecting) {
-                    fetchPosts(container, offset)
-                    // throttledFetch(container,offset);
+                    throttledFetch(container,offset);
                 }
             })
         })
@@ -44,7 +41,6 @@ function postsSectionObserver(container, target) {
 }
 
 function fetchPosts(container, offset) {
-    console.log("posts container: ", offset)
     getPostsApi(offset).then(([status, data]) => {
         if (status == 401) {
             navigateTo('login')
@@ -52,21 +48,20 @@ function fetchPosts(container, offset) {
             renderErrorPage(status)
         }
         else if (status == 200) {
+            if (data){
+                data.map(postData => container.insertBefore(createPostCard(postData), container.lastChild))
+            }
             if (!data || data.length < 10) {
                 container.dataset.canFetch = "false"
-            }
-            if (!data) {
-                console.log("no data", data)
                 let img = document.createElement("img")
                 img.src = "../assets/icons/finishline.png"
                 img.style.width = "100px"
                 let text = createElement("p", null, "You have reached the end :)")
                 text.style.fontWeight = 600
                 text.style.fontSize = "20px"
-                container.append(img, text)
-            } else {
-                data.map(postData => container.insertBefore(createPostCard(postData), container.lastChild))
-            }
+                container.append(text)
+            } 
+            
         }
     })
 }
