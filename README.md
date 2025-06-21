@@ -1,7 +1,7 @@
 # Real-Time Forum Application
 
 ## Overview
-This project is a single-page web application for a real-time forum built with Go, SQLite, JavaScript, HTML, and CSS. It supports user registration/login, post creation, commenting, and private messaging with real-time updates via WebSockets. The application ensures secure authentication, efficient data handling, and a responsive user interface without using frontend frameworks.
+This project is a single-page web application for a real-time forum built with Go, SQLite, Ja vaScript, HTML, and CSS. It supports user registration/login, post creation, commenting, and private messaging with real-time updates via WebSockets. The application ensures secure authentication, efficient data handling, and a responsive user interface without using frontend frameworks.
 
 ## Features
 - **Registration and Login**:
