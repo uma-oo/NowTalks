@@ -20,6 +20,7 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 				Status: 400,
 				Message: models.CommentError{
 					Content: "ERROR!! Empty Content Field!",
+					PostId: "ERROR!! Empty PostId Field!",
 				},
 			})
 			return

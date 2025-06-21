@@ -5,7 +5,7 @@ export function createLogo () {
     let appImg = createElement('img')
     let appName = createElement('span',null, "ⵙⴰⵡⵍ")
     appImg.src = "/frontend/assets/logo.png"
-    appLogo.href = './'
+    appLogo.href = 'http://localhost:8080/'
     appLogo.append(appImg,appName)
     return appLogo
 }

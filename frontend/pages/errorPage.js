@@ -1,7 +1,7 @@
 import { createButton } from "/frontend/components/button.js"
 import { createHeader } from "/frontend/components/header.js"
 import { app } from "/frontend/index.js"
-import { createElement } from "/frontend/utils.js"
+import { createElement, navigateTo } from "/frontend/utils.js"
 import { renderHomePage } from "/frontend/pages/homePage.js"
 
 export function renderErrorPage(status){
@@ -13,7 +13,7 @@ export function renderErrorPage(status){
     let errorMessage = createElement("p", "error-msg", getErrorMessage(status))
     let goBackBtn = createButton({icon:"home", text: "Go back home."},"butotn", "primary-btn")
     goBackBtn.addEventListener("click",()=> {
-        renderHomePage(app)
+       navigateTo("/")
     })
     container.append(statusCode, errorMessage)
     if (status != 429) container.append(goBackBtn)
@@ -23,6 +23,8 @@ export function renderErrorPage(status){
 
 function getErrorMessage(status) {
     switch (status) {
+        case 403:
+            return "Access Forbidden."
         case 404:
             return "Page Not Found."
         case 429:
