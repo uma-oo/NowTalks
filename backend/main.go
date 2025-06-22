@@ -12,7 +12,6 @@ import (
 )
 
 // insure that the database is always closed
-
 // close the database
 
 func main() {
