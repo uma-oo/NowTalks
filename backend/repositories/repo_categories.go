@@ -10,7 +10,8 @@ import (
 func (appRep *AppRepository) AddPostCategories(post *models.Post, categories []any) (*models.Post, *models.ErrorJson) {
 	for _, id := range categories {
 		query := `INSERT INTO postCategories (categoryID, postID) VALUES (? , ?)
-		RETURNING (SELECT category FROM categories WHERE categories.categoryID = postCategories.categoryID);`
+		RETURNING (SELECT category FROM categories 
+		WHERE categories.categoryID = postCategories.categoryID);`
 		stmt, err := appRep.db.Prepare(query)
 		if err != nil {
 			return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))

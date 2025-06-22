@@ -37,7 +37,7 @@ func (logout *Logout) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method != http.MethodPost && r.URL.Path == "/api/user/logout":
 		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!"})
 		return
-	case r.Method == http.MethodPost:
+	case r.Method == http.MethodPost && r.URL.Path == "/api/user/logout":
 		logout.Logout(w, r)
 		return
 	default:

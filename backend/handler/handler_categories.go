@@ -6,13 +6,11 @@ import (
 	"real-time-forum/backend/models"
 )
 
-
-
-
-// Require authentication ??? 
+// Require authentication ???
 func (catHandler *CategoriesHandler) GetCategories(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {
-		WriteJsonErrors(w, *models.NewErrorJson(405, "ERROR!! Method Not Allowed!"))
+		WriteJsonErrors(w, *models.NewErrorJson(405, " Method Not Allowed!"))
 		return
 	}
 	categories, err := catHandler.service.GetAllCategories()
@@ -22,6 +20,3 @@ func (catHandler *CategoriesHandler) GetCategories(w http.ResponseWriter, r *htt
 	}
 	WriteDataBack(w, categories)
 }
-
-
-

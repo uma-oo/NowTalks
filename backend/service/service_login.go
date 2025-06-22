@@ -11,16 +11,16 @@ import (
 // so we need to check that the password entered from the API is the same stored in the database !!
 
 func (s *AppService) Login(login *models.Login) (*models.User, *models.ErrorJson) {
-	LoginERR := models.Login{}
+	LoginERR := models.LoginERR{}
 
 	if strings.TrimSpace(login.LoginField) == "" {
-		LoginERR.LoginField = "ERROR! Login field is Empty!"
+		LoginERR.LoginField = "empty login field!"
 	}
 	if strings.TrimSpace(login.Password) == "" {
-		LoginERR.Password = "ERROR! Password field is Empty!"
+		LoginERR.Password = "empty password field!"
 	}
 	//
-	if LoginERR != (models.Login{}) {
+	if LoginERR != (models.LoginERR{}) {
 		return nil, &models.ErrorJson{Status: 400, Message: LoginERR}
 	}
 
@@ -40,11 +40,40 @@ func (s *AppService) Login(login *models.Login) (*models.User, *models.ErrorJson
 	if !utils.CheckPasswordHash(login.Password, user.Password) {
 		return nil, &models.ErrorJson{
 			Status: 401,
-			Message: models.Login{
-				LoginField: "ERROR!! Username or Email does not exist! Or Password Incorrect!",
-				Password:   "ERROR!! Username or Email does not exist! Or Password Incorrect!",
+			Message: models.LoginERR{
+				LoginField: "invalid login credentials!",
+				Password:   "invalid login credentials!",
 			},
 		}
 	}
 	return user, nil
+}
+
+func (s *AppService) CreateOrUpdateSession(user *models.User) (*models.UserData, *models.Session, *models.ErrorJson) {
+	session, errJson := s.GetSessionByUserId(user.Id)
+	if errJson != nil {
+		return nil, nil, errJson
+	}
+	if session != nil {
+		new_session, errJSON := s.UpdateUserSession(session)
+		if errJSON != nil {
+			return nil, nil, errJSON
+		}
+		return &models.UserData{
+			IsLoggedIn: true,
+			Id:         user.Id,
+			Nickname:   user.Nickname,
+		}, new_session, nil
+
+	} else {
+		new_session, errJSON := s.SetUserSession(user)
+		if errJSON != nil {
+			return nil, nil, errJSON
+		}
+		return &models.UserData{
+			IsLoggedIn: true,
+			Id:         user.Id,
+			Nickname:   user.Nickname,
+		}, new_session, nil
+	}
 }

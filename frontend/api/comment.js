@@ -1,18 +1,24 @@
 
 
 
-// You have to specify the id assi ayoub 
-export async function getComments(id) {
-    const response = await fetch(`/api/comment?postId=${id}`);
-    return response.json();
+export async function getComments(postId, offset) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/comment?post=${postId}&offset=${offset}`);
+        return [response.status, await response.json()]
+    } catch (error) {
+        console.error("Error While Trying to get comments")
+    }
 }
 
-// the same applies for the creation !!! khass id f l api 
-export async function createComment(commentData) {
-    const response = await fetch('/api/comment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(commentData),
-    });
-    return response.json();
+export async function addComment(commentData) {
+    try {
+        const response = await fetch('http://localhost:8080/api/comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(commentData)
+        });
+        return [response.status, await response.json()];
+    } catch (error) {
+        console.error(error)
+    }
 }

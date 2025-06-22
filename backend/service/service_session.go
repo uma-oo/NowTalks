@@ -2,9 +2,7 @@ package service
 
 import (
 	"time"
-
 	"real-time-forum/backend/models"
-
 	"github.com/google/uuid"
 )
 
@@ -47,7 +45,7 @@ func (s *AppService) UpdateUserSession(session *models.Session) (*models.Session
 }
 
 func (s *AppService) GetSessionByUserId(user_id int) (*models.Session, *models.ErrorJson) {
-	session, err := s.repo.GetUserSession(user_id)
+	session, err := s.repo.GetUserSessionByUserId(user_id)
 	if err != nil {
 		return nil, err
 	}

@@ -8,8 +8,8 @@ import (
 )
 
 // add the offset and the limit thing after
-func (s *AppService) GetComments(postId int, limit int , offset int ) ([]models.Comment, *models.ErrorJson) {
-	comments, err := s.repo.GetComments(postId , limit , offset )
+func (s *AppService) GetComments(user_id, postId, offset int) ([]models.Comment, *models.ErrorJson) {
+	comments, err := s.repo.GetComments(user_id, postId, offset)
 	if err != nil {
 		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -18,9 +18,14 @@ func (s *AppService) GetComments(postId int, limit int , offset int ) ([]models.
 
 // check if the content is null
 func (s *AppService) AddComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
+	message := models.NewCommentErr()
 	if strings.TrimSpace(comment.Content) == "" {
-		message := models.NewCommentErr()
-		message.Content = "ERROR: Empty Body Comment!"
+		message.Content = "empty body comment!"
+	}
+	if comment.PostId == 0 {
+		message.PostId = "Post ID is incorrect or did you mean post_id?"
+	}
+	if message.Content != "" || message.PostId != "" {
 		return nil, &models.ErrorJson{Status: 400, Message: message}
 	}
 	comment_created, err := s.repo.CreateComment(comment)

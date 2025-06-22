@@ -19,7 +19,8 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 			WriteJsonErrors(w, models.ErrorJson{
 				Status: 400,
 				Message: models.CommentError{
-					Content: "ERROR!! Empty Content Field!",
+					Content: "empty content field!",
+					PostId:  "empty PostId field!",
 				},
 			})
 			return
@@ -28,6 +29,7 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 		return
 
 	}
+	comment.UserId = CHanlder.service.GetUserIdFromSession(r)
 	comment_created, err_ := CHanlder.service.AddComment(comment)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
@@ -37,23 +39,21 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 }
 
 func (CHanlder *CommentHandler) getComments(w http.ResponseWriter, r *http.Request) {
-	// get the comments of a specific ID
-	// FOR NOW let's just get them from the query
-	limit, errConvlim := strconv.Atoi(r.URL.Query().Get("limit"))
+	cookie, _ := r.Cookie("session")
+	session, _ := CHanlder.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	postId, err := strconv.Atoi(r.URL.Query().Get("post"))
-	if err != nil || errConvlim != nil || errConvoff != nil {
-		errJson := models.ErrorJson{Status: 400, Message: "Bad Request!! Post Not Found Or Incorrect offset or limit!"}
+	if err != nil || errConvoff != nil {
+		errJson := models.ErrorJson{Status: 400, Message: "Bad Request!! Post Not Found Or Incorrect offset!"}
 		WriteJsonErrors(w, errJson)
 		return
 	}
-	comments, err_ := CHanlder.service.GetComments(postId, limit, offset)
+	comments, err_ := CHanlder.service.GetComments(session.UserId, postId, offset)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
 	}
 	if err := json.NewEncoder(w).Encode(&comments); err != nil {
-		errJson := models.ErrorJson{Status: 400, Message: "Bad Request!"}
-		WriteJsonErrors(w, errJson)
+		WriteJsonErrors(w, models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)})
 		return
 	}
 }
@@ -68,10 +68,7 @@ func (CHanlder *CommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		CHanlder.addComment(w, r)
 		return
 	default:
-		errJson := models.ErrorJson{Status: 405, Message: "Method Not Allowed!!"}
-		w.WriteHeader(errJson.Status)
-		json.NewEncoder(w).Encode(errJson)
+		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!!"})
 		return
-
 	}
 }

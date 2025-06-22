@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	models "real-time-forum/backend/models"
 )
@@ -11,31 +12,69 @@ import (
 // hadshi taaafh
 // y9dr ay wa7d ydiiruuu
 
-func (appRep *AppRepository) CreateUser(user *models.User) error {
+func (appRep *AppRepository) CreateUser(user *models.User) *models.ErrorJson {
 	query := `INSERT INTO users (nickname, age, gender, firstName, lastName, email, password) VALUES (?,?,?,?,?,?,?)`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return err
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	defer stmt.Close()
-	if _, err = stmt.Exec(user.Nickname, user.Age, user.Gender, user.FirstName, user.LastName, user.Email, user.Password); err != nil {
-		return nil
+	if _, err = stmt.Exec(strings.ToLower(user.Nickname), user.Age, strings.ToLower((user.Gender)), user.FirstName, user.LastName, user.Email, user.Password); err != nil {
+		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	return nil
 }
 
-func (appRep *AppRepository) GetUsers() ([]models.User, error) {
-	var users []models.User
-	query := `SELECT userID,nickname, age, gender, firstName, lastName, email FROM users`
-	rows, err := appRep.db.Query(query)
-	if err != nil {
-		return nil, err
-	}
+// TO GET THE USERS
 
+func (appRep *AppRepository) GetUsers(offset, user_id int) ([]models.User, *models.ErrorJson) {
+	var users []models.User
+	query := `with 
+	cte_latest_interaction as (
+	SELECT
+        CASE 
+            WHEN senderID = ? THEN receiverID 
+            ELSE senderID 
+        END AS userID,
+        MAX(createdAt) AS lastInteraction,
+        message
+    FROM messages
+    WHERE senderID = ? OR receiverID = ?
+    GROUP BY userID),
+	cte_ordered_users as (
+	SELECT i.message, coalesce(i.lastInteraction, 0) as lastInteraction  , u.userID, u.nickname 
+	from users u 
+		Left JOIN cte_latest_interaction i 
+		ON i.userID = u.userID
+		WHERE u.userID != ?
+	),
+	cte_notifications as (
+		select 
+		senderID,
+		count(*) as notifications 
+	from
+		messages 
+	WHERE
+		readStatus = 0
+		And receiverID = ?
+	GROUP BY
+		senderID
+	)
+	SELECT 
+		u.userID, u.nickname , coalesce(u.message, ""), u.lastInteraction, coalesce(n.notifications,0)
+	FROM cte_ordered_users u
+		LEFT JOIN cte_notifications n ON u.userID = n.senderID
+		ORDER BY u.lastInteraction DESC,
+		u.nickname
+; `
+	rows, err := appRep.db.Query(query, user_id, user_id, user_id, user_id, user_id)
+	if err != nil {
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
+	}
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.Id, &user.Nickname, &user, &user.Age, &user.Gender, &user.FirstName, &user.LastName, &user.Email); err != nil {
-			return users, err
+		if err := rows.Scan(&user.Id, &user.Nickname, &user.LastMessage, &user.LastInteraction, &user.Notfications); err != nil {
+			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v ", err)}
 		}
 		users = append(users, user)
 	}
@@ -61,15 +100,16 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 		return nil, &models.ErrorJson{
 			Status: 401,
 			Message: models.Login{
-				LoginField: "ERROR!! Username or Email does not exist! Or Password Incorrect!",
-				Password:   "ERROR!! Username or Email does not exist! Or Password Incorrect!",
+				LoginField: "invalid login credentials!",
+				Password:   "invalid login credentials!",
 			},
 		}
 	}
 	return user, nil
 }
 
-func (appRep *AppRepository) getUserNameById(user_id int) (string, *models.ErrorJson) {
+// get the username from the userId
+func (appRep *AppRepository) GetUserNameById(user_id int) (string, *models.ErrorJson) {
 	var username string
 	query := `SELECT nickname FROM users WHERE userID = ?`
 	err := appRep.db.QueryRow(query, user_id).Scan(&username)
@@ -77,4 +117,19 @@ func (appRep *AppRepository) getUserNameById(user_id int) (string, *models.Error
 		return "", models.NewErrorJson(500, fmt.Sprintf("%v 3", err))
 	}
 	return username, nil
+}
+
+func (appRepo *AppRepository) UserExists(id int) (bool, *models.ErrorJson) {
+	var exists bool
+	query := ` SELECT EXISTS(SELECT 1 FROM users WHERE userID = ?);`
+	stmt, err := appRepo.db.Prepare(query)
+	if err != nil {
+		return false, models.NewErrorJson(500, fmt.Sprintf("%v 3", err))
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(id).Scan(&exists)
+	if err == sql.ErrNoRows {
+		return false, &models.ErrorJson{Status: 400, Message: "user not found"}
+	}
+	return exists, nil
 }

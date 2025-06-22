@@ -9,7 +9,8 @@ import (
 
 func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Comment, *models.ErrorJson) {
 	comment_created := &models.Comment{}
-	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) RETURNING commentID, content, createdAt `
+	query := `INSERT INTO comments(postID, userID, content)  VALUES(?, ?, ?) 
+	RETURNING commentID, content, createdAt;`
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
 		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
@@ -20,7 +21,7 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 		&comment_created.CreatedAt); err != nil {
 		return nil, models.NewErrorJson(500, fmt.Sprintf("%v", err))
 	}
-	username, errJSon := appRep.getUserNameById(comment.UserId)
+	username, errJSon := appRep.GetUserNameById(comment.UserId)
 	if errJSon != nil {
 		return nil, models.NewErrorJson(500, *errJSon)
 	}
@@ -29,24 +30,61 @@ func (appRep *AppRepository) CreateComment(comment *models.Comment) (*models.Com
 }
 
 // But hna comments dyal wa7d l post specific
-func (appRep *AppRepository) GetComments(postId int, limit int, offset int) ([]models.Comment, error) {
-	var comments []models.Comment
-	query := `SELECT users.nickname,commentID, postID, createdAt , content 
-	FROM comments INNER JOIN on users.userID = comments.userID
-	WHERE postID = ?
-	ORDER BY createdAt DESC
-	LIMIT ? OFFSET ? ;`
-	rows, err := appRep.db.Query(query, postId, limit, offset)
-	if rows.Err() == sql.ErrNoRows {
-		return comments, nil
+func (appRep *AppRepository) GetComments(user_id, postId, offset int) ([]models.Comment, error) {
+	var where string
+	if offset == 0 {
+		where = `comments.postID = ?`
+	} else {
+		where = `comments.postID = ? AND comments.commentID < ?`
 	}
+	var comments []models.Comment
+	query := fmt.Sprintf(`
+	with
+    cte_likes as (
+        SELECT
+            entityID,
+            count(*) as total_likes
+        FROM
+            reactions
+        WHERE
+            reactions.entityTypeID = 2
+			AND reactions.reaction = 1
+        GROUP BY
+            entityID
+    )
+	SELECT
+		users.nickname,
+		comments.commentID,
+		content,
+		comments.createdAt,
+		coalesce(cte_likes.total_likes, 0) as total_likes,
+        coalesce(reactions.userID,0) as liked
+	FROM
+		comments
+		INNER JOIN users ON comments.userID = users.userID
+		LEFT JOIN cte_likes ON cte_likes.entityID = comments.commentID
+        LEFT JOIN reactions ON comments.commentID = reactions.entityID 
+        AND reactions.userID = ?  AND reactions.reaction =1 AND reactions.entityTypeID = 2
+	WHERE 
+		%v
+	ORDER BY
+		comments.createdAt DESC
+	LIMIT
+		10;
+	`, where)
+
+	rows, err := appRep.db.Query(query,user_id, postId, offset)
 	if err != nil {
 		return nil, err
+	}
+	if rows.Err() == sql.ErrNoRows {
+		return comments, nil
 	}
 
 	for rows.Next() {
 		var comment models.Comment
-		if err = rows.Scan(&comment.Username, &comment.Id, &comment.PostId, &comment.CreatedAt, &comment.Content); err != nil {
+		if err = rows.Scan(&comment.Username, &comment.Id, &comment.Content,
+			&comment.CreatedAt, &comment.TotalLikes, &comment.Liked); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)

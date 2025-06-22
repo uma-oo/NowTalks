@@ -18,8 +18,9 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.PostError{
-				Title:   "ERROR!! Empty Title field!",
-				Content: "ERROR!! Empty Content fiedl!",
+				Title:      "empty Title field!",
+				Content:    "empty Content fiedl!",
+				Categories: "select at least one category!",
 			}})
 			return
 		}
@@ -27,6 +28,8 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: fmt.Sprintf("%v", err)})
 		return
 	}
+	// even if the userid is given wrong we insert the correct one
+	post.UserId = Phandler.service.GetUserIdFromSession(r)
 	postCreated, err_ := Phandler.service.AddPost(post)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)
@@ -36,37 +39,23 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (Phandler *PostHandler) getPosts(w http.ResponseWriter, r *http.Request) {
+	cookie, _ := r.Cookie("session")
+	session, _ := Phandler.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {
-		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset or limit!"))
+		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect offset"))
 		return
 	}
 
-	categories, ok := r.URL.Query()["category"]
-	fmt.Println("categories", categories , "ok", ok )
-	var posts []models.Post
-	err_get := &models.ErrorJson{}
-	if ok && categories!= nil {
-		posts, err_get = Phandler.service.GetPostsByCategory(offset, categories...)
-		if err_get != nil {
-			WriteJsonErrors(w, *err_get)
-			return
-		}
-	} else {
-		posts, err_get = Phandler.service.GetPosts(offset)
-		if err_get != nil {
-			WriteJsonErrors(w, *err_get)
-			return
-		}
-
+	posts, err_get := Phandler.service.GetPosts(session.UserId, offset)
+	if err_get != nil {
+		WriteJsonErrors(w, *err_get)
+		return
 	}
-
-	// read the body of the request
 
 	err_ := json.NewEncoder(w).Encode(posts)
 	if err_ != nil {
-		errJSon := models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err_)}
-		WriteJsonErrors(w, errJSon)
+		WriteJsonErrors(w, models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err_)})
 		return
 	}
 }
@@ -81,9 +70,7 @@ func (Phandler *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Phandler.addPost(w, r)
 		return
 	default:
-		errJson := models.ErrorJson{Status: 405, Message: "Method Not Allowed!!"}
-		w.WriteHeader(errJson.Status)
-		json.NewEncoder(w).Encode(errJson)
+		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not Allowed!!"})
 		return
 	}
 }

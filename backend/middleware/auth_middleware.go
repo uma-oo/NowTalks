@@ -21,8 +21,8 @@ func (m *Middleware) GetAuthUserEnsureAuth(r *http.Request) (*models.Session, *m
 	return session, nil
 }
 
-
 func (m *Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-Type", "application/json")
 	_, err := m.GetAuthUserEnsureAuth(r)
 	if err != nil {
 		handler.WriteJsonErrors(w, *err)

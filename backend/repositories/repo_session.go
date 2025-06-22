@@ -9,13 +9,7 @@ import (
 
 func (appRep *AppRepository) CreateUserSession(session *models.Session, user *models.User) *models.ErrorJson {
 	query := `INSERT INTO sessions (userID, sessionToken, expiresAt) VALUES (?,?,?)`
-	stmt, err := appRep.db.Prepare(query)
-	if err != nil {
-		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
-	}
-
-	defer stmt.Close()
-	_, err = stmt.Exec(user.Id, session.Token, session.ExpDate)
+	_, err := appRep.db.Exec(query, user.Id, session.Token, session.ExpDate)
 	if err != nil {
 		return &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
@@ -26,10 +20,12 @@ func (appRep *AppRepository) CreateUserSession(session *models.Session, user *mo
 
 func (appRepo *AppRepository) GetSessionbyTokenEnsureAuth(token string) (*models.Session, *models.ErrorJson) {
 	session := models.Session{}
-	query := `SELECT userID, sessionToken , expiresAt FROM sessions WHERE sessionToken = ?`
-	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, session.Token, session.ExpDate)
+	query := `SELECT sessions.userID, sessions.sessionToken , sessions.expiresAt, users.nickname 
+	FROM sessions INNER JOIN users ON users.userID = sessions.userID
+	WHERE sessionToken = ?`
+	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, &session.Token, &session.ExpDate, &session.Username)
 	if row == sql.ErrNoRows {
-		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorizes Access"}
+		return nil, &models.ErrorJson{Status: 401, Message: " Unauthorized Access"}
 	}
 	return &session, nil
 }
@@ -49,15 +45,18 @@ func (appRepo *AppRepository) HasValidToken(token string) (bool, *models.Session
 	return false, nil
 }
 
-func (appRep *AppRepository) GetUserSession(field any) (*models.Session, *models.ErrorJson) {
-	session := models.Session{}
+func (appRep *AppRepository) GetUserSessionByUserId(user_id int) (*models.Session, *models.ErrorJson) {
+	session := &models.Session{}
 	query := `SELECT * FROM sessions WHERE userID = ?`
-	row := appRep.db.QueryRow(query, field)
+	row := appRep.db.QueryRow(query, user_id)
 	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpDate)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 400, Message: "ERROR!! No session is set for this User"}
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
-	return &session, nil
+	return session, nil
 }
 
 func (appRep *AppRepository) UpdateSession(session *models.Session, new_session *models.Session) *models.ErrorJson {

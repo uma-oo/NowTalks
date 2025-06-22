@@ -1,11 +1,9 @@
-import { renderErrorPage } from "./pages/errorPage.js";
-import { renderHomePage } from "./pages/homePage.js"
-import { renderLoginPage } from "./pages/loginPage.js";
-import { renderRegisterPage } from "./pages/registerPage.js";
+import { renderErrorPage } from "/frontend/pages/errorPage.js";
+import { renderHomePage } from "/frontend/pages/homePage.js"
+import { renderLoginPage } from "/frontend/pages/loginPage.js";
+import { renderRegisterPage } from "/frontend/pages/registerPage.js";
 
-let app  = document.querySelector('#app')
-
-console.log(document.cookie)
+export let app = document.querySelector('#app')
 
 export function renderApp() {
     app.innerHTML = ""
@@ -19,11 +17,24 @@ export function renderApp() {
         case "/":
             renderHomePage(app)
             break;
+        case "/api":
+        case "/assets":
+        case "/components":
+        case "/const":
+        case "/pages":
+        case "/styles":
+        case "/api/":
+        case "/assets/":
+        case "/components/":
+        case "/const/":
+        case "/pages/":
+        case "/styles/":
+            renderErrorPage(403)
+            break;
         default:
-            renderErrorPage(app)
+            renderErrorPage(404)
             break;
     }
 }
 
 renderApp()
-

@@ -6,8 +6,8 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'nickName',
-                name: 'nickName',
+                id: 'nickname',
+                name: 'nickname',
                 placeholder: "nickname...",
                 minlength: 4,
                 maxlenght: 20,
@@ -26,7 +26,7 @@ export const registerFom = {
             },
             options: ["Male", "Female"],
             style: {
-                width: '50%'
+                width: '100%'
             }
         },
         {
@@ -41,7 +41,7 @@ export const registerFom = {
                 default: 18
             },
             style: {
-                width: '50%'
+                width: '100%'
             }
         },
         {
@@ -50,8 +50,8 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'firstName',
-                name: 'firstName',
+                id: 'firstname',
+                name: 'firstname',
                 placeholder: "Enter Your First Name...",
             },
             style: {
@@ -64,8 +64,8 @@ export const registerFom = {
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'lastName',
-                name: 'lastName',
+                id: 'lastname',
+                name: 'lastname',
                 placeholder: "Enter Your Last Name...",
             },
             style: {
@@ -121,18 +121,20 @@ export const registerFom = {
     buttons: [
         {
             type: 'submit',
-            content: 'Register',
+            content: {
+                text: "Register"
+            },
             style: 'primary-btn'
         },
         {
             type: 'reset',
-            content: 'Cancel',
+            content: {
+                text: "Reset"
+            },
             style: 'secondary-btn'
         }
     ]
 }
-
-
 
 export const loginForm = {
     elements: [
@@ -168,12 +170,16 @@ export const loginForm = {
     buttons: [
         {
             type: 'submit',
-            content: 'Log In',
+            content: {
+                text : 'Log In',
+            },
             style: 'primary-btn'
         },
         {
             type: 'reset',
-            content: 'Cancel',
+            content: {
+                text : "Reset",
+            },
             style: 'secondary-btn'
         }
     ]
@@ -184,7 +190,7 @@ export const PostForm = {
     elements: [
         {
             tag: 'input',
-            label: 'Post Title',
+            // label: 'Post Title',
             attributes: {
                 required: 'true',
                 type: 'text',
@@ -198,7 +204,6 @@ export const PostForm = {
         },
         {
             tag: 'textarea',
-            label: 'Post Content:',
             attributes: {
                 required: 'true',
                 id: 'content',
@@ -213,13 +218,18 @@ export const PostForm = {
     buttons: [
         {
             type: 'submit',
-            content: 'Share Post',
-            style: 'primary-btn'
+            content: {
+                text : "share",
+                icon : "send"
+            },
+            style: ['primary-btn','row-reverse']
         },
         {
             type: 'reset',
-            content: 'Cancel',
-            style: 'secondary-￼btn'
+            content: {
+                text : "cancell"
+            },
+            style: 'secondary-btn'
         }
     ]
 }
@@ -228,12 +238,11 @@ export const CommentForm = {
     elements: [
         {
             tag: 'input',
-            label: 'Comment',
             attributes: {
                 required: 'true',
                 type: 'text',
-                id: 'postComment',
-                name: 'postComment',
+                id: 'content',
+                name: 'content',
                 placeholder: "Add a comment...",
             },
             style: {
@@ -244,7 +253,36 @@ export const CommentForm = {
     buttons: [
         {
             type: 'submit',
-            content: '>>',
+            content: {
+                icon : "send"
+            },
+            style: 'primary-btn'
+        }
+    ]
+}
+
+export const MessageForm = {
+    elements: [
+        {
+            tag: 'textarea',
+            attributes: {
+                required: 'true',
+                type: 'text',
+                id: 'chatMessage',
+                name: 'chatMessage',
+                placeholder: "Send a message..."
+            },
+            style: {
+                // width: '100%'
+            }
+        },
+    ],
+    buttons: [
+        {
+            type: 'submit',
+            content: {
+                icon : "send"
+            },
             style: 'primary-btn'
         }
     ]

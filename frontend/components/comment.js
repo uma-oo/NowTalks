@@ -1,25 +1,43 @@
-import {timeAgo} from "../utils.js"
+import { ToggleLike } from "/frontend/api/reaction.js"
+import { createElement, timeAgo } from "/frontend/utils.js"
+import { createIcon } from "/frontend/components/icon.js"
 
 
-export function createComment(data) {
-    let commentContainer = document.createElement('div')
-    commentContainer.className = 'commentContainer'
+export function createComment({
+    id,
+    user_name,
+    created_at,
+    content,
+    total_likes,
+    liked
+}) {
+    let commentContainer = createElement('div', "comment-container")
+    commentContainer.dataset.commentId = id
+    let commentContent = createElement('div', "comment-content")
+    let commentWriter = createElement('span', null, user_name)
+    let commentCreatedAt = createElement('span', null, timeAgo(created_at))
+    let commentText = createElement('p', null, content)
+
+    let reaction = createElement('div', 'reaction-container')
+    let heartIcon = createIcon("heart", "like")
+    let count = createElement('span', null, total_likes ? total_likes : '0')
     
-    let commentHeader = document.createElement('p')
-    commentHeader.classList.add("comment-header")
-    commentHeader.textContent = data.username
-    
-    
-    let commentBody = document.createElement('p')
-    commentBody.classList.add("comment-body")
-    commentBody.textContent = data.content
-
-    let commentFooter = document.createElement('div')
-    commentFooter.classList.add("comment-footer")
-    let createdAt = document.createElement('p')  
-    createdAt.textContent = timeAgo(data.createdAt)
-    commentFooter.append(createdAt)
-
-    commentContainer.append(commentHeader,commentBody,commentFooter)
+    if (liked != 0) {
+        heartIcon.style.fill = "red"
+    }
+    heartIcon.addEventListener("click", () => {
+        ToggleLike(
+            {
+                entity_id: id,
+                entity_type: "comment"
+            },
+            heartIcon, count
+        )
+    })
+    commentWriter.prepend(createIcon("user"))
+    commentCreatedAt.prepend(createIcon("calendar"))
+    reaction.append(heartIcon, count)
+    commentContent.append(commentWriter, commentCreatedAt, commentText)
+    commentContainer.append(commentContent, reaction)
     return commentContainer
 }
