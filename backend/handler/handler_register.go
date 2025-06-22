@@ -47,7 +47,7 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, *err_)
 		return
 	}
-	// Path knt nassyaha dakshi 3lash makantsh tl3
+
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session",

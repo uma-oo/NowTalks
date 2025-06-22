@@ -29,7 +29,7 @@ func (CHanlder *CommentHandler) addComment(w http.ResponseWriter, r *http.Reques
 		return
 
 	}
-	comment.UserId = CHanlder.service.GetUsernameFromSession(r)
+	comment.UserId = CHanlder.service.GetUserIdFromSession(r)
 	comment_created, err_ := CHanlder.service.AddComment(comment)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)

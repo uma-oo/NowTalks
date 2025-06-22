@@ -29,7 +29,7 @@ func (Phandler *PostHandler) addPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// even if the userid is given wrong we insert the correct one
-	post.UserId = Phandler.service.GetUsernameFromSession(r)
+	post.UserId = Phandler.service.GetUserIdFromSession(r)
 	postCreated, err_ := Phandler.service.AddPost(post)
 	if err_ != nil {
 		WriteJsonErrors(w, *err_)

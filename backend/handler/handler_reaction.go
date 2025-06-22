@@ -23,7 +23,7 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
 		return
 	}
-	liked.UserId = Rhanlder.service.GetUsernameFromSession(r)
+	liked.UserId = Rhanlder.service.GetUserIdFromSession(r)
 	entity_type_id := Rhanlder.service.GetTypeIdByName(liked.EntityType)
 	if entity_type_id == 0 {
 		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}

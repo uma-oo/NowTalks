@@ -1,54 +1,41 @@
 package utils
 
 import (
-	"net/mail"
+	"fmt"
 	"regexp"
 )
 
 // hadshi makhdmash
-func CheckEmailFormat(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
-}
 
 func PwdVerification(pwd string, pwdVerf string) bool {
 	return pwd == pwdVerf
 }
 
-// Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-
-//	the regex "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-//
 // lookarounds are not possible
-func PwdFormatVerf(password string) bool {
-	if len(password) < 8 {
-		return false
+func PwdFormatVerf(password string) error {
+	if len(password) < 6 {
+		return fmt.Errorf("password is too short")
 	}
-	reg, err := regexp.Compile(`^[A-Za-z\d@$!%*?&]{8,}$`)
-	if err != nil || !reg.MatchString(password) {
-		return false
+	if len(password) > 64 {
+		return fmt.Errorf("password is too long")
 	}
-	if !regexp.MustCompile("[a-z]{1,}").MatchString(password) {
-		return false
+	hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
+	hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
+	hasDigit := regexp.MustCompile(`\d`).MatchString(password)
+	hasSpecial := regexp.MustCompile(`[\W_]`).MatchString(password)
+	if !hasLower || !hasUpper || !hasDigit || !hasSpecial {
+		return fmt.Errorf("password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character")
 	}
-	if !regexp.MustCompile("[A-Z]{1,}").MatchString(password) {
-		return false
-	}
-	if !regexp.MustCompile("[!@#$%^&*]{1,}").MatchString(password) {
-		return false
-	}
-	if !regexp.MustCompile(`\d{1,}`).MatchString(password) {
-		return false
-	}
-	return true
+	return nil
 }
 
-// Sorry your name can't be stored on our system
-func IsValidNickname(nickname string) bool {
-	return regexp.MustCompile(`^[a-z0-9]+(?:[ _-][a-z0-9]+)*$`).MatchString(nickname)
-}
+func FirstLastNameVerf(name string) error {
+	if len(name) < 3 {
+		fmt.Errorf("the name is too short")
+	}
+	if !regexp.MustCompile(`^[a-zA-Z]+$`).MatchString(name) {
+		fmt.Errorf("the name must only contain letters ")
+	}
 
-// not sure
-func FirstLastNameVerf(name string) bool {
-	return regexp.MustCompile(`^[A-Za-z0-9]+(?:[ -][A-Za-z]+)*$`).MatchString(name)
+	return nil 
 }

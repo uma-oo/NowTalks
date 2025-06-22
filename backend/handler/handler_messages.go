@@ -11,8 +11,6 @@ import (
 
 // do we need to check the id of the receiver (if it exists in the database )
 func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Request) {
-	cookie, _ := r.Cookie("session")
-	session, _ := messages.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect Format offset"))
@@ -38,7 +36,7 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! receiver_id Incorrect"})
 		return
 	}
-	mesages, errJson := messages.service.GetMessages(session.UserId, receiver_id, offset, type_)
+	mesages, errJson := messages.service.GetMessages(messages.service.GetUserIdFromSession(r), receiver_id, offset, type_)
 	if errJson != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(errJson.Status, errJson.Message))
 		return
@@ -68,7 +66,7 @@ func (messages *MessagesHandler) UpdataReadStatus(w http.ResponseWriter, r *http
 		return
 	}
 
-	errJson = messages.service.EditReadStatus(messages.service.GetUsernameFromSession(r), receiver_id)
+	errJson = messages.service.EditReadStatus(messages.service.GetUserIdFromSession(r), receiver_id)
 	if errJson != nil {
 		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
 		return
