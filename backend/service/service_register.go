@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"regexp"
 
 	"real-time-forum/backend/models"
 	"real-time-forum/backend/utils"
@@ -11,32 +12,29 @@ import (
 func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	var registerErr models.RegisterError
 	// check for the nickname and email
-	_, has_nickname, _ := s.repo.GetItem("users", "nickname", user.Nickname)
-	_, has_email, _ := s.repo.GetItem("users", "email", user.Email)
-	if has_nickname {
-		registerErr.Nickname = "Username already exists"
+
+	if err := s.IsValidNickname(user.Nickname); err != nil {
+		registerErr.Nickname = err.Error()
 	}
-	if errEMail := utils.CheckEmailFormat(user.Email); errEMail != nil {
+
+	if errEMail := s.EmailVerification(user.Email); errEMail != nil {
 		registerErr.Email = errEMail.Error()
 	}
 
-	if has_email {
-		registerErr.Email = "Email already in use"
-	}
-	if !utils.IsValidNickname(user.Nickname) {
-		registerErr.Nickname = "Username Format is Incorrect"
-	}
-	if user.Age < 15 || user.Age >= 100 {
+	if user.Age < 15 {
 		registerErr.Age = "You are too Young!! Go play outside :)"
 	}
-	if !utils.FirstLastNameVerf(user.FirstName) {
-		registerErr.FirstName = "Sorry your First Name can't be stored on our system"
+	if user.Age >= 100 {
+		registerErr.Age = "You need to rest :( "
 	}
-	if !utils.FirstLastNameVerf(user.LastName) {
-		registerErr.LastName = "Sorry your Last Name can't be stored on our system"
+	if err := utils.FirstLastNameVerf(user.FirstName); err != nil {
+		registerErr.FirstName = err.Error()
+	}
+	if errLast := utils.FirstLastNameVerf(user.LastName); errLast != nil {
+		registerErr.LastName = errLast.Error()
 	}
 	if err := utils.PwdFormatVerf(user.Password); err != nil {
-		registerErr.Password = fmt.Sprintf("ERROR!! %s", err.Error())
+		registerErr.Password = err.Error()
 	}
 	if !utils.PwdVerification(user.Password, user.VerifPassword) {
 		registerErr.VerifPassword = "Passwords does not match!"
@@ -62,5 +60,32 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 		return errJson
 	}
 
+	return nil
+}
+
+func (s *AppService) IsValidNickname(nickname string) error {
+	if len(nickname) < 3 {
+		return fmt.Errorf("username is too short")
+	}
+	usernameRegex := `^[a-zA-Z0-9_.-]+$`
+	if match, _ := regexp.MatchString(usernameRegex, nickname); !match {
+		return fmt.Errorf("username can only contain letters, digits, underscores, dots, and hyphens")
+	}
+	_, has_nickname, _ := s.repo.GetItem("users", "nickname", nickname)
+	if has_nickname {
+		return fmt.Errorf("username already exists")
+	}
+	return nil
+}
+
+func (s *AppService) EmailVerification(email string) error {
+	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,20}$`
+	if match, _ := regexp.MatchString(emailRegex, email); !match {
+		return fmt.Errorf("invalid email format")
+	}
+	_, has_email, _ := s.repo.GetItem("users", "email", email)
+	if has_email {
+		return fmt.Errorf("email already in use")
+	}
 	return nil
 }
