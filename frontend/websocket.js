@@ -32,9 +32,10 @@ function receiveMessage(event) {
             if (sessionStorage.getItem("openChat") == openChatWindow?.dataset.id && openChatWindow?.dataset.id == data.sender_id) {
                 sendMessage("read","read")
             }
-            ReorderUsers(data)
+            ReorderUsers()
             break;
         case "online":
+            ReorderUsers()
             changeUsersStatus(data.data)
             break;
         case "read":
@@ -62,9 +63,10 @@ function changeUsersStatus(data) {
     let onlineUsers = data.map(user=>user.id)
     sessionStorage.setItem("onlineUsers",onlineUsers)
     let usersCards = document.querySelectorAll('.chat-user-card')
+
     usersCards.forEach(userCard => {
-        let id = userCard.dataset.id
-        if (onlineUsers.includes(+id)) {
+        let id = +userCard.dataset.id
+        if (onlineUsers.includes(id)) {
             userCard.dataset.status = "online"
             userCard.querySelector('.user_status').textContent = "online"
         } else {

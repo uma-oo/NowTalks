@@ -102,22 +102,7 @@ export function loadFormErrors(form, data) {
     }
 }
 
-export function ReorderUsers(data) {
+export function ReorderUsers() {
     let chatList = document.querySelector('.chat-list')
-    let user1 = document.querySelector(`.chat-user-card[data-id="${data.receiver_id}"]`)
-    let user2 = document.querySelector(`.chat-user-card[data-id="${data.sender_id}"`)
-    let userCard = user1 || user2
-    chatList.prepend(editUserCard(userCard, data))
-    fetchUsers(chatList).then(() => editUserCard(userCard))
-}
-
-function editUserCard(userCard) {
-    if (userCard.dataset.open !== "true") {
-        console.log("updating user card notifications")
-        console.log(userCard.dataset.notifications)
-        userCard.querySelector('.notification_container').classList.remove('hide')
-        userCard.querySelector('.user_notifications').textContent = + userCard.dataset.notifications + 1
-        userCard.dataset.notifications = + userCard.dataset.notifications + 1
-    }
-    return userCard
+    fetchUsers(chatList)
 }

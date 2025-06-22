@@ -41,7 +41,7 @@ export function openChatWindow(chatUserCard) {
     let receiver = createElement('h3', null, user.userName)
 
     let chatWindowBody = createElement('div', 'chat-window-body')
-    let targetTopElement = createElement('div', "observer-target top-observer-target ", "top Observer target")
+    let targetTopElement = createElement('div', "observer-target top-observer-target ")
 
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")

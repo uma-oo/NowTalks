@@ -10,7 +10,6 @@ import {createPostCard} from "/frontend/components/postCard.js"
 import { renderErrorPage } from "/frontend/pages/errorPage.js";
 import { toggleCreatePostFormContainer } from "/frontend/components/postsSection.js"
 
-
 export function createForm(formRepresentaion, id) {
     let formElement = document.createElement('form')
     formElement.noValidate = true
@@ -82,12 +81,14 @@ export function handleFormSubmit(event) {
             break;
         case "message-form":
             isLoggedIn().then(data => {
-                if (data.is_logged_in) sendMessage(formData.chatMessage)
+                if (data.is_logged_in) {
+                    sendMessage(formData.chatMessage)
+                    event.target.reset()
+                }
                 else navigateTo("/login")
             })
             break;
     }
-    event.target.reset()
 }
 
 export function login(form, data) {
@@ -134,6 +135,7 @@ export function createPost(form, data) {
                 let postsContainer = document.querySelector(".posts_container")
                 toggleCreatePostFormContainer()
                 postsContainer.prepend(post)
+                form.reset()
             }
             else if (status === 400) {
                 loadFormErrors(form, data.errors)
@@ -159,6 +161,7 @@ function handleCreateComment(form, data) {
                 let noComent = commentsContainer.querySelector(".no-content")
                 if (noComent) noComent.remove()
                 form.querySelector('.input-error').textContent = ""
+                form.reset()
             } else if (status == 400) {
                 loadFormErrors(form, data.errors)
             } else if ([429, 500].includes(status)) {

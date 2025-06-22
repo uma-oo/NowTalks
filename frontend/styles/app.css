@@ -367,7 +367,6 @@ main {
         display: flex;
         align-items: end;
         gap: 5px;
-
         img {
             height: 20px;
         }
@@ -927,6 +926,7 @@ aside .create-post-btn {
 .align-self-end {
     background-color: var(--secondary-color) !important;
     color: white;
+    margin-left: auto;
 }
 
 .align-self-end::after {
