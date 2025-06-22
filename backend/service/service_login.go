@@ -14,10 +14,10 @@ func (s *AppService) Login(login *models.Login) (*models.User, *models.ErrorJson
 	LoginERR := models.LoginERR{}
 
 	if strings.TrimSpace(login.LoginField) == "" {
-		LoginERR.LoginField = "ERROR! Login field is Empty!"
+		LoginERR.LoginField = "empty login field!"
 	}
 	if strings.TrimSpace(login.Password) == "" {
-		LoginERR.Password = "ERROR! Password field is Empty!"
+		LoginERR.Password = "empty password field!"
 	}
 	//
 	if LoginERR != (models.LoginERR{}) {
@@ -41,8 +41,8 @@ func (s *AppService) Login(login *models.Login) (*models.User, *models.ErrorJson
 		return nil, &models.ErrorJson{
 			Status: 401,
 			Message: models.LoginERR{
-				LoginField: "ERROR!! Invalid Login credentials!",
-				Password:   "ERROR!! Invalid Login credentials!",
+				LoginField: "invalid login credentials!",
+				Password:   "invalid login credentials!",
 			},
 		}
 	}

@@ -14,21 +14,21 @@ func (service *AppService) ValidateMessage(message *models.Message) (*models.Mes
 	type_message := strings.ToLower(strings.TrimSpace(message.Type))
 
 	if type_message != "message" && type_message != "read" && type_message != "typing" {
-		errMessage.Type = "ERROR!! Wrong type of message"
+		errMessage.Type = "wrong type of message"
 	}
 
 	if trimmedMsg == "" {
-		errMessage.Message = "ERROR!! Empty Message Body"
+		errMessage.Message = "empty message Body"
 	}
 	if len(trimmedMsg) > 1000 {
-		errMessage.Message = "ERROR!! Message Body Too Large!"
+		errMessage.Message = "message body too large!"
 	}
 	if username, _ := service.repo.GetUserNameById(message.ReceiverID); username == "" {
-		errMessage.ReceiverID = "ERROR!! The Receiver Specified Does Not Exist!!"
+		errMessage.ReceiverID = "The receiver specified does dot exist!!"
 	}
 
 	if message.CreatedAt.IsZero() {
-		errMessage.CreatedAt = "ERROR!! The date is not set up!"
+		errMessage.CreatedAt = "the date is not set up!"
 	}
 
 	if errMessage.Message != "" || errMessage.ReceiverID != "" || errMessage.Type != "" || errMessage.CreatedAt != "" {

@@ -30,8 +30,8 @@ func (appRep *AppRepository) CreateUser(user *models.User) *models.ErrorJson {
 func (appRep *AppRepository) GetUsers(offset, user_id int) ([]models.User, *models.ErrorJson) {
 	var users []models.User
 	query := `with 
-cte_latest_interaction as (
-SELECT
+	cte_latest_interaction as (
+	SELECT
         CASE 
             WHEN senderID = ? THEN receiverID 
             ELSE senderID 
@@ -40,34 +40,32 @@ SELECT
         message
     FROM messages
     WHERE senderID = ? OR receiverID = ?
-    GROUP BY userID
-
-),
-cte_ordered_users as (
-SELECT i.message, coalesce(i.lastInteraction, 0) as lastInteraction  , u.userID, u.nickname 
-from users u 
-    Left JOIN cte_latest_interaction i 
-    ON i.userID = u.userID
-    WHERE u.userID != ?
-),
-cte_notifications as (
-    select 
-    senderID,
-    count(*) as notifications 
-from
-    messages 
-WHERE
-    readStatus = 0
-    And receiverID = ?
-GROUP BY
-    senderID
-)
-SELECT 
-    u.userID, u.nickname , coalesce(u.message, ""), u.lastInteraction, coalesce(n.notifications,0)
-FROM cte_ordered_users u
-    LEFT JOIN cte_notifications n ON u.userID = n.senderID
-    ORDER BY u.lastInteraction DESC,
-    u.nickname
+    GROUP BY userID),
+	cte_ordered_users as (
+	SELECT i.message, coalesce(i.lastInteraction, 0) as lastInteraction  , u.userID, u.nickname 
+	from users u 
+		Left JOIN cte_latest_interaction i 
+		ON i.userID = u.userID
+		WHERE u.userID != ?
+	),
+	cte_notifications as (
+		select 
+		senderID,
+		count(*) as notifications 
+	from
+		messages 
+	WHERE
+		readStatus = 0
+		And receiverID = ?
+	GROUP BY
+		senderID
+	)
+	SELECT 
+		u.userID, u.nickname , coalesce(u.message, ""), u.lastInteraction, coalesce(n.notifications,0)
+	FROM cte_ordered_users u
+		LEFT JOIN cte_notifications n ON u.userID = n.senderID
+		ORDER BY u.lastInteraction DESC,
+		u.nickname
 ; `
 	rows, err := appRep.db.Query(query, user_id, user_id, user_id, user_id, user_id)
 	if err != nil {
@@ -75,7 +73,7 @@ FROM cte_ordered_users u
 	}
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.Id, &user.Nickname,&user.LastMessage, &user.LastInteraction, &user.Notfications); err != nil {
+		if err := rows.Scan(&user.Id, &user.Nickname, &user.LastMessage, &user.LastInteraction, &user.Notfications); err != nil {
 			return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v ", err)}
 		}
 		users = append(users, user)
@@ -102,8 +100,8 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 		return nil, &models.ErrorJson{
 			Status: 401,
 			Message: models.Login{
-				LoginField: "ERROR!! Username or Email does not exist! Or Password Incorrect!",
-				Password:   "ERROR!! Username or Email does not exist! Or Password Incorrect!",
+				LoginField: "invalid login credentials!",
+				Password:   "invalid login credentials!",
 			},
 		}
 	}
@@ -131,7 +129,7 @@ func (appRepo *AppRepository) UserExists(id int) (bool, *models.ErrorJson) {
 	defer stmt.Close()
 	err = stmt.QueryRow(id).Scan(&exists)
 	if err == sql.ErrNoRows {
-		return false, &models.ErrorJson{Status: 400, Message: "ERROR!! User Not Found"}
+		return false, &models.ErrorJson{Status: 400, Message: "user not found"}
 	}
 	return exists, nil
 }

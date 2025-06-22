@@ -41,7 +41,7 @@ export function openChatWindow(chatUserCard) {
     let receiver = createElement('h3', null, user.userName)
 
     let chatWindowBody = createElement('div', 'chat-window-body')
-    let targetTopElement = createElement('div', "observer-target top-observer-target ", "top Observer target")
+    let targetTopElement = createElement('div', "observer-target top-observer-target ")
 
     let chatWindowFooter = createElement('div', 'chat-window-footer')
     let messageform = createForm(MessageForm, "message-form")
@@ -62,17 +62,17 @@ export function openChatWindow(chatUserCard) {
 }
 
 export function closeChatWindow(chatUserCard, chatWindow) {
+    sessionStorage.setItem("openChat", 0)
     chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
-    console.log("chatUser: ", chatUserCard)
+    
 }
 
 function chatWindowObserver(container, target) {
     const throttledFetch = throttle((offset, id, type, container) => {
         fetchMessages(offset, id, type, container)
-    }, 8000);
-    console.log(throttledFetch)
+    },  500);
 
     const topObserver = new IntersectionObserver(
         (entries, observer) => {
@@ -81,7 +81,7 @@ function chatWindowObserver(container, target) {
                 let nextSibling = target.nextSibling
                 let offset = nextSibling?.dataset.messageId || 0
                 if (chatData.topObsorver === "off") {
-                    console.log("unobserve the topTarget")
+
                     observer.unobserve(entry.target)
                 };
                 if (entry.isIntersecting) {

@@ -24,8 +24,8 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 			WriteJsonErrors(w, models.ErrorJson{
 				Status: 400,
 				Message: models.Login{
-					LoginField: "ERROR!! Empty Login field!!",
-					Password:   "ERROR!! Emty Password field!!",
+					LoginField: "empty login field!!",
+					Password:   "empty password field!!",
 				},
 			})
 			return
@@ -61,5 +61,3 @@ func (Uhandler *UserHanlder) Login(w http.ResponseWriter, r *http.Request) {
 	})
 	WriteDataBack(w, UserData)
 }
-
-

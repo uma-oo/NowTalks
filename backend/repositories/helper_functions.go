@@ -15,12 +15,12 @@ func (appRep *AppRepository) GetItem(typ string, field string, value string) ([]
 	query := fmt.Sprintf(`SELECT %v FROM %v WHERE %v=?`, field, typ, field)
 	stmt, err := appRep.db.Prepare(query)
 	if err != nil {
-		return nil, false, models.NewErrorJson(500, "ERROR: Internal Server Error!!")
+		return nil, false, models.NewErrorJson(500, "ERROR!! Internal Server error")
 	}
 	defer stmt.Close()
 	rows, err := stmt.Query(value)
 	if err != nil {
-		return nil, false, models.NewErrorJson(500, "ERROR: Internal Server Error!!")
+		return nil, false, models.NewErrorJson(500, "ERROR!! Internal Server error")
 	}
 	for rows.Next() {
 		var row any
@@ -35,5 +35,3 @@ func (appRep *AppRepository) GetItem(typ string, field string, value string) ([]
 	}
 	return nil, false, nil
 }
-
-

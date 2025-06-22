@@ -11,21 +11,19 @@ import (
 
 // do we need to check the id of the receiver (if it exists in the database )
 func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Request) {
-	cookie, _ := r.Cookie("session")
-	session, _ := messages.service.GetSessionByTokenEnsureAuth(cookie.Value)
 	offset, errConvoff := strconv.Atoi(r.URL.Query().Get("offset"))
 	if errConvoff != nil {
-		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect Format offset"))
+		WriteJsonErrors(w, *models.NewErrorJson(400, "Incorrect Format offset"))
 		return
 	}
 	receiver_id, errConvrec := strconv.Atoi(r.URL.Query().Get("receiver_id"))
 	if errConvrec != nil {
-		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect Format of the receiver_id"))
+		WriteJsonErrors(w, *models.NewErrorJson(400, "Incorrect Format of the receiver_id"))
 		return
 	}
 	type_ := r.URL.Query().Get("type")
 	if type_ != "old" && type_ != "new" {
-		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! type is not specified"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "type is not specified"})
 		return
 	}
 	exists, errJson := messages.service.UserExists(receiver_id)
@@ -35,10 +33,10 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 	}
 	// check if the user 2 exists
 	if !exists {
-		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! receiver_id Incorrect"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "receiver_id Incorrect"})
 		return
 	}
-	mesages, errJson := messages.service.GetMessages(session.UserId, receiver_id, offset, type_)
+	mesages, errJson := messages.service.GetMessages(messages.service.GetUserIdFromSession(r), receiver_id, offset, type_)
 	if errJson != nil {
 		WriteJsonErrors(w, *models.NewErrorJson(errJson.Status, errJson.Message))
 		return
@@ -53,7 +51,7 @@ func (messages *MessagesHandler) GetMessages(w http.ResponseWriter, r *http.Requ
 func (messages *MessagesHandler) UpdataReadStatus(w http.ResponseWriter, r *http.Request) {
 	receiver_id, errConvrec := strconv.Atoi(r.URL.Query().Get("receiver_id"))
 	if errConvrec != nil {
-		WriteJsonErrors(w, *models.NewErrorJson(400, "ERROR!! Incorrect Format of the receiver_id"))
+		WriteJsonErrors(w, *models.NewErrorJson(400, "Incorrect Format of the receiver_id"))
 		return
 	}
 	exists, errJson := messages.service.UserExists(receiver_id)
@@ -64,11 +62,11 @@ func (messages *MessagesHandler) UpdataReadStatus(w http.ResponseWriter, r *http
 	// the one who is logged in is the one who opens  the tab
 	// so basically the messages sent by the other (receiver_id) must be marked read
 	if !exists {
-		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! receiver_id Incorrect"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "receiver_id Incorrect"})
 		return
 	}
 
-	errJson = messages.service.EditReadStatus(messages.service.GetUsernameFromSession(r), receiver_id)
+	errJson = messages.service.EditReadStatus(messages.service.GetUserIdFromSession(r), receiver_id)
 	if errJson != nil {
 		WriteJsonErrors(w, models.ErrorJson{Status: errJson.Status, Message: errJson.Message})
 		return

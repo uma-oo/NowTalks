@@ -15,18 +15,18 @@ func (Rhanlder *ReactionHanlder) LikeEntity(w http.ResponseWriter, r *http.Reque
 	if err := json.NewDecoder(r.Body).Decode(&liked); err != nil {
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
-				EntityId:   "ERROR!! Empty EntityID field!",
-				EntityType: "ERROR!! Empty EntityType field!",
+				EntityId:   " emptyEntityID field!",
+				EntityType: " emptyEntityType field!",
 			}})
 			return
 		}
-		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: " Bad Request!"})
 		return
 	}
-	liked.UserId = Rhanlder.service.GetUsernameFromSession(r)
+	liked.UserId = Rhanlder.service.GetUserIdFromSession(r)
 	entity_type_id := Rhanlder.service.GetTypeIdByName(liked.EntityType)
 	if entity_type_id == 0 {
-		errJson := models.ErrorJson{Status: 500, Message: "ERROR!! Internal Server Error"}
+		errJson := models.ErrorJson{Status: 500, Message: " Internal Server Error"}
 		WriteJsonErrors(w, errJson)
 		return
 	}
@@ -48,12 +48,12 @@ func (Rhandler *ReactionHanlder) DislikeEnity(w http.ResponseWriter, r *http.Req
 	if err := json.NewDecoder(r.Body).Decode(&disliked); err != nil {
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.ReactionErr{
-				EntityId:   "ERROR!! Empty EntityID field!",
-				EntityType: "ERROR!! Empty EntityType field!",
+				EntityId:   " emptyEntityID field!",
+				EntityType: " emptyEntityType field!",
 			}})
 			return
 		}
-		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: "ERROR!! Bad Request!"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: " Bad Request!"})
 		return
 	}
 
@@ -61,7 +61,7 @@ func (Rhandler *ReactionHanlder) DislikeEnity(w http.ResponseWriter, r *http.Req
 	entity_type_id := Rhandler.service.GetTypeIdByName(disliked.EntityType)
 	if entity_type_id == 0 {
 		// to be verified if the status code is 500 or 400
-		errJson := models.ErrorJson{Status: 400, Message: "ERROR!! The entity requested Does not Exist!"}
+		errJson := models.ErrorJson{Status: 400, Message: " The entity requested Does not Exist!"}
 		WriteJsonErrors(w, errJson)
 		return
 	}
@@ -77,7 +77,7 @@ func (Rhandler *ReactionHanlder) DislikeEnity(w http.ResponseWriter, r *http.Req
 func (RHanlder *ReactionHanlder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
-		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: "ERROR!! Method Not allowed!!"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 405, Message: " Method Not allowed!!"})
 		return
 	}
 	switch r.URL.Path {
@@ -88,7 +88,7 @@ func (RHanlder *ReactionHanlder) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		RHanlder.DislikeEnity(w, r)
 		return
 	default:
-		WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: "ERROR!! Not Found!"})
+		WriteJsonErrors(w, models.ErrorJson{Status: 404, Message: " Not Found!"})
 		return
 	}
 }

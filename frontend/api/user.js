@@ -39,7 +39,7 @@ export async function logoutUser() {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         })
-        console.log()
+    
         return response.status
     } catch (error) {
         console.error(`Error trying to logout: ${error}`)

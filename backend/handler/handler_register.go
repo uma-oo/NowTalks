@@ -15,14 +15,14 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == io.EOF {
 			WriteJsonErrors(w, models.ErrorJson{Status: 400, Message: &models.RegisterError{
-				Nickname:      "ERROR!! Empty Username Field",
-				Age:           "ERROR!! Empty Username Field",
-				Gender:        "ERROR!! Empty Gender Field",
-				FirstName:     "ERROR!! Empty First Name Field",
-				LastName:      "ERROR!! Empty LastName Field",
-				Email:         "ERROR!! Empty Email Field",
-				Password:      "ERROR!! Empty Password  Field",
-				VerifPassword: "ERROR!! Empty Verification Password  Field",
+				Nickname:      " empty username field",
+				Age:           " empty username field",
+				Gender:        " empty gender field",
+				FirstName:     " empty first Name field",
+				LastName:      " empty lastName field",
+				Email:         " empty email field",
+				Password:      " empty password  field",
+				VerifPassword: " empty verification Password  field",
 			}})
 			return
 		}
@@ -47,7 +47,6 @@ func (Uhandler *UserHanlder) Register(w http.ResponseWriter, r *http.Request) {
 		WriteJsonErrors(w, *err_)
 		return
 	}
-	// Path knt nassyaha dakshi 3lash makantsh tl3
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session",

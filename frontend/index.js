@@ -7,7 +7,6 @@ export let app = document.querySelector('#app')
 
 export function renderApp() {
     app.innerHTML = ""
-    console.log(window.location.pathname)
     switch (window.location.pathname) {
         case "/register":
             renderRegisterPage(app)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"regexp"
 
 	"real-time-forum/backend/models"
 	"real-time-forum/backend/utils"
@@ -11,44 +12,40 @@ import (
 func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	var registerErr models.RegisterError
 	// check for the nickname and email
-	_, has_nickname, _ := s.repo.GetItem("users", "nickname", user.Nickname)
-	_, has_email, _ := s.repo.GetItem("users", "email", user.Email)
-	if has_nickname {
-		registerErr.Nickname = "ERROR! Username already exists"
-	}
-	if !utils.CheckEmailFormat(user.Email) {
-		registerErr.Email = "ERROR! email Format is Incorrect"
+
+	if err := s.IsValidNickname(user.Nickname); err != nil {
+		registerErr.Nickname = err.Error()
 	}
 
-	if has_email {
-		registerErr.Email = "ERROR! Email already in use"
+	if errEMail := s.EmailVerification(user.Email); errEMail != nil {
+		registerErr.Email = errEMail.Error()
 	}
-	if !utils.IsValidNickname(user.Nickname) {
-		registerErr.Nickname = "ERROR! Username Format is Incorrect"
+
+	if user.Age < 15 {
+		registerErr.Age = "you are too Young!! Go play outside :)"
 	}
-	if user.Age < 18 || user.Age >= 100 {
-		registerErr.Age = "ERROR! Age had to be 18 and less than 100"
+	if user.Age >= 100 {
+		registerErr.Age = "you need to rest :( "
 	}
-	if !utils.FirstLastNameVerf(user.FirstName) {
-		registerErr.FirstName = "ERROR! Sorry your First Name can't be stored on our system"
+	if err := utils.FirstLastNameVerf(user.FirstName); err != nil {
+		registerErr.FirstName = err.Error()
 	}
-	if !utils.FirstLastNameVerf(user.LastName) {
-		registerErr.LastName = "ERROR! Sorry your Last Name can't be stored on our system"
+	if errLast := utils.FirstLastNameVerf(user.LastName); errLast != nil {
+		registerErr.LastName = errLast.Error()
 	}
-	if !utils.PwdFormatVerf(user.Password) {
-		registerErr.Password = "ERROR! Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+	if err := utils.PwdFormatVerf(user.Password); err != nil {
+		registerErr.Password = err.Error()
 	}
 	if !utils.PwdVerification(user.Password, user.VerifPassword) {
-		registerErr.VerifPassword = "ERROR! Passwords are not matched!"
+		registerErr.VerifPassword = "passwords does not match!"
 	}
 	if !utils.CheckGender(user.Gender) {
-		registerErr.Gender ="ERROR!! Please be sure to enter Male or Female"
+		registerErr.Gender = "please be sure to enter Male or Female"
 	}
 	// check if struct 3amra wlla la
 	if registerErr != (models.RegisterError{}) {
 		return &models.ErrorJson{Status: 400, Message: registerErr}
 	}
-
 
 	// hash the password here !! before the database insertion
 	hash, err := utils.HashPassword(user.Password)
@@ -63,5 +60,38 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 		return errJson
 	}
 
+	return nil
+}
+
+func (s *AppService) IsValidNickname(nickname string) error {
+	if len(nickname) < 3 {
+		return fmt.Errorf("username is too short")
+	}
+	if len(nickname) > 30 {
+		return fmt.Errorf("username is too long")
+	}
+	usernameRegex := `^[a-zA-Z0-9_.-]+$`
+	if match, _ := regexp.MatchString(usernameRegex, nickname); !match {
+		return fmt.Errorf("username can only contain letters, digits, underscores, dots, and hyphens")
+	}
+	_, has_nickname, _ := s.repo.GetItem("users", "nickname", nickname)
+	if has_nickname {
+		return fmt.Errorf("username already exists")
+	}
+	return nil
+}
+
+func (s *AppService) EmailVerification(email string) error {
+	if len(email) > 255 {
+		return fmt.Errorf("email too long")
+	}
+	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,20}$`
+	if match, _ := regexp.MatchString(emailRegex, email); !match {
+		return fmt.Errorf("invalid email format")
+	}
+	_, has_email, _ := s.repo.GetItem("users", "email", email)
+	if has_email {
+		return fmt.Errorf("email already in use")
+	}
 	return nil
 }

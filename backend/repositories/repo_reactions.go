@@ -105,7 +105,7 @@ func (appRepo *AppRepository) CheckEntityID(reaction *models.Reaction, type_enti
 	// exists will return 0 if there is no row thar matches dakshi li 3ndna
 	if entity == 0 {
 		return &models.ErrorJson{Status: 400, Message: &models.ReactionErr{
-			EntityId: "ERROR!! Wrong EntityID field!",
+			EntityId: "Wrong EntityID field!",
 		}}
 	}
 	return nil
