@@ -2,9 +2,7 @@ package service
 
 import (
 	"time"
-
 	"real-time-forum/backend/models"
-
 	"github.com/google/uuid"
 )
 

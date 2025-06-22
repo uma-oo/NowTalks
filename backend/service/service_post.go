@@ -16,13 +16,13 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	errorJson := models.NewErrorJson(0, "")
 	message := models.NewPostErr()
 	if strings.TrimSpace(post.Content) == "" {
-		message.Content = "ERROR: emptyPost Content!!"
+		message.Content = "empty post content!!"
 	}
 	if  strings.TrimSpace(post.Title) == "" {
-		message.Title = "ERROR: emptyTitle Content!!"
+		message.Title = "empty title content!!"
 	}
 	if len(post.PostCategories) == 0 || !utils.CheckPOSTCategories(post.PostCategories) {
-		message.Categories = "ERROR: Incorrect Format of category ID or There is No category affected!"
+		message.Categories = "please choose at least one category!"
 	}
 	if message.Content != "" || message.Title != "" || message.Categories != "" {
 		errorJson.Status = 400
@@ -31,7 +31,7 @@ func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson
 	}
 	post_created, err := s.repo.CreatePost(post)
 	if err != nil {
-		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v hnaaa", err)}
+		return nil, &models.ErrorJson{Status: 500, Message: fmt.Sprintf("%v", err)}
 	}
 	return post_created, nil
 }
