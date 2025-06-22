@@ -25,7 +25,7 @@ func (appRepo *AppRepository) GetSessionbyTokenEnsureAuth(token string) (*models
 	WHERE sessionToken = ?`
 	row := appRepo.db.QueryRow(query, token).Scan(&session.UserId, &session.Token, &session.ExpDate, &session.Username)
 	if row == sql.ErrNoRows {
-		return nil, &models.ErrorJson{Status: 401, Message: "ERROR!! Unauthorized Access"}
+		return nil, &models.ErrorJson{Status: 401, Message: " Unauthorized Access"}
 	}
 	return &session, nil
 }

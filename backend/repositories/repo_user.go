@@ -100,14 +100,13 @@ func (appRep *AppRepository) GetUser(login *models.Login) (*models.User, *models
 		return nil, &models.ErrorJson{
 			Status: 401,
 			Message: models.Login{
-				LoginField: "ERROR!! Username or Email does not exist! Or Password Incorrect!",
-				Password:   "ERROR!! Username or Email does not exist! Or Password Incorrect!",
+				LoginField: "invalid login credentials!",
+				Password:   "invalid login credentials!",
 			},
 		}
 	}
 	return user, nil
 }
-
 
 // get the username from the userId
 func (appRep *AppRepository) GetUserNameById(user_id int) (string, *models.ErrorJson) {
@@ -130,7 +129,7 @@ func (appRepo *AppRepository) UserExists(id int) (bool, *models.ErrorJson) {
 	defer stmt.Close()
 	err = stmt.QueryRow(id).Scan(&exists)
 	if err == sql.ErrNoRows {
-		return false, &models.ErrorJson{Status: 400, Message: "ERROR!! User Not Found"}
+		return false, &models.ErrorJson{Status: 400, Message: "user not found"}
 	}
 	return exists, nil
 }

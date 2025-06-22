@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"strings"
 
 	"real-time-forum/backend/models"
 	"real-time-forum/backend/utils"
@@ -14,11 +15,11 @@ import (
 func (s *AppService) AddPost(post *models.Post) (*models.Post, *models.ErrorJson) {
 	errorJson := models.NewErrorJson(0, "")
 	message := models.NewPostErr()
-	if post.Content == "" {
-		message.Content = "ERROR: Empty Post Content!!"
+	if strings.TrimSpace(post.Content) == "" {
+		message.Content = "ERROR: emptyPost Content!!"
 	}
-	if post.Title == "" {
-		message.Title = "ERROR: Empty Title Content!!"
+	if  strings.TrimSpace(post.Title) == "" {
+		message.Title = "ERROR: emptyTitle Content!!"
 	}
 	if len(post.PostCategories) == 0 || !utils.CheckPOSTCategories(post.PostCategories) {
 		message.Categories = "ERROR: Incorrect Format of category ID or There is No category affected!"

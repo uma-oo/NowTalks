@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     nickname VARCHAR(30) NOT NULL UNIQUE,
     age INTEGER NOT NULL,
     gender TEXT NOT NULL DEFAULT 'male' CHECK (gender IN ('male','female')),
-    firstName VARCHAR(30) NOT NULL,
+    firstName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL, 

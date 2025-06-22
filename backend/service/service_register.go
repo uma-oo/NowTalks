@@ -22,10 +22,10 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 	}
 
 	if user.Age < 15 {
-		registerErr.Age = "You are too Young!! Go play outside :)"
+		registerErr.Age = "you are too Young!! Go play outside :)"
 	}
 	if user.Age >= 100 {
-		registerErr.Age = "You need to rest :( "
+		registerErr.Age = "you need to rest :( "
 	}
 	if err := utils.FirstLastNameVerf(user.FirstName); err != nil {
 		registerErr.FirstName = err.Error()
@@ -37,10 +37,10 @@ func (s *AppService) Register(user *models.User) *models.ErrorJson {
 		registerErr.Password = err.Error()
 	}
 	if !utils.PwdVerification(user.Password, user.VerifPassword) {
-		registerErr.VerifPassword = "Passwords does not match!"
+		registerErr.VerifPassword = "passwords does not match!"
 	}
 	if !utils.CheckGender(user.Gender) {
-		registerErr.Gender = "Please be sure to enter Male or Female"
+		registerErr.Gender = "please be sure to enter Male or Female"
 	}
 	// check if struct 3amra wlla la
 	if registerErr != (models.RegisterError{}) {
@@ -67,6 +67,9 @@ func (s *AppService) IsValidNickname(nickname string) error {
 	if len(nickname) < 3 {
 		return fmt.Errorf("username is too short")
 	}
+	if len(nickname) > 30 {
+		return fmt.Errorf("username is too long")
+	}
 	usernameRegex := `^[a-zA-Z0-9_.-]+$`
 	if match, _ := regexp.MatchString(usernameRegex, nickname); !match {
 		return fmt.Errorf("username can only contain letters, digits, underscores, dots, and hyphens")
@@ -79,6 +82,9 @@ func (s *AppService) IsValidNickname(nickname string) error {
 }
 
 func (s *AppService) EmailVerification(email string) error {
+	if len(email) > 255 {
+		return fmt.Errorf("email too long")
+	}
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,20}$`
 	if match, _ := regexp.MatchString(emailRegex, email); !match {
 		return fmt.Errorf("invalid email format")
