@@ -20,7 +20,7 @@ func (rl *RateLimitMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.Request)
 	if ok {
 		clientInfo, ok := val.(*ClientInfo)
 		if !ok {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			http.Error(w, "ERROR!! Internal server error", http.StatusInternalServerError)
 			return
 		}
 

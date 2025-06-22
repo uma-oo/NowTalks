@@ -13,10 +13,10 @@ func PwdVerification(pwd string, pwdVerf string) bool {
 
 // lookarounds are not possible
 func PwdFormatVerf(password string) error {
-	if len(password) < 6 {
+	if len(password) < 8 {
 		return fmt.Errorf("password is too short")
 	}
-	if len(password) > 64 {
+	if len(password) > 50 {
 		return fmt.Errorf("password is too long")
 	}
 	hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
@@ -31,10 +31,13 @@ func PwdFormatVerf(password string) error {
 
 func FirstLastNameVerf(name string) error {
 	if len(name) < 3 {
-		fmt.Errorf("the name is too short")
+		return fmt.Errorf("the name is too short")
+	}
+	if len(name) > 50 {
+		return fmt.Errorf("the name is too long")
 	}
 	if !regexp.MustCompile(`^[a-zA-Z]+$`).MatchString(name) {
-		fmt.Errorf("the name must only contain letters ")
+		return fmt.Errorf("the name must only contain letters ")
 	}
 
 	return nil 

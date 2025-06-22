@@ -25,7 +25,7 @@ func (LogRegM *LoginRegisterMiddleWare) ServeHTTP(w http.ResponseWriter, r *http
 	LogRegM.MiddlewareHanlder.ServeHTTP(w, r)
 }
 
-// 
+//
 
 func (LogRegM *LoginRegisterMiddleWare) GetAuthUser(r *http.Request) *models.ErrorJson {
 	cookie, err := r.Cookie("session")

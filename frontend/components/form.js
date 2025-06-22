@@ -104,7 +104,7 @@ export function login(form, data) {
         } else if (status == 401) {
             let errors = form.querySelectorAll(".input-error")
             errors.forEach(error => error.textContent = "")
-            formError.innerText = "ERROR!! Username or Email does not exist! Or Password Incorrect!"
+            formError.innerText = " Username or Email does not exist! Or Password Incorrect!"
             formError.classList.add("form-have-error")
         } else if ([429, 500].includes(status)) {
             renderErrorPage(status)
