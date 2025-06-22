@@ -9,11 +9,11 @@ export function createHeader() {
     let header = createElement('header')
     let logOut = createButton({ text: "log out", icon: "logout" }, 'button', 'logout-btn')
     logOut.addEventListener("click", async (e) => {
-        console.log("logout btn pressed: ", e)
+     
         let status = await logoutUser()
-        console.log(status)
+
         if (status == 204 || status == 401) {
-                console.log("logging out.")
+         
                 navigateTo("/login")
                 closeConnection()
             }

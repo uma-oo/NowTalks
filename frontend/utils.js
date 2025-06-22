@@ -55,12 +55,10 @@ export function formatTimestamp(date) {
 }
 
 export function throttle(func, delay) {
-    console.log("throttle set with delay: ", delay)
    let delayPassed = true
     return function (...arg) {
 
         if (delayPassed) {
-            console.log("delay passed")
             func(...arg);
             delayPassed = false
             setTimeout(() => {

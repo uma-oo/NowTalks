@@ -152,7 +152,7 @@ function handleCreateComment(form, data) {
     addComment(data)
         .then(([status, data]) => {
             if (status === 200) {
-                console.log("comment added: ", data)
+
                 data.user_name = sessionStorage.getItem("userNickname")
                 let commentsContainer = form.parentElement.querySelector(".comments-container")
                 let commentsCount = commentsContainer.parentElement.parentElement.querySelector('.reaction-container[data-reaction="comment"] > span')

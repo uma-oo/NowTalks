@@ -66,14 +66,13 @@ export function closeChatWindow(chatUserCard, chatWindow) {
     chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
-    console.log("chatUser: ", chatUserCard)
+    
 }
 
 function chatWindowObserver(container, target) {
     const throttledFetch = throttle((offset, id, type, container) => {
         fetchMessages(offset, id, type, container)
     },  500);
-    console.log(throttledFetch)
 
     const topObserver = new IntersectionObserver(
         (entries, observer) => {
@@ -82,7 +81,7 @@ function chatWindowObserver(container, target) {
                 let nextSibling = target.nextSibling
                 let offset = nextSibling?.dataset.messageId || 0
                 if (chatData.topObsorver === "off") {
-                    console.log("unobserve the topTarget")
+
                     observer.unobserve(entry.target)
                 };
                 if (entry.isIntersecting) {
