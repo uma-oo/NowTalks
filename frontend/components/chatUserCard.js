@@ -20,7 +20,7 @@ export function createChatUserCard({
     let chatUserCardFooter = createElement('div', 'chat-user-card-footer')
 
     let user_nickname = createElement('p', "user_name", nickname)
-    let user_status = createElement('span', "user_status", "offline")
+    let user_status = createElement('span', "user_status", chatUserCard.dataset.status)
     let last_message = createElement('p', "latest_message", lastMessage)
     let last_interaction = createElement('span', "latest_interaction", lastInteraction !== "0" ? formatTimestamp(lastInteraction) : "")
     let notifications_container = createElement('div', `${+notifications > 0 ? "notification_container " : "notification_container hide"}`)

@@ -35,8 +35,8 @@ function receiveMessage(event) {
             ReorderUsers()
             break;
         case "online":
-            ReorderUsers()
             changeUsersStatus(data.data)
+            ReorderUsers()
             break;
         case "read":
             markMessagesRead(data)

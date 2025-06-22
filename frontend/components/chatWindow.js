@@ -62,6 +62,7 @@ export function openChatWindow(chatUserCard) {
 }
 
 export function closeChatWindow(chatUserCard, chatWindow) {
+    sessionStorage.setItem("openChat", 0)
     chatWindow.innerHTML = ""
     chatWindow.classList.remove("chat-window_expanded")
     chatUserCard.dataset.open = ""
@@ -71,7 +72,7 @@ export function closeChatWindow(chatUserCard, chatWindow) {
 function chatWindowObserver(container, target) {
     const throttledFetch = throttle((offset, id, type, container) => {
         fetchMessages(offset, id, type, container)
-    }, 8000);
+    },  500);
     console.log(throttledFetch)
 
     const topObserver = new IntersectionObserver(

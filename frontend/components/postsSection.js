@@ -20,7 +20,7 @@ export function createPostsSection() {
 }
 
 function postsSectionObserver(container, target) {
-    const throttledFetch = throttle((container,offset) => fetchPosts(container, offset), 8000);
+    const throttledFetch = throttle((container,offset) => fetchPosts(container, offset), 500);
     const observer = new IntersectionObserver(
         (entries, observer) => {
             entries.map(entry => {
