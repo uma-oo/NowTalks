@@ -1,5 +1,3 @@
-# Real-Time Forum Application
-
 ## Overview
 This project is a single-page web application for a real-time forum built with Go, SQLite, Ja vaScript, HTML, and CSS. It supports user registration/login, post creation, commenting, and private messaging with real-time updates via WebSockets. The application ensures secure authentication, efficient data handling, and a responsive user interface without using frontend frameworks.
 
@@ -34,31 +32,7 @@ This project is a single-page web application for a real-time forum built with G
   - HTML (single file for SPA).
   - CSS for styling.
 - **No frontend frameworks** (e.g., React, Angular, Vue) are used.
-
-## Project Structure
 ```
-forum/
-├── backend/
-│   ├── main.go              # Entry point, server setup
-│   ├── handlers/            # HTTP and WebSocket handlers
-│   ├── models/              # Data structures (User, Post, Comment, Message)
-│   ├── database/            # SQLite setup and queries
-│   └── sessions/            # Session management
-├── frontend/
-│   ├── index.html           # Single HTML file
-│   ├── css/                 # Stylesheets
-│   │   └── styles.css
-│   └── js/                  # JavaScript files
-│       ├── main.js          # Core SPA logic
-│       ├── websocket.js     # WebSocket client
-│       └── utils.js         # Throttle/debounce and helpers
-├── database/
-│   └── forum.db             # SQLite database
-├── go.mod                   # Go module dependencies
-└── README.md                # This file
-```
-
-
 
 ## Setup Instructions
 ### Prerequisites
@@ -68,29 +42,9 @@ forum/
 
 ### Installation
 1. **Clone the Repository**:
-   ```bash
-   git clone <repository-url>
-   cd forum
-   ```
-
-2. **Install Go Dependencies**:
-   ```bash
-   go mod init forum
-   go get github.com/gorilla/websocket
-   go get golang.org/x/crypto/bcrypt
-   go get github.com/google/uuid
-   ```
-
-3. **Initialize the Database**:
-   - Create the SQLite database (`forum.db`) in the `database/` directory.
-   - Run the SQL schema (provided in `database/schema.sql`) to create tables for users, posts, comments, messages, and sessions:
-     ```bash
-     sqlite3 database/forum.db < database/schema.sql
-     ```
-
-4. **Run the Server**:
-   ```bash
-   go run backend/main.go
+2. **Run the Go application**:
+  ```bash
+  ./run.sh
    ```
    The server runs on `http://localhost:8080` by default.
 
@@ -138,30 +92,7 @@ forum/
 - github.com/google/uuid
 - SQLite3 (via database/sql)
 
-## Learning Outcomes
-This project demonstrates:
-- Web basics (HTML, HTTP, CSS, DOM).
-- Backend development (Go, WebSockets, SQLite).
-- Frontend development (vanilla JavaScript, SPA).
-- Real-time communication (WebSockets).
-- Database management (SQL).
-- Security practices (password hashing, session management).
+.
 
-## Troubleshooting
-- **Server not starting**:
-  - Ensure `forum.db` exists and is writable.
-  - Check for port conflicts on `:8080`.
-- **WebSocket connection fails**:
-  - Verify the WebSocket endpoint (`ws://localhost:8080/ws`).
-  - Check browser console for errors.
-- **Messages not loading**:
-  - Ensure the database has the correct schema.
-  - Verify WebSocket connection is active.
 
-## Future Improvements
-- Add post filtering by category.
-- Implement message search functionality.
-- Enhance UI with responsive design for mobile devices.
 
-## License
-This project is for educational purposes and not licensed for commercial use.
