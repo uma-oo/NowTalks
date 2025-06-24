@@ -32,7 +32,6 @@ This project is a single-page web application for a real-time forum built with G
   - HTML (single file for SPA).
   - CSS for styling.
 - **No frontend frameworks** (e.g., React, Angular, Vue) are used.
-```
 
 ## Setup Instructions
 ### Prerequisites
