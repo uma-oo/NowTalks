@@ -78,7 +78,7 @@ This project is a single-page web application for a real-time forum built with G
   - WebSocket client listens for real-time message updates.
   - Throttle/debounce used for scroll events to optimize message loading.
 - **Database**:
-  - Tables: `users`, `posts`, `comments`, `messages`, `sessions`.
+  - Tables: `users`, `posts`, `comments`, `messages`, `sessions`  `reactions`.
   - Foreign keys ensure data integrity.
 - **Security**:
   - Passwords are hashed with bcrypt.
@@ -90,6 +90,9 @@ This project is a single-page web application for a real-time forum built with G
 - golang.org/x/crypto/bcrypt
 - github.com/google/uuid
 - SQLite3 (via database/sql)
+
+## Credits 
+- The backend part (including the database and the API endpoints creation) is my work, the Frontend part (Javascript, CSS and DOM manipulation) was beautifully realized by [@DarkMethoss](https://github.com/DarkMethoss)
 
 .
 
