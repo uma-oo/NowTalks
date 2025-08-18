@@ -27,6 +27,7 @@ This project is a single-page web application for a real-time forum built with G
   - Go (standard library + allowed packages: gorilla/websocket, sqlite3, bcrypt, google/uuid).
   - SQLite for data storage.
   - WebSockets for real-time communication.
+  - Websockets (with go-routines and channels) for more performance.
 - **Frontend**:
   - Vanilla JavaScript for DOM manipulation and WebSocket handling.
   - HTML (single file for SPA).
