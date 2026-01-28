@@ -64,8 +64,7 @@ forum/
 
 ## Setup Instructions
 ### Prerequisites
-- Go (version 1.21 or higher)
-- SQLite3
+- Go (version 1.21 or higher) Make sure that Golang is installed before proceeding
 - A modern web browser
 
 ### Installation
