@@ -23,6 +23,8 @@ This project is a single-page web application for a real-time forum built with G
 - **Security**:
   - Passwords hashed with bcrypt.
   - Session management with cookies.
+  - middlwares to assure only authenticated people are allowed to interact.
+  - middlewares to forbid authenticated users to go back to login and register endpoints.
 
 ## Technologies
 - **Backend**:
@@ -70,30 +72,9 @@ forum/
 1. **Clone the Repository**:
    ```bash
    git clone <repository-url>
-   cd forum
+   cd NowTalks
+   ./run.sh
    ```
-
-2. **Install Go Dependencies**:
-   ```bash
-   go mod init forum
-   go get github.com/gorilla/websocket
-   go get golang.org/x/crypto/bcrypt
-   go get github.com/google/uuid
-   ```
-
-3. **Initialize the Database**:
-   - Create the SQLite database (`forum.db`) in the `database/` directory.
-   - Run the SQL schema (provided in `database/schema.sql`) to create tables for users, posts, comments, messages, and sessions:
-     ```bash
-     sqlite3 database/forum.db < database/schema.sql
-     ```
-
-4. **Run the Server**:
-   ```bash
-   go run backend/main.go
-   ```
-   The server runs on `http://localhost:8080` by default.
-
 5. **Access the Application**:
    - Open a browser and navigate to `http://localhost:8080`.
    - Register a new account or log in to access the forum.
@@ -125,43 +106,15 @@ forum/
   - WebSocket client listens for real-time message updates.
   - Throttle/debounce used for scroll events to optimize message loading.
 - **Database**:
-  - Tables: `users`, `posts`, `comments`, `messages`, `sessions`.
+  - Tables: `users`, `posts`, `comments`, `messages`, `sessions`, `messages` ... 
   - Foreign keys ensure data integrity.
 - **Security**:
   - Passwords are hashed with bcrypt.
   - Input validation prevents SQL injection and XSS.
 
-## Allowed Packages
+## Used Packages
 - Go standard library
 - github.com/gorilla/websocket
 - golang.org/x/crypto/bcrypt
 - github.com/google/uuid
 - SQLite3 (via database/sql)
-
-## Learning Outcomes
-This project demonstrates:
-- Web basics (HTML, HTTP, CSS, DOM).
-- Backend development (Go, WebSockets, SQLite).
-- Frontend development (vanilla JavaScript, SPA).
-- Real-time communication (WebSockets).
-- Database management (SQL).
-- Security practices (password hashing, session management).
-
-## Troubleshooting
-- **Server not starting**:
-  - Ensure `forum.db` exists and is writable.
-  - Check for port conflicts on `:8080`.
-- **WebSocket connection fails**:
-  - Verify the WebSocket endpoint (`ws://localhost:8080/ws`).
-  - Check browser console for errors.
-- **Messages not loading**:
-  - Ensure the database has the correct schema.
-  - Verify WebSocket connection is active.
-
-## Future Improvements
-- Add post filtering by category.
-- Implement message search functionality.
-- Enhance UI with responsive design for mobile devices.
-
-## License
-This project is for educational purposes and not licensed for commercial use.
